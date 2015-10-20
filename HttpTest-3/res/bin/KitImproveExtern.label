@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DieCutLabel Version="8.0" Units="twips">
+	<PaperOrientation>Landscape</PaperOrientation>
+	<Id>LargeAddress</Id>
+	<PaperName>30321 Large Address</PaperName>
+	<DrawCommands>
+		<RoundRectangle X="0" Y="0" Width="2025" Height="5020" Rx="270" Ry="270" />
+	</DrawCommands>
+	<ObjectInfo>
+		<AddressObject>
+			<Name>Adresse</Name>
+			<ForeColor Alpha="255" Red="0" Green="0" Blue="0" />
+			<BackColor Alpha="0" Red="255" Green="255" Blue="255" />
+			<LinkedObjectName></LinkedObjectName>
+			<Rotation>Rotation0</Rotation>
+			<IsMirrored>False</IsMirrored>
+			<IsVariable>True</IsVariable>
+			<HorizontalAlignment>Left</HorizontalAlignment>
+			<VerticalAlignment>Top</VerticalAlignment>
+			<TextFitMode>ShrinkToFit</TextFitMode>
+			<UseFullFontHeight>True</UseFullFontHeight>
+			<Verticalized>False</Verticalized>
+			<StyledText />
+			<ShowBarcodeFor9DigitZipOnly>False</ShowBarcodeFor9DigitZipOnly>
+			<BarcodePosition>AboveAddress</BarcodePosition>
+			<LineFonts>
+				<Font Family="Arial" Size="12" Bold="False" Italic="False" Underline="False" Strikeout="False" />
+				<Font Family="Arial" Size="12" Bold="False" Italic="False" Underline="False" Strikeout="False" />
+				<Font Family="Arial" Size="12" Bold="False" Italic="False" Underline="False" Strikeout="False" />
+				<Font Family="Arial" Size="12" Bold="False" Italic="False" Underline="False" Strikeout="False" />
+				<Font Family="Arial" Size="12" Bold="False" Italic="False" Underline="False" Strikeout="False" />
+			</LineFonts>
+		</AddressObject>
+		<Bounds X="408.735892416402" Y="675.415033793277" Width="4286.2641075836" Height="1169.58496620672" />
+	</ObjectInfo>
+	<ObjectInfo>
+		<ShapeObject>
+			<Name>FORM</Name>
+			<ForeColor Alpha="255" Red="0" Green="0" Blue="0" />
+			<BackColor Alpha="0" Red="255" Green="255" Blue="255" />
+			<LinkedObjectName></LinkedObjectName>
+			<Rotation>Rotation0</Rotation>
+			<IsMirrored>False</IsMirrored>
+			<IsVariable>False</IsVariable>
+			<ShapeType>HorizontalLine</ShapeType>
+			<LineWidth>15</LineWidth>
+			<LineAlignment>Center</LineAlignment>
+			<FillColor Alpha="0" Red="255" Green="255" Blue="255" />
+		</ShapeObject>
+		<Bounds X="357.165359694794" Y="567.692321777344" Width="4297.04445467064" Height="15" />
+	</ObjectInfo>
+	<ObjectInfo>
+		<TextObject>
+			<Name>Absender</Name>
+			<ForeColor Alpha="255" Red="0" Green="0" Blue="0" />
+			<BackColor Alpha="0" Red="255" Green="255" Blue="255" />
+			<LinkedObjectName></LinkedObjectName>
+			<Rotation>Rotation0</Rotation>
+			<IsMirrored>False</IsMirrored>
+			<IsVariable>False</IsVariable>
+			<HorizontalAlignment>Left</HorizontalAlignment>
+			<VerticalAlignment>Top</VerticalAlignment>
+			<TextFitMode>None</TextFitMode>
+			<UseFullFontHeight>True</UseFullFontHeight>
+			<Verticalized>False</Verticalized>
+			<StyledText>
+				<Element>
+					<String>Abs.: Oliver Nöltner, ITIV, KIT, Engesserstr. 5, 76131 Karlsruhe</String>
+					<Attributes>
+						<Font Family="Arial" Size="7" Bold="False" Italic="False" Underline="False" Strikeout="False" />
+						<ForeColor Alpha="255" Red="0" Green="0" Blue="0" />
+					</Attributes>
+				</Element>
+			</StyledText>
+		</TextObject>
+		<Bounds X="360" Y="390.236361487093" Width="4230.43165467626" Height="163.792415491325" />
+	</ObjectInfo>
+	<ObjectInfo>
+		<TextObject>
+			<Name>Link-ID</Name>
+			<ForeColor Alpha="255" Red="0" Green="0" Blue="0" />
+			<BackColor Alpha="0" Red="255" Green="255" Blue="255" />
+			<LinkedObjectName></LinkedObjectName>
+			<Rotation>Rotation0</Rotation>
+			<IsMirrored>False</IsMirrored>
+			<IsVariable>False</IsVariable>
+			<HorizontalAlignment>Left</HorizontalAlignment>
+			<VerticalAlignment>Bottom</VerticalAlignment>
+			<TextFitMode>ShrinkToFit</TextFitMode>
+			<UseFullFontHeight>True</UseFullFontHeight>
+			<Verticalized>False</Verticalized>
+			<StyledText>
+				<Element>
+					<String>Link-ID 0000000000</String>
+					<Attributes>
+						<Font Family="Arial" Size="12" Bold="False" Italic="False" Underline="False" Strikeout="False" />
+						<ForeColor Alpha="255" Red="0" Green="0" Blue="0" />
+					</Attributes>
+				</Element>
+			</StyledText>
+		</TextObject>
+		<Bounds X="357.165359694794" Y="149.093525179856" Width="2880" Height="120" />
+	</ObjectInfo>
+	<ObjectInfo>
+		<TextObject>
+			<Name>Service</Name>
+			<ForeColor Alpha="255" Red="0" Green="0" Blue="0" />
+			<BackColor Alpha="0" Red="255" Green="255" Blue="255" />
+			<LinkedObjectName></LinkedObjectName>
+			<Rotation>Rotation0</Rotation>
+			<IsMirrored>False</IsMirrored>
+			<IsVariable>False</IsVariable>
+			<HorizontalAlignment>Right</HorizontalAlignment>
+			<VerticalAlignment>Bottom</VerticalAlignment>
+			<TextFitMode>ShrinkToFit</TextFitMode>
+			<UseFullFontHeight>True</UseFullFontHeight>
+			<Verticalized>False</Verticalized>
+			<StyledText>
+				<Element>
+					<String>KIT improve+</String>
+					<Attributes>
+						<Font Family="Arial" Size="12" Bold="False" Italic="False" Underline="False" Strikeout="False" />
+						<ForeColor Alpha="255" Red="0" Green="0" Blue="0" />
+					</Attributes>
+				</Element>
+			</StyledText>
+		</TextObject>
+		<Bounds X="4025.19691084609" Y="147.401577016899" Width="627.390010747388" Height="120" />
+	</ObjectInfo>
+</DieCutLabel>

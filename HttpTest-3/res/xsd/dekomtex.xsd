@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="Patient">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Age" type="xsd:int" />
+				<xsd:element name="Gender" type="gender" />
+				<xsd:element name="DominantHand" type="dominantHand" />
+				<xsd:element name="Size" type="xsd:int" />
+				<xsd:element name="Weight" type="xsd:float" />
+				<xsd:element name="Diagnosis" type="xsd:string" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:simpleType name="gender">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[M,W,?]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="dominantHand">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[L,R,?]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

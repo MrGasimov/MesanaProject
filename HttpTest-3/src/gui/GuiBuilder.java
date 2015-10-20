@@ -46,88 +46,24 @@ public class GuiBuilder {
 	    Measurement mObject;
 	    AddressData aData;
 	    SensorData sData;
-	   
-	    
+	
+	//fist Constructor    
+	public GuiBuilder(){
+		
+	}
 	    
 	    
 	public GuiBuilder(String log, String pass) throws IOException{
 		setOperatorData(log,pass);
 		setGui();
 		if(ConfigSensor.checkSensorConnected()){
-			//set data to customer list
+			//initialize customer data and SensorData to Gui if sensor connected
 		    setCustomerData();  
 		    setSensorData();
 		}
+			        
+		setListeners();
 		
-	    
-	    //register listener for customerList.
-        customerList.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
-            	int index = customerList.getSelectionIndex();
-                measureText.setText(mCollect.measList.get(index).getMeasurementData());
-                mObject = mCollect.measList.get(index);
-                aData = new AddressData(mObject.getID());
-                customerText.setText(aData.getCustomerData());
-            	}
-           
-          });
-        
-        //register listener for combo selection
-        priorityCombo.addSelectionListener(new SelectionAdapter(){
-        	 @Override
-	          public void widgetSelected(SelectionEvent e) {
-        		 if(priorityCombo.getText().equals("1.High")){       			 
-        			 mCollect.priorityFilter();
-        			customerList.removeAll();
-        			 for(Measurement mObject:mCollect.measList){
-        				 aData = new AddressData(mObject.getID());
-        				 customerList.add(aData.guiAddressData());        				 
-        			 }       			 	        			 
-        		 }
-	          }
-        	
-        });
-        
-        //register listener for the electrode combo
-        electrodeCombo.addSelectionListener(new SelectionAdapter(){
-        	public void widgetSelected(SelectionEvent e){
-        		
-        	}
-
-		});
-        
-        //delete all data on gui, update list and set text fields to first selected item
-        updateButton.addSelectionListener(new SelectionAdapter(){
-        	public void widgetSelected(SelectionEvent e){
-        		resetData();
-        		setCustomerData();
-        		try {
-					setSensorData();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-        	}
-        });
-        
-        //register listener for the selection event
-	    configButton.addSelectionListener(new SelectionAdapter() {
-	    @Override
-	     public void widgetSelected(SelectionEvent e) {
-	       	try {	
-	       		 	String text = commentText.getText();
-		    		ConfigSensor.streamCopy();
-		    		
-		    		//save text in database
-			} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-			}
-	        	  
-	     }
-	    }); 
-	        
-	   
 	    shell.pack();	      
 	    setShell();
 	        
@@ -308,6 +244,76 @@ public class GuiBuilder {
         configButton.setLayoutData(gridData);
           }
 	
+	public void setListeners(){
+		//register listener for customerList.
+        customerList.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+            	int index = customerList.getSelectionIndex();
+                measureText.setText(mCollect.measList.get(index).getMeasurementData());
+                mObject = mCollect.measList.get(index);
+                aData = new AddressData(mObject.getID());
+                customerText.setText(aData.getCustomerData());
+            	}
+           
+          });
+        
+        //register listener for combo selection
+        priorityCombo.addSelectionListener(new SelectionAdapter(){
+        	 @Override
+	          public void widgetSelected(SelectionEvent e) {
+        		 if(priorityCombo.getText().equals("1.High")){       			 
+        			 mCollect.priorityFilter();
+        			customerList.removeAll();
+        			 for(Measurement mObject:mCollect.measList){
+        				 aData = new AddressData(mObject.getID());
+        				 customerList.add(aData.guiAddressData());        				 
+        			 }       			 	        			 
+        		 }
+	          }
+        	
+        });
+        
+        //register listener for the electrode combo
+        electrodeCombo.addSelectionListener(new SelectionAdapter(){
+        	public void widgetSelected(SelectionEvent e){
+        		
+        	}
+
+		});
+        
+        //delete all data on gui, update list and set text fields to first selected item
+        updateButton.addSelectionListener(new SelectionAdapter(){
+        	public void widgetSelected(SelectionEvent e){
+        		resetData();
+        		setCustomerData();
+        		try {
+					setSensorData();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+        	}
+        });
+        
+        //register listener for the selection event
+	    configButton.addSelectionListener(new SelectionAdapter() {
+	    @Override
+	     public void widgetSelected(SelectionEvent e) {
+	       	try {	
+	       		 	String text = commentText.getText();
+		    		ConfigSensor.streamCopy();
+		    		
+		    		//save text in database
+			} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+			}
+	        	  
+	     }
+	    }); 
+	        
+	}
+
 	public void setTrayIcon(){
 		 //image for tray icon
         Image image =  new Image(display,"C:/Users/gasimov/Documents/Repo/HttpTest-3/res/images/bulb.gif");
@@ -332,7 +338,7 @@ public class GuiBuilder {
             });
             item.addListener(SWT.Selection, new Listener() {
               public void handleEvent(Event event) {
-            	  if(customerList.equals("")){
+            	  if(ConnectionState.state){
             		  setCustomerData();  
                 	    try {
       					setSensorData();
@@ -341,7 +347,7 @@ public class GuiBuilder {
       					e.printStackTrace();
       				}
                   	setShell();
-                      System.out.println("selection"); 
+                    System.out.println("selection"); 
             	  }
             	
             	
@@ -397,6 +403,7 @@ public class GuiBuilder {
             item.setImage(image);
             }
 	}
+	
 	public void setCustomerData(){
 		mCollect = new MeasurementCollection();
         mCollect.getMethod(null);	    

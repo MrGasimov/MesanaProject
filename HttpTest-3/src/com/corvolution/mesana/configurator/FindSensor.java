@@ -1,6 +1,10 @@
 package com.corvolution.mesana.configurator;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
+
+import gui.GuiBuilder;
+import gui.OperatorAccess;
 
 
 public class FindSensor implements Runnable {
@@ -46,13 +50,12 @@ public class FindSensor implements Runnable {
                  if( pluggedIn ){
                 	 status = "Sensor "+letters[i]+" has been plugged in";
                 	 System.out.println("Sensor "+letters[i]+" has been plugged in");
-                	
-                	
-                }  
+                	 ConnectionState.setTrueState();
+             	 }  
                  else{
                 	 status = "Sensor "+letters[i]+" has been unplugged in";
                 	 System.out.println("Sensor "+letters[i]+" has been unplugged");
-                  	
+                	 ConnectionState.setFalseState();
                 	                	 
                 	 //System.out.println(state);
                 	 

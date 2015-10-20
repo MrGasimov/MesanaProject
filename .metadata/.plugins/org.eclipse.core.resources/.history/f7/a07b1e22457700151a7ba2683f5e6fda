@@ -1,0 +1,14 @@
+package com.corvolution.mesana.configurator;
+
+public class ConnectionState {
+	public static boolean state;
+	
+	public  void setState(){
+		state = true;
+	}
+	
+	public boolean getState(){
+		return state;
+	}
+	
+}

@@ -1,13 +1,17 @@
 package com.corvolution.mesana.configurator;
 
 public class ConnectionState {
-	public  boolean state;
+	public static boolean state;
 	
-	public  void setState(boolean state){
-		this.state = state;
+	public static  void setTrueState(){
+		state = true;
 	}
 	
-	public boolean getState(){
+	public static void setFalseState(){
+		state = false;
+	}
+	
+	public static boolean getState(){
 		return state;
 	}
 	

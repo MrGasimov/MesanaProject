@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.TrayItem;
 
 import com.corvolution.mesana.configurator.AddressData;
 import com.corvolution.mesana.configurator.ConfigSensor;
+import com.corvolution.mesana.configurator.ConnectionState;
 import com.corvolution.mesana.configurator.Measurement;
 import com.corvolution.mesana.configurator.MeasurementCollection;
 import com.corvolution.mesana.configurator.SensorCollection;
@@ -51,10 +52,13 @@ public class GuiBuilder {
 	    
 	public GuiBuilder(String log, String pass) throws IOException{
 		setOperatorData(log,pass);
-		setGui();		
-		//set data to customer list
-	    setCustomerData();  
-	    setSensorData();
+		setGui();
+		if(ConfigSensor.checkSensorConnected()){
+			//set data to customer list
+		    setCustomerData();  
+		    setSensorData();
+		}
+		
 	    
 	    //register listener for customerList.
         customerList.addSelectionListener(new SelectionAdapter() {
@@ -328,15 +332,29 @@ public class GuiBuilder {
             });
             item.addListener(SWT.Selection, new Listener() {
               public void handleEvent(Event event) {
-            	setShell();
-                System.out.println("selection"); 
+            	  if(customerList.equals("")){
+            		  setCustomerData();  
+                	    try {
+      					setSensorData();
+      				} catch (IOException e) {
+      					// TODO Auto-generated catch block
+      					e.printStackTrace();
+      				}
+                  	setShell();
+                      System.out.println("selection"); 
+            	  }
+            	
             	
             	  
               }
             });
             item.addListener(SWT.DefaultSelection, new Listener() {
               public void handleEvent(Event event) {
-                System.out.println("default selection");
+            	  if(ConnectionState.state){
+            		  item.setToolTipText("Please connect Sensor");
+                      System.out.println("default selection"); 
+            	  }
+            	  
               }
             });
             

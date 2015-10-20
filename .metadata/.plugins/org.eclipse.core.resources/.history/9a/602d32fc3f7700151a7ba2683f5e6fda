@@ -11,8 +11,8 @@ public class AppStart {
 	
 	public static void main(String[] args) throws MalformedURLException, IOException{
 		
-		//Thread thread = new Thread(new FindSensor());
-		//thread.start();
+		Thread thread = new Thread(new FindSensor());
+		thread.start();
 		//OperatorAccess opAccess = new OperatorAccess();
 		//GuiBuilder g =new GuiBuilder(opAccess.getLogin(),opAccess.getPassword());
 		

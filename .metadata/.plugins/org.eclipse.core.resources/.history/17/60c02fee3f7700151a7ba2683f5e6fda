@@ -13,8 +13,8 @@ public class AppStart {
 		
 		//Thread thread = new Thread(new FindSensor());
 		//thread.start();
-		//OperatorAccess opAccess = new OperatorAccess();
-		//GuiBuilder g =new GuiBuilder(opAccess.getLogin(),opAccess.getPassword());
+		OperatorAccess opAccess = new OperatorAccess();
+		GuiBuilder g =new GuiBuilder(opAccess.getLogin(),opAccess.getPassword());
 		
 		
 		

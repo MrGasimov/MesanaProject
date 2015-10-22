@@ -1,0 +1,27 @@
+package com.corvolution.mesana.configurator;
+
+import java.io.IOException;
+
+public class UpdateGui implements Runnable {
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
+		if (!ConfigSensor.checkSensorConnected()){
+			resetData();
+			if(sensorText.getText().equals("") && ConfigSensor.checkSensorConnected()){
+				try {
+					updateGui();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			//Thread.sleep(7000);
+			
+		} else if(ConfigSensor.checkSensorConnected() && !shell.isVisible())
+			setShell();
+	}
+
+}

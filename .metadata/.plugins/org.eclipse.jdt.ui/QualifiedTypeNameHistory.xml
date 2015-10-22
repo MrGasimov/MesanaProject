@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="gui.OperatorAccess"/>
-<fullyQualifiedTypeName name="gui.GuiBuilder"/>
 <fullyQualifiedTypeName name="com.corvolution.mesana.configurator.ConnectionState"/>
 <fullyQualifiedTypeName name="org.eclipse.swt.events.SelectionAdapter"/>
+<fullyQualifiedTypeName name="org.eclipse.swt.events.ShellAdapter"/>
+<fullyQualifiedTypeName name="gui.GuiBuilder"/>
+<fullyQualifiedTypeName name="org.eclipse.swt.widgets.Display"/>
 </qualifiedTypeNameHistroy>

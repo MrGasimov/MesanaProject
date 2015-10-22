@@ -3,12 +3,12 @@ import java.io.*;
 import org.apache.commons.io.FileUtils;
 
 public class ConfigSensor {
-	
+	static String source = "C:/Users/Gasimov/file.txt";
+	static String dest  = "E:/file.txt";
 	
 	public static void streamCopy() throws IOException {
 		
-		String source = "C:/Users/Gasimov/file.txt";
-		String dest  = "E:/file.txt";
+		
 		
 		File  sourceFile= new File(source);
 		File destFile = new File(dest);
@@ -26,6 +26,17 @@ public class ConfigSensor {
 	        is.close();
 	        os.close();
 	    }
+	}
+	
+	//returns true if configuration was successfull otherwise false
+	public static boolean checkConfigState(){
+		boolean success = false;
+		File sourceFile = new File(source);
+		File destFile = new File (dest);
+		if(sourceFile.length()== destFile.length()){
+			success = true;
+		}
+		return success;
 	}
 	
 	public static boolean checkSensorConnected(){

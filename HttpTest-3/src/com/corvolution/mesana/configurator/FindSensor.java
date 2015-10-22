@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.eclipse.swt.widgets.Display;
+
 import gui.GuiBuilder;
 import gui.OperatorAccess;
 
@@ -50,6 +52,7 @@ public class FindSensor implements Runnable {
                  if( pluggedIn ){
                 	 status = "Sensor "+letters[i]+" has been plugged in";
                 	 System.out.println("Sensor "+letters[i]+" has been plugged in");
+                
                 	 ConnectionState.setTrueState();
              	 }  
                  else{
@@ -74,4 +77,6 @@ public class FindSensor implements Runnable {
 	  
 	     	
     }
+	
+	
 }

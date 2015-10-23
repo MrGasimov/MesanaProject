@@ -18,8 +18,18 @@ import com.google.gson.reflect.TypeToken;
 
 public class SensorCollection implements RestApiConnector{
 	
+	/**
+	 * @uml.property  name="sURL"
+	 */
 	public String sURL ="http://chili/mk/backend.mesana.com/api/v4/sensors/";	
+	/**
+	 * @uml.property  name="sensorList"
+	 */
 	private List<SensorData> sensorList;
+	/**
+	 * @uml.property  name="token"
+	 * @uml.associationEnd  multiplicity="(1 1)"
+	 */
 	TypeToken<List<SensorData>> token = new TypeToken<List<SensorData>>(){};
 	
 	public  List<SensorData> getList(){

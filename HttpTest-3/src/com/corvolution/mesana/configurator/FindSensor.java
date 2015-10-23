@@ -11,7 +11,14 @@ import gui.OperatorAccess;
 
 public class FindSensor implements Runnable {
 	static String status;	
+	/**
+	 * @uml.property  name="state"
+	 */
 	PrintStream state; 
+	/**
+	 * @uml.property  name="stateObj"
+	 * @uml.associationEnd  readOnly="true"
+	 */
 	ConnectionState stateObj;
 	
 	

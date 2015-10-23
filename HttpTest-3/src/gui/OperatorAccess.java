@@ -14,7 +14,14 @@ import org.eclipse.swt.widgets.Text;
 
 public class OperatorAccess {
 	
-	private String login, password;
+	/**
+	 * @uml.property  name="login"
+	 */
+	private String login;
+	/**
+	 * @uml.property  name="password"
+	 */
+	private String password;
 	
 	public OperatorAccess(){
 		Display display = new Display();
@@ -131,10 +138,18 @@ public class OperatorAccess {
         
 	}
 	
+	/**
+	 * @return
+	 * @uml.property  name="login"
+	 */
 	public String getLogin(){
 		return login;
 	}
 	
+	/**
+	 * @return
+	 * @uml.property  name="password"
+	 */
 	public String getPassword(){
 		return password;
 	}

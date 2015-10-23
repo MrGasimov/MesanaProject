@@ -14,10 +14,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-public class MeasurementCollection implements RestApiConnector {
-
-	CloseableHttpClient httpclient = HttpClients.createDefault();
-	public List<Measurement> measList;
+public class MeasurementCollection implements RestApiConnector {	
+	
+	CloseableHttpClient httpclient = HttpClients.createDefault();	
+	public List<Measurement> measList;	
 	TypeToken<List<Measurement>> token = new TypeToken<List<Measurement>>() {
 	};
 
@@ -26,10 +26,17 @@ public class MeasurementCollection implements RestApiConnector {
 
 	}
 
-	public void priorityFilter() {
-		Collections.sort(measList, new FilterComparator());
+	public void highPriorityfilter() {
+		Collections.sort(measList, new 	HighFilter());
 	}
-
+	
+	public void mediumPriorityfilter() {
+		Collections.sort(measList, new 	MediumFilter());
+	}
+	
+	public void lowPriorityfilter() {
+		Collections.sort(measList, new 	LowFilter());
+	}
 	@Override
 	public void getMethod(String id) {
 

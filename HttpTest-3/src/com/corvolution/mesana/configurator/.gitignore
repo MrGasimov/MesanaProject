@@ -3,3 +3,6 @@
 /SensorCollection$1.class
 /FindSensor$1.class
 /UpdateGui.class
+/HighFilter.class
+/MediumFilter.class
+/LowFilter.class

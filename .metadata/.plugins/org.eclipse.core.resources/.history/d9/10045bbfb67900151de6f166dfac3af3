@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" size="1096,1691" id="com.corvolution.mesana.configurator" metadata="uml2-1.0" initialized="true" scrolledX="148" tag="10" key="32303037303533312D31302048747470546573742D33">
+  <children xsi:type="editmodel:ClassEditModel" name="AppStart" location="622,649" size="97,67" id="com.corvolution.mesana.configurator/AppStart" runTimeClassModel="main([Ljava.lang.String;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="52,18">
+      <children xsi:type="editmodel:MethodEditModel" name="main" id="com.corvolution.mesana.configurator/AppStart#main([Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="CollectionData" location="50,784" size="135,29" id="com.corvolution.mesana.configurator/CollectionData" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ConfigApp" location="463,649" size="109,85" id="com.corvolution.mesana.configurator/ConfigApp" runTimeClassModel="getProperty(Ljava.lang.String;),ConfigApp()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="86,36">
+      <children xsi:type="editmodel:MethodEditModel" name="ConfigApp" id="com.corvolution.mesana.configurator/ConfigApp#ConfigApp()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getProperty" id="com.corvolution.mesana.configurator/ConfigApp#getProperty(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ConfigSensor" location="294,424" size="169,175" id="com.corvolution.mesana.configurator/ConfigSensor" runTimeClassModel="checkSensorConnected(),readConfigFile(Ljava.lang.String;),copyApache(Ljava.io.File;Ljava.io.File;),checkConfigState(),streamCopy(),source,dest">
+    <children xsi:type="editmodel:CompartmentEditModel" size="87,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="dest" id="com.corvolution.mesana.configurator/ConfigSensor#dest"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="source" id="com.corvolution.mesana.configurator/ConfigSensor#source"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="146,90">
+      <children xsi:type="editmodel:MethodEditModel" name="checkConfigState" id="com.corvolution.mesana.configurator/ConfigSensor#checkConfigState()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="checkSensorConnected" id="com.corvolution.mesana.configurator/ConfigSensor#checkSensorConnected()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="copyApache" id="com.corvolution.mesana.configurator/ConfigSensor#copyApache(Ljava.io.File;Ljava.io.File;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readConfigFile" id="com.corvolution.mesana.configurator/ConfigSensor#readConfigFile(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="streamCopy" id="com.corvolution.mesana.configurator/ConfigSensor#streamCopy()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="ConnectionState" location="513,424" size="147,121" id="com.corvolution.mesana.configurator/ConnectionState" runTimeClassModel="setTrueState(),getState(),state,setFalseState()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="87,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="state" id="com.corvolution.mesana.configurator/ConnectionState#state"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="96,54">
+      <children xsi:type="editmodel:MethodEditModel" name="getState" id="com.corvolution.mesana.configurator/ConnectionState#getState()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFalseState" id="com.corvolution.mesana.configurator/ConnectionState#setFalseState()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTrueState" id="com.corvolution.mesana.configurator/ConnectionState#setTrueState()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Constants" location="250,649" size="163,57" id="com.corvolution.mesana.configurator/Constants" runTimeClassModel="pROPERTIES_FILE">
+    <children xsi:type="editmodel:CompartmentEditModel" size="140,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="pROPERTIES_FILE" id="com.corvolution.mesana.configurator/Constants#pROPERTIES_FILE"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="CustomComparator" location="887,424" size="164,67" id="com.corvolution.mesana.configurator/CustomComparator" runTimeClassModel="compare(Lcom.corvolution.mesana.configurator.Measurement;Lcom.corvolution.mesana.configurator.Measurement;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="72,18">
+      <children xsi:type="editmodel:MethodEditModel" name="compare" id="com.corvolution.mesana.configurator/CustomComparator#compare(Lcom.corvolution.mesana.configurator.Measurement;Lcom.corvolution.mesana.configurator.Measurement;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="FilterComparator" location="50,649" size="150,67" id="com.corvolution.mesana.configurator/FilterComparator" runTimeClassModel="compare(Lcom.corvolution.mesana.configurator.Measurement;Lcom.corvolution.mesana.configurator.Measurement;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="72,18">
+      <children xsi:type="editmodel:MethodEditModel" name="compare" id="com.corvolution.mesana.configurator/FilterComparator#compare(Lcom.corvolution.mesana.configurator.Measurement;Lcom.corvolution.mesana.configurator.Measurement;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="FindSensor" location="710,424" size="127,121" id="com.corvolution.mesana.configurator/FindSensor" runTimeClassModel="run(),sensorListener(),state,status">
+    <children xsi:type="editmodel:CompartmentEditModel" size="104,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="state" id="com.corvolution.mesana.configurator/FindSensor#state"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="status" id="com.corvolution.mesana.configurator/FindSensor#status"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="103,36">
+      <children xsi:type="editmodel:MethodEditModel" name="run" id="com.corvolution.mesana.configurator/FindSensor#run()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sensorListener" id="com.corvolution.mesana.configurator/FindSensor#sensorListener()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Printer" location="50,424" size="194,157" id="com.corvolution.mesana.configurator/Printer" runTimeClassModel="print(),setTemplate(),hmap,printList,printLabel(),addParameter()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="171,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="hmap" id="com.corvolution.mesana.configurator/Printer#hmap"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="printList" id="com.corvolution.mesana.configurator/Printer#printList"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="97,72">
+      <children xsi:type="editmodel:MethodEditModel" name="addParameter" id="com.corvolution.mesana.configurator/Printer#addParameter()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="print" id="com.corvolution.mesana.configurator/Printer#print()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="printLabel" id="com.corvolution.mesana.configurator/Printer#printLabel()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTemplate" id="com.corvolution.mesana.configurator/Printer#setTemplate()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SelectionListener" location="769,649" size="153,29" id="com.corvolution.mesana.configurator/SelectionListener" runTimeClassModel="">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.14/@sourceConnections.0" name="RestApiConnector" location="484,50" size="183,99" id="com.corvolution.mesana.configurator/RestApiConnector" runTimeClassModel="getMethod(Ljava.lang.String;),httpclient">
+    <children xsi:type="editmodel:CompartmentEditModel" size="160,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="httpclient" id="com.corvolution.mesana.configurator/RestApiConnector#httpclient"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="80,18">
+      <children xsi:type="editmodel:MethodEditModel" name="getMethod" id="com.corvolution.mesana.configurator/RestApiConnector#getMethod(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SensorCollection" location="713,199" size="150,103" id="com.corvolution.mesana.configurator/SensorCollection" runTimeClassModel="getList(),sURL,getMethod(Ljava.lang.String;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="79,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="sURL" id="com.corvolution.mesana.configurator/SensorCollection#sURL"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="80,36">
+      <children xsi:type="editmodel:MethodEditModel" name="getList" id="com.corvolution.mesana.configurator/SensorCollection#getList()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMethod" id="com.corvolution.mesana.configurator/SensorCollection#getMethod(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.corvolution.mesana.configurator/RestApiConnector&lt;-com.corvolution.mesana.configurator/SensorCollection" source="//@children.12" target="//@children.14/@sourceConnections.0" targetEnd="//@children.12/@sourceConnections.0/@children.1" sourceEnd="//@children.12/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="75,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Measurement" location="278,199" size="183,175" id="com.corvolution.mesana.configurator/Measurement" runTimeClassModel="getMeasurementData(),getID(),getMethod(Ljava.lang.String;),priority,getDate(),httpclient,putMethod(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="160,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="httpclient" id="com.corvolution.mesana.configurator/Measurement#httpclient"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="priority" id="com.corvolution.mesana.configurator/Measurement#priority"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="132,90">
+      <children xsi:type="editmodel:MethodEditModel" name="getDate" id="com.corvolution.mesana.configurator/Measurement#getDate()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getID" id="com.corvolution.mesana.configurator/Measurement#getID()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMeasurementData" id="com.corvolution.mesana.configurator/Measurement#getMeasurementData()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMethod" id="com.corvolution.mesana.configurator/Measurement#getMethod(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="putMethod" id="com.corvolution.mesana.configurator/Measurement#putMethod(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.corvolution.mesana.configurator/RestApiConnector&lt;-com.corvolution.mesana.configurator/Measurement" source="//@children.13" target="//@children.14/@sourceConnections.0" targetEnd="//@children.13/@sourceConnections.0/@children.1" sourceEnd="//@children.13/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="91,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="AddressData" location="50,199" size="198,157" id="com.corvolution.mesana.configurator/AddressData" runTimeClassModel="getCustomerData(),addressList,AddressData(Ljava.lang.String;),guiAddressData(),getMethod(Ljava.lang.String;),httpclient">
+    <children xsi:type="editmodel:CompartmentEditModel" size="175,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="addressList" id="com.corvolution.mesana.configurator/AddressData#addressList"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="httpclient" id="com.corvolution.mesana.configurator/AddressData#httpclient"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="113,72">
+      <children xsi:type="editmodel:MethodEditModel" name="AddressData" id="com.corvolution.mesana.configurator/AddressData#AddressData(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCustomerData" id="com.corvolution.mesana.configurator/AddressData#getCustomerData()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMethod" id="com.corvolution.mesana.configurator/AddressData#getMethod(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="guiAddressData" id="com.corvolution.mesana.configurator/AddressData#guiAddressData()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.13/@sourceConnections.0 //@children.16/@sourceConnections.0 //@children.12/@sourceConnections.0 //@children.15/@sourceConnections.0" autoLocated="true" id="com.corvolution.mesana.configurator/RestApiConnector&lt;-com.corvolution.mesana.configurator/AddressData" source="//@children.14" target="//@children.11" targetEnd="//@children.14/@sourceConnections.0/@children.1" sourceEnd="//@children.14/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="99,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="91,99" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="SensorData" location="893,199" size="183,139" id="com.corvolution.mesana.configurator/SensorData" runTimeClassModel="getID(),SensorData(),getMethod(Ljava.lang.String;),getSensorData(),httpclient">
+    <children xsi:type="editmodel:CompartmentEditModel" size="160,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="httpclient" id="com.corvolution.mesana.configurator/SensorData#httpclient"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="102,72">
+      <children xsi:type="editmodel:MethodEditModel" name="SensorData" id="com.corvolution.mesana.configurator/SensorData#SensorData()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getID" id="com.corvolution.mesana.configurator/SensorData#getID()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMethod" id="com.corvolution.mesana.configurator/SensorData#getMethod(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSensorData" id="com.corvolution.mesana.configurator/SensorData#getSensorData()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.corvolution.mesana.configurator/RestApiConnector&lt;-com.corvolution.mesana.configurator/SensorData" source="//@children.15" target="//@children.14/@sourceConnections.0" targetEnd="//@children.15/@sourceConnections.0/@children.1" sourceEnd="//@children.15/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="91,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="MeasurementCollection" location="491,199" size="192,103" id="com.corvolution.mesana.configurator/MeasurementCollection" runTimeClassModel="sortListbyDate(),priorityFilter(),getMethod(Ljava.lang.String;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="100,54">
+      <children xsi:type="editmodel:MethodEditModel" name="getMethod" id="com.corvolution.mesana.configurator/MeasurementCollection#getMethod(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="priorityFilter" id="com.corvolution.mesana.configurator/MeasurementCollection#priorityFilter()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sortListbyDate" id="com.corvolution.mesana.configurator/MeasurementCollection#sortListbyDate()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.corvolution.mesana.configurator/RestApiConnector&lt;-com.corvolution.mesana.configurator/MeasurementCollection" source="//@children.16" target="//@children.14/@sourceConnections.0" targetEnd="//@children.16/@sourceConnections.0/@children.1" sourceEnd="//@children.16/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="96,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=1;Product=eUML2" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

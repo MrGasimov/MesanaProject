@@ -14,10 +14,25 @@ import com.google.gson.JsonParser;
 
 public class SensorData implements RestApiConnector{
 	static CloseableHttpClient httpclient = HttpClients.createDefault();
+	/**
+	 * @uml.property  name="id"
+	 */
 	private  String id = "";
+	/**
+	 * @uml.property  name="state"
+	 */
 	private  String state = "";
+	/**
+	 * @uml.property  name="firmware"
+	 */
 	private  String firmware = "";	
+	/**
+	 * @uml.property  name="name"
+	 */
 	private  String name = "";
+	/**
+	 * @uml.property  name="type"
+	 */
 	private  String type = "";
 
 
@@ -28,7 +43,7 @@ public class SensorData implements RestApiConnector{
 	
 	public  String getSensorData(){
 		
-		return "Sensor ID: " + id +"\r\n" +"State: "+ state + "\r\n"+"Firmware: "+firmware +"\r\n"+"Sensor Name: "+ name +"\r\n"+"Type: "+type;
+		return "SN: " + id +"\r\n" +"State: "+ state + "\r\n"+"Firmware: "+firmware +"\r\n"+"Sensor Name: "+ name +"\r\n"+"Type: "+type;
 		
 	}
 	public String getID(){

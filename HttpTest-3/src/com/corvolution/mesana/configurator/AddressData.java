@@ -17,23 +17,26 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
-/**
- * 
- * @author gasimov
- *
- */
+
 public class AddressData implements RestApiConnector {
 	
-	static CloseableHttpClient httpclient = HttpClients.createDefault();
-	public List <AddressData> addressList;
+	static CloseableHttpClient httpclient = HttpClients.createDefault();	
+	public List <AddressData> addressList;	
 	TypeToken<List<AddressData>> token = new TypeToken<List<AddressData>>(){};
 
+	
 	private String salutation = "";
+	
 	private String firstName = "";
+	
 	private String lastName = "";
+	
 	private String city = "";
+	
 	private String street = "";
+	
 	private String zip = "";
+	
 	private String country = "";
 
 	/**
@@ -52,11 +55,7 @@ public class AddressData implements RestApiConnector {
 			salutation = "Frau";
 		}
 		
-		if(country.equalsIgnoreCase("Deutschland")){
-			country = "";
-		}else{
-			country = country.toUpperCase();
-		}
+		country = country.toUpperCase();		
 		firstName = firstName.substring(0,1).toUpperCase() + firstName.substring(1).toLowerCase();
 		lastName = lastName.substring(0,1).toUpperCase() + lastName.substring(1).toLowerCase();
 		city = city.toUpperCase();
@@ -66,8 +65,12 @@ public class AddressData implements RestApiConnector {
 	}
 
 	public String guiAddressData() {
-
-		return firstName + " " + "\r\n" + lastName + " " + "\r\n" + city + " " + "\r\n" + country;
+		String limiter = null;
+		if(country.equalsIgnoreCase("Deutschland")){
+			country = "";
+			limiter =".";
+		}
+		return firstName + ", "  + lastName + ", "  + city + limiter +  country;
 
 	}
 

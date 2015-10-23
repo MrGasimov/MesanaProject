@@ -6,7 +6,13 @@ import java.util.List;
 
 public class Printer{
 	
+	/**
+	 * @uml.property  name="printList"
+	 */
 	public List<String> printList ;
+	/**
+	 * @uml.property  name="hmap"
+	 */
 	public HashMap<Integer, String> hmap = new HashMap<Integer, String>();
 	
 	public void printLabel(){

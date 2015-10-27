@@ -8,10 +8,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
@@ -116,96 +118,107 @@ public class GuiBuilder {
 		shell = new Shell(display, SWT.CLOSE | SWT.TITLE | SWT.MIN);
 		shell.setText("Configurator");
 		// create a new GridLayout with 3 columns of same size
-		GridLayout layout = new GridLayout(4, false);
+		GridLayout layout = new GridLayout(3, false);
 		shell.setLayout(layout);
 
 		setTrayIcon();
-
-		listLabel = new Label(shell, SWT.NONE);
+		
+		Group groupLeft = new Group(shell, SWT.SHADOW_OUT);
+		groupLeft.setLayout(new GridLayout());
+		groupLeft.setText("Customer Group");
+		
+		listLabel = new Label(groupLeft, SWT.NONE);
 		listLabel.setText("List of Customers");
 		listLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
-
-		customerLabel = new Label(shell, SWT.NONE);
-		customerLabel.setText("Customer Info");
-		customerLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
-
-		// Measurement Label
-		measLabel = new Label(shell, SWT.NONE);
-		measLabel.setText("Measurement Info");
-		measLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false, 1, 1));
-
-		sensorLabel = new Label(shell, SWT.NONE);
-		sensorLabel.setText("Sensor Info");
-		sensorLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
-
-		customerList = new List(shell, SWT.BORDER | SWT.V_SCROLL);
+		
+		customerList = new List(groupLeft, SWT.BORDER | SWT.V_SCROLL);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.verticalAlignment = GridData.BEGINNING;
-		gridData.heightHint = 200;
+		gridData.heightHint = 207;
 		gridData.widthHint = 160;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = false;
 		gridData.horizontalSpan = 1;
-		gridData.verticalSpan = 3;
+		gridData.verticalSpan = 1;
 		customerList.setLayoutData(gridData);
-		// customerList.select(1);
+		//customerList.select();
 		// customerList.showSelection();
-
-		customerText = new StyledText(shell, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		
+		// Combo selection
+		priorityCombo = new Combo(groupLeft, SWT.READ_ONLY);
+		priorityCombo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+		priorityCombo.setItems(new String[] {"Filter by Priority", "HIGH", "MEDIUM", "LOW" });
+		priorityCombo.select(0);
+		
+		// updateButton
+		updateButton = new Button(groupLeft, SWT.PUSH);
+		updateButton.setText("Update List");
+		gridData = new GridData();
+		gridData.verticalAlignment = GridData.CENTER;
+		gridData.horizontalAlignment = GridData.CENTER;
+		gridData.widthHint = 100;
+		gridData.heightHint = 30;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		updateButton.setLayoutData(gridData);
+		
+		
+		//center group
+		Group groupCenter = new Group(shell, SWT.SHADOW_OUT);
+		GridLayout groupLayout = new GridLayout(2,false);
+		groupCenter.setLayout(groupLayout);
+		groupCenter.setText("Measurement group");
+		
+		customerLabel = new Label(groupCenter, SWT.NONE);
+		customerLabel.setText("Customer Info");
+		customerLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
+		
+		// Measurement Label
+		measLabel = new Label(groupCenter, SWT.NONE);
+		measLabel.setText("Measurement Info");
+		measLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false, 1, 1));
+		
+		//customerText
+		customerText = new StyledText(groupCenter, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.verticalAlignment = GridData.BEGINNING;
-		gridData.heightHint = 130;
+		gridData.heightHint = 135;
 		gridData.widthHint = 90;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = false;
 		gridData.horizontalSpan = 1;
 		gridData.verticalSpan = 1;
 		customerText.setLayoutData(gridData);
-
+		
 		// Measurement Text
-		measureText = new StyledText(shell, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		measureText = new StyledText(groupCenter, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.verticalAlignment = GridData.BEGINNING;
-		gridData.heightHint = 130;
+		gridData.heightHint = 135;
 		gridData.widthHint = 150;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalSpan = 1;
 		gridData.verticalSpan = 1;
 		measureText.setLayoutData(gridData);
-
-		sensorText = new StyledText(shell, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
-		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.FILL;
-		gridData.verticalAlignment = GridData.BEGINNING;
-		gridData.heightHint = 130;
-		gridData.widthHint = 150;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = false;
-		gridData.horizontalSpan = 1;
-		gridData.verticalSpan = 1;
-		sensorText.setLayoutData(gridData);
-
+		
 		// Comment Label
-		commentLabel = new Label(shell, SWT.NONE);
+		commentLabel = new Label(groupCenter, SWT.NONE);
 		commentLabel.setText("Comment Here!");
 		commentLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-
+	
 		// Measurement Task Label
-		measTaskLabel = new Label(shell, SWT.NONE);
+		measTaskLabel = new Label(groupCenter, SWT.NONE);
 		measTaskLabel.setText("Measurement Tasks!");
 		measTaskLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-
-		// sensor Task label
-		sensorTaskLabel = new Label(shell, SWT.NONE);
-		sensorTaskLabel.setText("Sensor Tasks");
-		sensorTaskLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-
+		
 		// Comment Text
-		commentText = new StyledText(shell, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		commentText = new StyledText(groupCenter, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.CENTER;
 		gridData.verticalAlignment = GridData.BEGINNING;
@@ -218,7 +231,7 @@ public class GuiBuilder {
 		commentText.setLayoutData(gridData);
 
 		// Measurement Task Text
-		measurTaskText = new StyledText(shell, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		measurTaskText = new StyledText(groupCenter, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.CENTER;
 		gridData.verticalAlignment = GridData.BEGINNING;
@@ -229,9 +242,41 @@ public class GuiBuilder {
 		gridData.horizontalSpan = 1;
 		gridData.verticalSpan = 1;
 		measurTaskText.setLayoutData(gridData);
+		
+		// Electrode selection
+		electrodeCombo = new Combo(groupCenter, SWT.READ_ONLY);
+		electrodeCombo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
+		electrodeCombo.setItems(new String[] {"Filter by Electrode", "Simple", "Test", "New" });
+		electrodeCombo.select(0);
+		
+		
+		//right group 
+		Group groupRight = new Group(shell, SWT.SHADOW_OUT);
+		groupRight.setLayout(new GridLayout());
+		groupRight.setText("Sensor group");
 
-		// Sensor Task Text
-		sensorTaskText = new StyledText(shell, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		sensorLabel = new Label(groupRight, SWT.NONE);
+		sensorLabel.setText("Sensor Info");
+		sensorLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
+
+		sensorText = new StyledText(groupRight, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.verticalAlignment = GridData.BEGINNING;
+		gridData.heightHint = 130;
+		gridData.widthHint = 150;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = false;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		sensorText.setLayoutData(gridData);
+		
+		// sensor Task label
+		sensorTaskLabel = new Label(groupRight, SWT.NONE);
+		sensorTaskLabel.setText("Sensor Tasks");
+		sensorTaskLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		
+		sensorTaskText = new StyledText(groupRight, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.CENTER;
 		gridData.verticalAlignment = GridData.BEGINNING;
@@ -243,33 +288,8 @@ public class GuiBuilder {
 		gridData.verticalSpan = 1;
 		sensorTaskText.setLayoutData(gridData);
 		
-		// Combo selection
-		priorityCombo = new Combo(shell, SWT.DROP_DOWN);
-		priorityCombo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
-		priorityCombo.setItems(new String[] { "HIGH", "MEDIUM", "LOW" });
-		//priorityCombo.select(0);
-
-		// Electrode selection
-		electrodeCombo = new Combo(shell, SWT.READ_ONLY);
-		electrodeCombo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
-		electrodeCombo.setItems(new String[] { "Simple", "Test", "New" });
-
-		// updateButton
-		updateButton = new Button(shell, SWT.PUSH);
-		updateButton.setText("Update List");
-		gridData = new GridData();
-		gridData.verticalAlignment = GridData.CENTER;
-		gridData.horizontalAlignment = GridData.CENTER;
-		gridData.widthHint = 100;
-		gridData.heightHint = 30;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalSpan = 1;
-		gridData.verticalSpan = 1;
-		updateButton.setLayoutData(gridData);
-
 		// configButton
-		configButton = new Button(shell, SWT.PUSH);
+		configButton = new Button(groupRight, SWT.PUSH);
 		configButton.setText("Start Configure");
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.CENTER;
@@ -299,11 +319,14 @@ public class GuiBuilder {
 		// register listener for customerList.
 		customerList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				int index = customerList.getSelectionIndex();
-				measureText.setText(mCollect.measList.get(index).getMeasurementData());
-				mObject = mCollect.measList.get(index);
-				aData = new AddressData(mObject.getID());
-				customerText.setText(aData.getCustomerData());
+				int index = customerList.getSelectionIndex();				
+				if(index >=0 && index <= mCollect.measList.size()){
+					measureText.setText(mCollect.measList.get(index).getMeasurementData());
+					mObject = mCollect.measList.get(index);
+					aData = new AddressData(mObject.getID());
+					customerText.setText(aData.getCustomerData());
+				}
+				
 			}
 
 		});
@@ -311,33 +334,37 @@ public class GuiBuilder {
 		// register listener for combo selection
 		priorityCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				customerList.removeAll();
+				
 				if (priorityCombo.getText().equals("HIGH")) {
+					customerList.removeAll();
 					mCollect.highPriorityfilter();
 					for(Measurement mObject:mCollect.measList){
        				aData = new AddressData(mObject.getID());
-       				customerList.add(aData.guiAddressData());        				 
+       				customerList.add(aData.guiAddressData());  
+       				
        			 } 
-					System.out.println("high selected");
-				} else if (priorityCombo.getText().equals("MEDIUM")) {
+					statusBar.setText("List filtered according High priority");
 					
+				} else if (priorityCombo.getText().equals("MEDIUM")) {
+					customerList.removeAll();
 					mCollect.mediumPriorityfilter();
 					for(Measurement mObject:mCollect.measList){
        				aData = new AddressData(mObject.getID());
-       				customerList.add(aData.guiAddressData());        				 
+       				customerList.add(aData.guiAddressData());
+       				
        			 } 
+					statusBar.setText("List filtered according Medium priority");
 					
-					System.out.println("medium selected");
-				} else {
+				} else if(priorityCombo.getText().equals("LOW")) {
+					customerList.removeAll();
 					mCollect.lowPriorityfilter();
 					for(Measurement mObject:mCollect.measList){
        				aData = new AddressData(mObject.getID());
        				customerList.add(aData.guiAddressData());
-					
-					System.out.println("low selected");
-				}
-
-			}
+       				
+				} 
+					statusBar.setText("List filtered according Low priority");
+			} 
 			}
 		});
 
@@ -466,7 +493,7 @@ public class GuiBuilder {
 		mCollect = new MeasurementCollection();
 		mCollect.getMethod(null);
 
-		for (int i = 0; i < mCollect.measList.size(); i++) {
+		for (int i=0 ; i<mCollect.measList.size(); i++ ) {
 			mObject = mCollect.measList.get(i);
 			
 			String mID = mObject.getID();

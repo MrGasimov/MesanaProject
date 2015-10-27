@@ -19,16 +19,12 @@ import org.eclipse.swt.widgets.Text;
 
 public class OperatorAccess {
 	
-	Display display;
-	Shell shell;
-	Label userLabel, passwordLabel;
-	Text loginText, passwordText;
-	Button okButton, cancelButton;
+	
 	private String login, password;
 	
 	public OperatorAccess(){
-		display = new Display();
-        shell = new Shell(display,SWT.CLOSE | SWT.TITLE|SWT.MIN);
+		Display display = new Display();
+        Shell shell = new Shell(display,SWT.CLOSE | SWT.TITLE|SWT.MIN);
         shell.setText("Operator Access");  
       	
         // create a new GridLayout with 3 columns of same size
@@ -37,12 +33,12 @@ public class OperatorAccess {
         
         
         
-        userLabel = new Label(shell, SWT.NONE);
+        Label userLabel = new Label(shell, SWT.NONE);
         userLabel.setText("Username:");
         userLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false,false,1,1));
         
         //Login Text
-        loginText = new Text(shell, SWT.BORDER|SWT.SINGLE);
+        Text loginText = new Text(shell, SWT.BORDER|SWT.SINGLE);
         GridData gridData = new GridData();
         gridData.widthHint = 80;
         gridData.horizontalAlignment = GridData.CENTER;        
@@ -53,12 +49,12 @@ public class OperatorAccess {
         gridData.verticalSpan = 1;
         loginText.setLayoutData(gridData);
         
-        passwordLabel = new Label(shell, SWT.NONE);
+        Label passwordLabel = new Label(shell, SWT.NONE);
         passwordLabel.setText("Password:");
         passwordLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false,false,1,1));
         
         //Login Text
-        passwordText = new Text(shell, SWT.BORDER|SWT.SINGLE | SWT.PASSWORD);
+        Text passwordText = new Text(shell, SWT.BORDER|SWT.SINGLE | SWT.PASSWORD);
         gridData = new GridData();
         gridData.widthHint = 80;
         gridData.horizontalAlignment = GridData.CENTER;
@@ -73,7 +69,7 @@ public class OperatorAccess {
         errorLabel.setText("");
         errorLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false,false,2,1));
         
-        okButton = new Button(shell, SWT.PUSH);
+        Button okButton = new Button(shell, SWT.PUSH);
         okButton.setText("OK");
         gridData = new GridData();
         gridData.verticalAlignment = GridData.CENTER;
@@ -86,7 +82,7 @@ public class OperatorAccess {
         gridData.verticalSpan = 1;
         okButton.setLayoutData(gridData);
         
-        cancelButton = new Button(shell, SWT.PUSH);
+        Button cancelButton = new Button(shell, SWT.PUSH);
         cancelButton.setText("Cancel");
         gridData = new GridData();
         gridData.verticalAlignment = GridData.CENTER;
@@ -104,7 +100,17 @@ public class OperatorAccess {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.keyCode == SWT.CR){
-        			checkCredits();
+        			login = loginText.getText();
+            		password = passwordText.getText();
+            		
+            		if(!(login.equals("user") && password.equals("1234"))){
+                		okButton.setText("Enter again");        		
+                		loginText.setText("");
+                		passwordText.setText("");
+            		
+        		}else{
+        			shell.dispose();
+        		}
         			
         	}
 				
@@ -116,13 +122,23 @@ public class OperatorAccess {
 				
 			}
         	
-        }) ;   	
+        })      	
         
       
         okButton.addSelectionListener(new SelectionAdapter(){
         	public void widgetSelected(SelectionEvent e){
         		
-        		checkCredits();
+        		login = loginText.getText();
+        		password = passwordText.getText();
+        	if(!(login.equals("user") && password.equals("1234"))){
+        		okButton.setText("Enter again");        		
+        		loginText.setText("");
+        		passwordText.setText("");
+        	
+        	} else{
+        		
+        		shell.dispose();
+        	}
         		
         	}
         });
@@ -150,20 +166,7 @@ public class OperatorAccess {
         
         
 	}
-	
-	public void checkCredits(){
-		login = loginText.getText();
-		password = passwordText.getText();
 		
-		if(!(login.equals("user") && password.equals("1234"))){
-    		okButton.setText("Enter again");        		
-    		loginText.setText("");
-    		passwordText.setText("");
-		
-	}else{
-		shell.dispose();
-	}
-	}
 	public String getLogin(){
 		return login;
 	}

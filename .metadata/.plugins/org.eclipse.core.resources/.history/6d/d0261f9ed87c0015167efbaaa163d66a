@@ -73,7 +73,7 @@ public class OperatorAccess {
         errorLabel.setText("");
         errorLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false,false,2,1));
         
-        okButton = new Button(shell, SWT.PUSH);
+        Button okButton = new Button(shell, SWT.PUSH);
         okButton.setText("OK");
         gridData = new GridData();
         gridData.verticalAlignment = GridData.CENTER;
@@ -86,7 +86,7 @@ public class OperatorAccess {
         gridData.verticalSpan = 1;
         okButton.setLayoutData(gridData);
         
-        cancelButton = new Button(shell, SWT.PUSH);
+        Button cancelButton = new Button(shell, SWT.PUSH);
         cancelButton.setText("Cancel");
         gridData = new GridData();
         gridData.verticalAlignment = GridData.CENTER;
@@ -104,7 +104,7 @@ public class OperatorAccess {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.keyCode == SWT.CR){
-        			checkCredits();
+        			
         			
         	}
 				
@@ -122,7 +122,17 @@ public class OperatorAccess {
         okButton.addSelectionListener(new SelectionAdapter(){
         	public void widgetSelected(SelectionEvent e){
         		
-        		checkCredits();
+        		login = loginText.getText();
+        		password = passwordText.getText();
+        	if(!(login.equals("user") && password.equals("1234"))){
+        		okButton.setText("Enter again");        		
+        		loginText.setText("");
+        		passwordText.setText("");
+        	
+        	} else{
+        		
+        		shell.dispose();
+        	}
         		
         	}
         });

@@ -104,7 +104,7 @@ public class OperatorAccess {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.keyCode == SWT.CR){
-        			checkCredits();
+        			
         			
         	}
 				
@@ -122,7 +122,17 @@ public class OperatorAccess {
         okButton.addSelectionListener(new SelectionAdapter(){
         	public void widgetSelected(SelectionEvent e){
         		
-        		checkCredits();
+        		login = loginText.getText();
+        		password = passwordText.getText();
+        	if(!(login.equals("user") && password.equals("1234"))){
+        		okButton.setText("Enter again");        		
+        		loginText.setText("");
+        		passwordText.setText("");
+        	
+        	} else{
+        		
+        		shell.dispose();
+        	}
         		
         	}
         });

@@ -1,0 +1,5 @@
+package com.corvolution.cm2;
+
+public interface SensorListener {
+
+}

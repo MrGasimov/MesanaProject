@@ -1,0 +1,6 @@
+
+public interface SpeedListener {
+	public void speedExceeded(SunEvent e);
+
+	public void speedGoneBelow(SunEvent e);
+}

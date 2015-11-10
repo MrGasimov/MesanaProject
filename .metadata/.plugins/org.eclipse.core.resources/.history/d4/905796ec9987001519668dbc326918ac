@@ -1,0 +1,13 @@
+import java.util.EventObject;
+
+public class SunEvent extends EventObject{
+	 
+	private boolean risen;
+	private Date date;
+	
+	public SunEvent(Object arg0) {
+			super(arg0);
+			// TODO Auto-generated constructor stub
+		}
+	 
+}

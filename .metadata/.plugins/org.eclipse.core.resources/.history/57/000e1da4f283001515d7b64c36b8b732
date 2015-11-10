@@ -1,0 +1,37 @@
+package com.corvolution.cm2;
+import java.util.ArrayList;
+
+public class ConnectionState {
+	private static boolean state;
+	private static int counter;
+	private static ArrayList<String> driveList = new ArrayList<>();
+	
+	public static  void setState(boolean status){
+		state = status;
+	}
+	
+	public static boolean getState(){
+		return state;
+	}
+	
+	public static void setCounter(int count){
+		counter = count;
+	}
+	
+	public static int getCounter(){
+		return counter;
+	}
+	
+	public static void addDriveToList(String dir){
+		driveList.add(dir);
+	}
+	public static void deleteDriveFromList(String dir){
+		for(int i=0; i<=driveList.size(); i++){
+			if(driveList.get(i).equals(dir) driveList.remove(i);
+					
+				
+		}
+		
+	}
+	
+}

@@ -1,24 +1,19 @@
 package com.corvolution.mesana.configurator;
-import java.io.IOException;
-import java.net.MalformedURLException;
+import com.corvolution.cm2.ConnectionListener;
+import com.corvolution.mesana.gui.GuiBuilder;
+import com.corvolution.mesana.gui.OperatorAccess;
 
-import gui.GuiBuilder;
-import gui.OperatorAccess;
 
 
 public class AppStart {
 
-	public static void main(String[] args) throws MalformedURLException, IOException 
-	{
-
-		// Thread thread = new Thread(new FindSensor());
-		// thread.start();
-
+	public static void main(String[] args) throws Exception 
+	{	
+		Thread sensorListener = new Thread(new ConnectionListener());
+		sensorListener.start();		
 		OperatorAccess opAccess = new OperatorAccess();
-		new GuiBuilder(opAccess.getLogin(), opAccess.getPassword());
-
-		// Measurement m = new Measurement();
-		 //m.putMethod("SENSOR_OUTBOX", "test2", "00849");
-
+		new GuiBuilder(opAccess.getLogin(), opAccess.getPassword());		
+		
+		
 	}
 }

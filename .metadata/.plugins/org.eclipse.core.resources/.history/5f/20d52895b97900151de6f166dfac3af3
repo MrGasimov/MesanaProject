@@ -1,7 +1,0 @@
-package com.corvolution.mesana.configurator;
-
-import java.util.Comparator;
-
-public class LowFilter implements Comparator<Measurement> {
-	final String highOrder = "LOWMEDIUMHIGH";
-}

@@ -1,7 +1,0 @@
-package gui;
-
-import org.eclipse.swt.events.SelectionAdapter;
-
-public class UpdateButtonListener extends SelectionAdapter {
-
-}

@@ -1,0 +1,14 @@
+import java.util.ArrayList;
+
+public class Car {
+	private SpeedListener listener; 
+	private ArrayList<SpeedListener> speedListenerList = new ArrayList<SpeedListener>();
+	
+	// Register an event listener
+		public synchronized void addSpeedListener(SpeedListener listener) {
+			if (!speedListenerList.contains(listener)) {
+				speedListenerList.add(listener);
+			}
+		}
+	
+}

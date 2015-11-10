@@ -1,0 +1,57 @@
+import java.util.Vector;
+import java.util.Date;
+import java.util.Enumeration;
+import java.awt.Button;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.Serializable;
+
+/** A sample event source - this class fires SunEvents
+ *   to anyone watching. A simple GUI is provided
+ *   with "rise" and "set" buttons that cause the
+ *   SunEvents to be fired.
+ */
+
+public class WeatherStation extends Frame implements Serializable  {
+	
+	  private transient Vector listeners;
+
+	  /** Provide a simple GUI that triggers our SunEvents
+	    */
+	  
+	  public WeatherStation() {
+		    super("Sun Watcher");
+		    setLayout(new GridLayout(1,0));
+		    Button riseButton = new Button("Rise");
+		    Button setButton = new Button("Set");
+		    add(riseButton);
+		    add(setButton);
+
+		    // make the "Rise" button fire "rise" SunEvents
+		    riseButton.addActionListener(new ActionListener() {
+		      public void actionPerformed(ActionEvent e) {
+		        fireSunMoved(true);
+		      }
+		    });
+
+		    // make the "Rise" button fire "set" SunEvents
+		    setButton.addActionListener(new ActionListener() {
+		      public void actionPerformed(ActionEvent e) {
+		        fireSunMoved(false);
+		      }
+		    });
+
+		    // Provide a means to close the application
+		    addWindowListener(new WindowAdapter() {
+		      public void windowClosing(WindowEvent e) {
+		        System.exit(0);
+		      }
+		    });
+		    pack();
+	  }
+		
+}

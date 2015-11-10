@@ -1,6 +1,4 @@
 package com.corvolution.mesana.configurator;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,19 +11,17 @@ public class Printer{
 	/**
 	 * @uml.property  name="hmap"
 	 */
-	public HashMap<Integer, String> hmap = new HashMap<Integer, String>();
-	
-	public void printLabel(){
+	public HashMap<String , String> hmap = new HashMap<String, String>();
 		
+	
+	public void setTemplate(String labelTemplate){
+		
+		String label;
 	}
 	
-	public void setTemplate(){
-		ConfigApp conf =  new ConfigApp();
-		conf.getProperty("LABEL_TEMPLATE");
-	}
-	
-	public void addParameter(){
-		
+	//adding parameters to map e.g linkId and address
+	public void addParameter(String key, String value){
+		hmap.put(key, value);
 	}
 
 	public void print(){

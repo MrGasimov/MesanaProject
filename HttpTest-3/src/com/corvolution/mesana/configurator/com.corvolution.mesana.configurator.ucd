@@ -38,14 +38,14 @@
     <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="ConnectionState" location="513,424" size="147,121" id="com.corvolution.mesana.configurator/ConnectionState" runTimeClassModel="setTrueState(),getState(),state,setFalseState()">
+  <children xsi:type="editmodel:ClassEditModel" name="ConnectionState" location="513,424" size="147,121" id="com.corvolution.cm2/ConnectionState" runTimeClassModel="setTrueState(),getState(),state,setFalseState()">
     <children xsi:type="editmodel:CompartmentEditModel" size="87,18">
-      <children xsi:type="editmodel:AttributeEditModel" name="state" id="com.corvolution.mesana.configurator/ConnectionState#state"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="state" id="com.corvolution.cm2/ConnectionState#state"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel" size="96,54">
-      <children xsi:type="editmodel:MethodEditModel" name="getState" id="com.corvolution.mesana.configurator/ConnectionState#getState()"/>
-      <children xsi:type="editmodel:MethodEditModel" name="setFalseState" id="com.corvolution.mesana.configurator/ConnectionState#setFalseState()"/>
-      <children xsi:type="editmodel:MethodEditModel" name="setTrueState" id="com.corvolution.mesana.configurator/ConnectionState#setTrueState()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getState" id="com.corvolution.cm2/ConnectionState#getState()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFalseState" id="com.corvolution.cm2/ConnectionState#setFalseState()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTrueState" id="com.corvolution.cm2/ConnectionState#setTrueState()"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
@@ -74,14 +74,14 @@
     <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" name="FindSensor" location="710,424" size="127,121" id="com.corvolution.mesana.configurator/FindSensor" runTimeClassModel="run(),sensorListener(),state,status">
+  <children xsi:type="editmodel:ClassEditModel" name="FindSensor" location="710,424" size="127,121" id="com.corvolution.cm2/FindSensor" runTimeClassModel="run(),sensorListener(),state,status">
     <children xsi:type="editmodel:CompartmentEditModel" size="104,36">
-      <children xsi:type="editmodel:AttributeEditModel" name="state" id="com.corvolution.mesana.configurator/FindSensor#state"/>
-      <children xsi:type="editmodel:AttributeEditModel" name="status" id="com.corvolution.mesana.configurator/FindSensor#status"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="state" id="com.corvolution.cm2/FindSensor#state"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="status" id="com.corvolution.cm2/FindSensor#status"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel" size="103,36">
-      <children xsi:type="editmodel:MethodEditModel" name="run" id="com.corvolution.mesana.configurator/FindSensor#run()"/>
-      <children xsi:type="editmodel:MethodEditModel" name="sensorListener" id="com.corvolution.mesana.configurator/FindSensor#sensorListener()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="run" id="com.corvolution.cm2/FindSensor#run()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sensorListener" id="com.corvolution.cm2/FindSensor#sensorListener()"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
@@ -92,10 +92,10 @@
       <children xsi:type="editmodel:AttributeEditModel" name="printList" id="com.corvolution.mesana.configurator/Printer#printList"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel" size="97,72">
-      <children xsi:type="editmodel:MethodEditModel" name="addParameter" id="com.corvolution.mesana.configurator/Printer#addParameter()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addParameter" id="com.corvolution.mesana.configurator/Printer#addParameter(Ljava.lang.String;Ljava.lang.String;)"/>
       <children xsi:type="editmodel:MethodEditModel" name="print" id="com.corvolution.mesana.configurator/Printer#print()"/>
       <children xsi:type="editmodel:MethodEditModel" name="printLabel" id="com.corvolution.mesana.configurator/Printer#printLabel()"/>
-      <children xsi:type="editmodel:MethodEditModel" name="setTemplate" id="com.corvolution.mesana.configurator/Printer#setTemplate()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setTemplate" id="com.corvolution.mesana.configurator/Printer#setTemplate(Ljava.lang.String;)"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>

@@ -1,0 +1,12 @@
+ECG_SAMPLE_RATE = 100
+ACC_SAMPLE_RATE = 200
+TEMP_SAMPLE_RATE = 120
+IMP_SAMPLE_RATE = 130
+
+START_MODE = ATTACH
+LABEL_TEMPLATE=res/bin/KitImproveLabelExtern.label
+LABEL_WRITER_BIN=res/bin/PrintLabel.exe
+HOME_COUNTRY = DEUTSCHLAND
+GUI_MODE = CONFIGURATOR
+REST_PATH = http://chili/mk/backend.mesana.com/api/v4/
+READOUT_DEST = C:/Users/gasimov/Downloads

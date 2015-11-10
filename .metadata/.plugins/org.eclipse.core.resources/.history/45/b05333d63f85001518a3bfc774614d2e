@@ -1,0 +1,33 @@
+#
+# LabView exchange file
+#
+LABVIEW_EXCHANGE_FILE=C:/Temp/labview_exchange.txt
+#C:/Users/<USERNAME>/AppData/Local/careMon Wizard/careMonExchange.txt 
+LABVIEW_EXCHANGE_OK_MESSAGE=OK
+LABVIEW_EXCHANGE_ERROR_MESSAGE=ERROR
+LABVIEW_START_PATH=calc.exe
+#
+# Bluetooth Vendor MAC
+# Leave empty, when no vendor MAC should be used. 
+# Do not use separators (e.g. colons or hyphens)!  
+# Example: 
+# BLUETOOTH_VENDOR_MAC=0A1C94
+#
+BLUETOOTH_VENDOR_MAC=001791
+#
+# Unisens data folder
+#
+UNISENS_DATA_FOLDER=C:/DekomTexStudie
+
+ECG_SAMPLE_RATE = 100
+ACC_SAMPLE_RATE = 200
+TEMP_SAMPLE_RATE = 120
+IMP_SAMPLE_RATE = 130
+
+START_MODE = ATTACH
+LABEL_TEMPLATE=res/bin/KitImproveLabelExtern.label
+LABEL_WRITER_BIN=res/bin/PrintLabel.exe
+HOME_COUNTRY = DEUTSCHLAND
+GUI_MODE = CONFIGURATOR
+REST_PATH = http://chili/mk/backend.mesana.com/api/v4/
+READOUT_DEST = C:/Users/gasimov/Downloads/

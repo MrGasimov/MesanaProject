@@ -6,27 +6,8 @@ public class ConfigSensor {
 	static String source = "C:/Users/Gasimov/file.txt";
 	static String dest  = "E:/file.txt";
 	
-	public static void streamCopy() throws IOException {
-		
-		
-		
-		File  sourceFile= new File(source);
-		File destFile = new File(dest);
-		InputStream is = null;
-	    OutputStream os = null;
-	    try {
-	        is = new FileInputStream(sourceFile);
-	        os = new FileOutputStream(destFile);
-	        byte[] buffer = new byte[1024];
-	        int length;
-	        while ((length = is.read(buffer)) > 0) {
-	            os.write(buffer, 0, length);
-	        }
-	    } finally {
-	        is.close();
-	        os.close();
-	    }
-	}
+
+	
 	
 	//returns true if configuration was successfull otherwise false
 	public static boolean checkConfigState(){
@@ -39,13 +20,17 @@ public class ConfigSensor {
 		return success;
 	}
 	
+	//checks mock station for any connected sensor
 	public static boolean checkSensorConnected(){
-		boolean connected;
+		boolean connected = false;
 		File sensorFile = new File("E:/SensorInfo.txt");
 		connected = sensorFile.exists();
 		return connected;
 		
 	}
+	
+	
+	//read configuration file from sensor
 	public static String readConfigFile(String file) throws IOException{
 	
 			BufferedReader reader = new BufferedReader( new FileReader (file));
@@ -62,10 +47,14 @@ public class ConfigSensor {
 		 return stringBuilder.toString();
 	}
 	
-
-	public static void copyApache(File source , File dest ) throws IOException {
-	    FileUtils.copyFile(source, dest);
+	public static String getSensorID() throws IOException{
+		
+		String sensorID = readConfigFile("E:/info.txt").substring(5, 10).trim();
+		
+		return sensorID;
+		
 	}
+	
 	
 	
 	

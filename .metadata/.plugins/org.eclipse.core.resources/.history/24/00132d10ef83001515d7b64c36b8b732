@@ -1,0 +1,27 @@
+package com.corvolution.cm2;
+
+public class ConnectionState {
+	private static boolean state;
+	private static int counter;
+	
+	public static  void setTrueState(){
+		state = true;
+	}
+	
+	public static void setFalseState(){
+		state = false;
+	}
+	
+	public static boolean getState(){
+		return state;
+	}
+	
+	public static void setCounter(int count){
+		counter = count;
+	}
+	
+	public static int getCounter(){
+		return counter;
+	}
+	
+}

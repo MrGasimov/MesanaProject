@@ -1,0 +1,147 @@
+package com.corvolution.cm2;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.io.FileUtils;
+import java.util.Date;
+
+public class Sensor {
+		
+		private String sensorPath;
+		private String deviceName;
+		private String manufacturerName;
+		private String serialNumber;
+		private String firmwareVersion;		
+		private String flashDate;
+		private double sensorVoltage;		
+		private SensorConfiguration sensorConfiguration;	
+		//construct sensor object
+		public Sensor(String path) throws IOException{
+			
+			sensorPath = path;
+			readSensorInfo(path);
+			String fileName =":/config.txt" ;
+			readConfigFile(path, fileName);					
+		}
+			
+		
+		public String  getSensorPath(){
+			return sensorPath;
+		}
+		
+		public String getDeviceName(){
+			return deviceName;	
+		}
+		
+		public String getManufacturerName(){
+			return manufacturerName;	
+		}
+		
+		public String getSerialNumber(){
+			return serialNumber;	
+		}
+		
+		public String getFlashDate(){
+			return flashDate;
+		}			
+		
+		public double getSensorVoltage(){
+			return sensorVoltage;
+		}
+		
+		//read sensor info file from sensor
+		private void readSensorInfo(String path) throws IOException{
+			 String sensorInfo = ":/info.txt";					    		    
+			 deviceName = readConfigFile(path,sensorInfo).get(0);
+			 manufacturerName = readConfigFile(path,sensorInfo).get(1);
+			 serialNumber = readConfigFile(path,sensorInfo).get(2).substring(13, 23);
+			 firmwareVersion = readConfigFile(path,sensorInfo).get(3);
+			 flashDate =  readConfigFile(path,sensorInfo).get(4);					
+		}
+		
+		
+		//read configuration file from sensor
+		private void readConfigFile(String sensorPath,String fileName) throws IOException{
+			String absolutePath = sensorPath+fileName;
+			BufferedReader reader = new BufferedReader( new FileReader(absolutePath));
+			String line = null;
+			List<String> list = new ArrayList<String>();		
+		    while( ( line = reader.readLine() ) != null ) {	    
+		    	list.add(line);        	        
+		    }	
+		    
+		    reader.close();
+		   
+		}
+		
+		//create new configuration object for writing to sensor
+		public void setConfiguration(SensorConfiguration sensorConfiguration){					
+			this.sensorConfiguration = sensorConfiguration;
+//			return configObject;	
+		}
+		
+		public SensorConfiguration getConfiguration(){
+			return this.sensorConfiguration;
+		}
+		
+		//write configuration file to sensor
+		private void writeConfigFile() throws IOException{
+			
+			String configContent = sensorConfiguration.getLinkId() + "\r\n" + sensorConfiguration.getSampleRate();
+			System.out.println(configContent+" config content");
+			Files.write(Paths.get(sensorPath+":/config.txt"), configContent.getBytes());
+			File source = new File(sensorPath+":/confige.txt");					   
+		}
+		
+
+		
+		//read measurement data from sensor		
+		public void readMeasurementFromSensor(String dest, String mName){			
+			File destination = new File(dest+mName);
+			File source =  new File(sensorPath+":/project");
+				
+			try {
+				FileUtils.copyDirectoryToDirectory(source,destination);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 
+		}
+		
+		public long getSizeOfData(){
+			long size = FileUtils.sizeOf(new File(sensorPath+":/project"));
+			return size;
+		}
+		
+		public void setSensorVoltage(double sensorVoltage) {
+			this.sensorVoltage = sensorVoltage;
+		}
+		
+		public void setFlashDate(String flashDate) {
+			this.flashDate = flashDate;
+		}
+		
+
+		public void update(){
+				this.restartUsb();
+			}
+
+			
+		public void disconnect() throws IOException{
+			 this.writeConfigFile();
+			this.restartUsb();
+		}
+
+		private void restartUsb(){
+			// Writing timesync
+			// devcon restart
+		}
+
+
+}

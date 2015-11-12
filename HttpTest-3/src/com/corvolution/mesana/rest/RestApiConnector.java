@@ -19,9 +19,9 @@ public class RestApiConnector {
 	
 	public static CloseableHttpClient httpclient = HttpClients.createDefault();
 	PropertyManager conf = new PropertyManager();
-	public String getMethod(String ID){
+	public String getMethod(String URL){
 		
-		HttpGet httpGet = new HttpGet(ID);
+		HttpGet httpGet = new HttpGet(URL);
 		String json=null;
 		try {
 

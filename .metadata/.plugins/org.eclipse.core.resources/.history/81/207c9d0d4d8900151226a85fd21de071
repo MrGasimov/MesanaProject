@@ -1,0 +1,16 @@
+package com.corvolution.cm2;
+
+import java.util.HashMap;
+
+
+public class ConfigurationSet {
+	HashMap <String, String> description = new HashMap<>();
+	
+	String setName;
+	String descripton;
+	
+	public ConfigurationSet(){
+		description.put("Mesana", "ACG:250Hz");
+		
+	}
+}

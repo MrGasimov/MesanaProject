@@ -1,0 +1,27 @@
+package com.corvolution.mesana.configurator;
+
+import com.corvolution.cm2.ConnectionManager;
+import com.corvolution.cm2.UsbListener;
+import com.corvolution.mesana.gui.ReaderGui;
+
+public class MainClass {
+
+	public static void main(String[] args) {
+		Thread usbListener = new Thread(new UsbListener());
+		usbListener.start();
+		ConnectionManager cManager = new ConnectionManager();
+		cManager.addSensorListener(new GuiUpdater());
+		PropertyManager pManager = new PropertyManager();
+		if(pManager.getProperty("GUI_MODE").equals("CONFIGURATOR"){
+			
+			nwe 
+		}else{
+			
+		}
+		
+	
+		
+		
+	}
+
+}

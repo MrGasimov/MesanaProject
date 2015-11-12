@@ -1,16 +1,66 @@
 package com.corvolution.cm2;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class ConnectionManager {
-	  
+import javax.swing.event.EventListenerList;
+
+
+
+public final class ConnectionManager {
+	private static Vector<SensorListener> sensorListeners;
 	public static boolean state;
-	public static int numberOfConnectedSensors;
-	private static List<Sensor>sensorList = new CopyOnWriteArrayList<>();
 	private static String sensorPath;
-		
+	private SensorEvent sensorEvent;
+	public static int numberOfConnectedSensors;
+	private static List<Sensor>sensorList = new CopyOnWriteArrayList<>();	
+	private static ConnectionManager instance = null;
+	
+	private ConnectionManager() {
+	     //only for defending single instance
+	   }
+	
+	public static ConnectionManager getInstance() {
+	      if(instance == null) {
+	         instance = new ConnectionManager();
+	      }
+	      return instance;
+	   }
+	
+		/** Register a listener for SunEvents */
+	  synchronized public void addSensorListener(SensorListener listener) {
+	    if (sensorListeners == null)
+	    	sensorListeners = new Vector<SensorListener>();
+	    	sensorListeners.addElement(listener);
+	  }  
+
+	  /** Remove a listener for SunEvents */
+	  synchronized public void removeSensorListener(SensorListener listener) {
+	    if (sensorListeners == null)
+	    	sensorListeners = new Vector<>();
+	    	sensorListeners.removeElement(listener);
+	  }
+	 		  
+	  private synchronized void fireSensorEvent() {
+	        sensorEvent = new SensorEvent(this,state,sensorPath, numberOfConnectedSensors);
+	        if(sensorListeners!=null){
+	        	Iterator<SensorListener> listeners  = sensorListeners.iterator();
+		        while( listeners.hasNext() ) {
+		        	listeners.next().sensorConnection(sensorEvent);
+		        	
+		        }
+	        }
+	        
+	       
+	    }
+	
+	
 	public static  void setState(boolean status){
 		state = status;
 	}	
@@ -25,22 +75,25 @@ public class ConnectionManager {
 	}	
 	
 	//adds connected sensor path to array 
-	public static void addSensorToList(String path) throws IOException{
+	public  void addSensorToList(String path) throws IOException{
+		sensorPath  = path;
 		Sensor sensor = new Sensor(path);
+		fireSensorEvent();
 		sensorList.add(sensor);
 		
 	}
 	//deletes disconnected sensor from array
-	public static void removeSensorFromList(String path){
+	public  void removeSensorFromList(String path){
 		for(Sensor device:sensorList){
 			if(device.getSensorPath().equals(path))
-					sensorList.remove(device);
-		}				
+					sensorList.remove(device);			
+		}	
+		fireSensorEvent();
 	}
 		
 	//starts thread for listening and notifies Manager about any connection
 	public void startListener(){
-		Thread sensorListener = new Thread(new ConnectionListener());
+		Thread sensorListener = new Thread(new UsbListener());
 		sensorListener.start();
 	}
 	
@@ -61,10 +114,10 @@ public class ConnectionManager {
 		long dataSize = 0; 
 		if(option.equalsIgnoreCase("all")){
 			for(Sensor device:sensorList){
-				dataSize += device.sizeOfSensorData();			
+				dataSize += device.getSizeOfData();			
 			}
 		} else if(option.equalsIgnoreCase("single")){
-			dataSize += sensorList.get(0).sizeOfSensorData();
+			dataSize += sensorList.get(0).getSizeOfData();
 		}
 	
 		return dataSize;

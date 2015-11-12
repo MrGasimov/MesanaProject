@@ -6,11 +6,13 @@ public class SensorEvent extends EventObject {
 	
 	private boolean state;
 	private String path;
-	public SensorEvent(Object source, boolean state, String path) {
+	private int numOfSensors;
+	public SensorEvent(Object source, boolean state, String path, int num) {
 		super(source);
 		this.state = state;
 		this.path = path;
-		// TODO Auto-generated constructor stub
+		this.numOfSensors = num;
+		
 	}
 	
 	public boolean getState(){
@@ -19,5 +21,9 @@ public class SensorEvent extends EventObject {
 	
 	public String getSensorPath(){
 		return path;
+	}
+	
+	public int getNumOfConnectedSensors(){
+		return numOfSensors;
 	}
 }

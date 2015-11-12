@@ -1,0 +1,668 @@
+package com.corvolution.mesana.gui;
+
+import java.io.IOException;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tray;
+import org.eclipse.swt.widgets.TrayItem;
+import org.json.simple.JSONObject;
+import com.corvolution.cm2.ConnectionManager;
+import com.corvolution.cm2.Sensor;
+import com.corvolution.mesana.configurator.ConfigSensor;
+import com.corvolution.mesana.configurator.PropertyManager;
+import com.corvolution.mesana.data.AddressData;
+import com.corvolution.mesana.data.Measurement;
+import com.corvolution.mesana.data.MeasurementCollection;
+import com.corvolution.mesana.data.SensorCollection;
+import com.corvolution.mesana.data.SensorData;
+import com.corvolution.mesana.data.TaskCollection;
+
+public class GuiBuilder {
+	
+	private String login, password;
+	Display display;
+	Shell shell;
+	Label listLabel,customerLabel,sensorLabel,commentLabel, measLabel,measTaskLabel, sensorTaskLabel;	
+	List customerList;	
+	StyledText customerText, commentText, measurTaskText,sensorTaskText ,sensorText, measureText;	
+	Text statusBar;	
+	Button updateButton, configButton;	
+	Combo priorityCombo, electrodeCombo;	
+	MeasurementCollection mCollect;	
+	SensorCollection sCollect;	
+	TaskCollection tCollect;
+	Measurement mObject;	
+	AddressData aData;	
+	SensorData sData;
+	JSONObject json = new JSONObject();
+	PropertyManager conf = new PropertyManager();
+
+	// Constructor
+	public GuiBuilder(String log, String pass) throws IOException {
+		
+		setOperatorData(log, pass);
+		setGui();
+		if (ConnectionManager.state) {
+			// initialize customer data and SensorData to GUI if sensor connected		
+			statusBar.setText("Sensor connected Successfully");
+			setCustomerData();
+			setSensorData();			
+		}
+
+		setListeners();
+
+		shell.pack();
+		setShell();
+
+		// background Thread for updating GUI depending on Sensor connection
+		Thread updateThread = new Thread() {
+			public void run() {
+				while (true) {
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							// listens if sensor disconnected or connected
+							if(!ConnectionManager.state){
+								resetData();
+								statusBar.setText("Please connect Sensor!");
+							}else if(ConnectionManager.state && !shell.isVisible() ){
+								try {
+									updateGui();
+									statusBar.setText("Sensor connected Succussfully");
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								setShell();
+							}														
+						}
+
+					});
+				}
+			}
+			
+			
+		};
+
+		updateThread.setDaemon(true);
+		updateThread.start();
+
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch())
+				display.sleep();
+		}
+		display.dispose();
+
+	}
+
+	public void setGui() {
+		display = new Display();
+		shell = new Shell(display, SWT.CLOSE | SWT.TITLE | SWT.MIN);
+		shell.setText("Sensor Configurator");
+		// create a new GridLayout with 3 columns of same size
+		GridLayout layout = new GridLayout(3, false);
+		shell.setLayout(layout);
+
+		setTrayIcon();
+		
+		Group groupLeft = new Group(shell, SWT.SHADOW_OUT);
+		groupLeft.setLayout(new GridLayout());
+		groupLeft.setText("Customer Group");
+		
+		listLabel = new Label(groupLeft, SWT.NONE);
+		listLabel.setText("List of Customers");
+		listLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
+		
+		customerList = new List(groupLeft, SWT.BORDER | SWT.V_SCROLL);
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.verticalAlignment = GridData.BEGINNING;
+		gridData.heightHint = 207;
+		gridData.widthHint = 160;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = false;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		customerList.setLayoutData(gridData);
+		//customerList.select();
+		// customerList.showSelection();
+		
+		// Combo selection
+		priorityCombo = new Combo(groupLeft, SWT.READ_ONLY);
+		priorityCombo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+		priorityCombo.setItems(new String[] {"Filter by Priority", "HIGH", "MEDIUM", "LOW" });
+		priorityCombo.select(0);
+		
+		// updateButton
+		updateButton = new Button(groupLeft, SWT.PUSH);
+		updateButton.setText("Update List");
+		gridData = new GridData();
+		gridData.verticalAlignment = GridData.CENTER;
+		gridData.horizontalAlignment = GridData.CENTER;
+		gridData.widthHint = 100;
+		gridData.heightHint = 30;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		updateButton.setLayoutData(gridData);
+		
+		
+		//center group
+		Group groupCenter = new Group(shell, SWT.SHADOW_OUT);
+		GridLayout groupLayout = new GridLayout(2,false);
+		groupCenter.setLayout(groupLayout);
+		groupCenter.setText("Measurement group");
+		
+		customerLabel = new Label(groupCenter, SWT.NONE);
+		customerLabel.setText("Customer Info");
+		customerLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
+		
+		// Measurement Label
+		measLabel = new Label(groupCenter, SWT.NONE);
+		measLabel.setText("Measurement Info");
+		measLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false, 1, 1));
+		
+		//customerText
+		customerText = new StyledText(groupCenter, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.verticalAlignment = GridData.BEGINNING;
+		gridData.heightHint = 135;
+		gridData.widthHint = 90;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = false;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		customerText.setLayoutData(gridData);
+		
+		// Measurement Text
+		measureText = new StyledText(groupCenter, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.verticalAlignment = GridData.BEGINNING;
+		gridData.heightHint = 135;
+		gridData.widthHint = 150;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		measureText.setLayoutData(gridData);
+		
+		// Comment Label
+		commentLabel = new Label(groupCenter, SWT.NONE);
+		commentLabel.setText("Comment Here!");
+		commentLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+	
+		// Measurement Task Label
+		measTaskLabel = new Label(groupCenter, SWT.NONE);
+		measTaskLabel.setText("Measurement Tasks!");
+		measTaskLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		
+		// Comment Text
+		commentText = new StyledText(groupCenter, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.CENTER;
+		gridData.verticalAlignment = GridData.BEGINNING;
+		gridData.heightHint = 80;
+		gridData.widthHint = 100;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		commentText.setLayoutData(gridData);
+
+		// Measurement Task Text
+		measurTaskText = new StyledText(groupCenter, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.CENTER;
+		gridData.verticalAlignment = GridData.BEGINNING;
+		gridData.heightHint = 80;
+		gridData.widthHint = 150;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		measurTaskText.setLayoutData(gridData);
+		
+		// Electrode selection
+		electrodeCombo = new Combo(groupCenter, SWT.READ_ONLY);
+		electrodeCombo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
+		electrodeCombo.setItems(new String[] {"Electrode", "Simple", "Test", "New" });
+		electrodeCombo.select(0);		
+		
+		//right group 
+		Group groupRight = new Group(shell, SWT.SHADOW_OUT);
+		groupRight.setLayout(new GridLayout());
+		groupRight.setText("Sensor group");
+
+		sensorLabel = new Label(groupRight, SWT.NONE);
+		sensorLabel.setText("Sensor Info");
+		sensorLabel.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
+
+		sensorText = new StyledText(groupRight, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.verticalAlignment = GridData.BEGINNING;
+		gridData.heightHint = 130;
+		gridData.widthHint = 150;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = false;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		sensorText.setLayoutData(gridData);
+		
+		// sensor Task label
+		sensorTaskLabel = new Label(groupRight, SWT.NONE);
+		sensorTaskLabel.setText("Sensor Tasks");
+		sensorTaskLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		
+		sensorTaskText = new StyledText(groupRight, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.CENTER;
+		gridData.verticalAlignment = GridData.BEGINNING;
+		gridData.heightHint = 80;
+		gridData.widthHint = 150;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		sensorTaskText.setLayoutData(gridData);
+		
+		// configButton
+		configButton = new Button(groupRight, SWT.PUSH);
+		configButton.setText("Start Configure");
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.CENTER;
+		gridData.verticalAlignment = GridData.CENTER;
+		gridData.widthHint = 100;
+		gridData.heightHint = 30;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.horizontalSpan = 1;
+		gridData.verticalSpan = 1;
+		configButton.setLayoutData(gridData);
+
+		statusBar = new Text(shell, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE);
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.verticalAlignment = GridData.FILL;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.horizontalSpan = 4;
+		gridData.verticalSpan = 1;
+		statusBar.setLayoutData(gridData);
+
+	}
+
+	public void setListeners() {
+
+		// register listener for customerList.
+		customerList.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				int index = customerList.getSelectionIndex();				
+				if(index >=0 && index <= mCollect.getList().size()){
+					measureText.setText(mCollect.getList().get(index).getMeasurementData());
+					aData = new AddressData(mCollect.getMesID(index));
+					customerText.setText(aData.getCustomerData());
+					try {
+						setTaskData(mCollect.getMesID(index));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				
+			}
+
+		});
+
+		// register listener for combo selection
+		priorityCombo.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				
+				if (priorityCombo.getText().equals("HIGH")) {
+					customerList.removeAll();
+					mCollect.highPriorityfilter();
+					for(Measurement mObject:mCollect.getList()){
+       				aData = new AddressData(mObject.getID());
+       				if(mObject.getPriority().equals("HIGH")){				
+       					customerList.add("+ "+aData.guiAddressData());
+       				}else if(mObject.getPriority().equals("MEDIUM")){
+       					customerList.add("- "+aData.guiAddressData());
+       				}else {
+       					customerList.add("o "+aData.guiAddressData());
+       				}
+       				
+       				
+       			 } 
+					statusBar.setText("List filtered according High priority");
+					
+				} else if (priorityCombo.getText().equals("MEDIUM")) {
+					customerList.removeAll();
+					mCollect.mediumPriorityfilter();
+					for(Measurement mObject:mCollect.getList()){
+       				aData = new AddressData(mObject.getID());
+       				if(mObject.getPriority().equals("HIGH")){				
+       					customerList.add("+ "+aData.guiAddressData());
+       				}else if(mObject.getPriority().equals("MEDIUM")){
+       					customerList.add("- "+aData.guiAddressData());
+       				}else {
+       					customerList.add("o "+aData.guiAddressData());
+       				} 
+       				
+       			 } 
+					statusBar.setText("List filtered according Medium priority");
+					
+				} else if(priorityCombo.getText().equals("LOW")) {
+					customerList.removeAll();
+					mCollect.lowPriorityfilter();
+					for(Measurement mObject:mCollect.getList()){
+       				aData = new AddressData(mObject.getID());
+       				if(mObject.getPriority().equals("HIGH")){				
+       					customerList.add("+ "+aData.guiAddressData());
+       				}else if(mObject.getPriority().equals("MEDIUM")){
+       					customerList.add("- "+aData.guiAddressData());
+       				}else {
+       					customerList.add("o "+aData.guiAddressData());
+       				}
+       				
+				} 
+					statusBar.setText("List filtered according Low priority");
+			} 
+			}
+		});
+
+		// register listener for the electrode combo
+		electrodeCombo.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e){
+				if(electrodeCombo.getText().equals("Simple")){
+					JSONObject json = new JSONObject();
+					json.put("comment","Simple");
+					json.put("user", login);
+					String s = json.toJSONString();	
+					String id = measureText.getText().substring(4,17);
+					String elecUri = "http://chili/mk/backend.mesana.com/api/v4/measurements/"+id+"/electrodes";
+					try {
+						mObject.postMethod(s,elecUri);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}else if(electrodeCombo.getText().equals("Test")){
+					JSONObject json = new JSONObject();
+					json.put("comment","Test");
+					json.put("user", login);
+					String s = json.toJSONString();	
+					String id = measureText.getText().substring(4,17);
+					String elecUri = "http://chili/mk/backend.mesana.com/api/v4/measurements/"+id+"/electrodes";
+					try {
+						mObject.postMethod(s,elecUri);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}else if(electrodeCombo.getText().equals("New")){
+					JSONObject json = new JSONObject();
+					json.put("comment","New");
+					json.put("user", login);
+					String s = json.toJSONString();	
+					String id = measureText.getText().substring(4,17);
+					String elecUri = "http://chili/mk/backend.mesana.com/api/v4/measurements/"+id+"/electrodes";
+					try {
+						mObject.postMethod(s,elecUri);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}else{
+					
+				}
+			}
+
+		});
+
+		// delete all data on gui, update list and set text fields to first selected item
+		updateButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				resetData();
+				setCustomerData();
+				try {
+					setSensorData();					
+					statusBar.setText("List updated successfully");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		// register listener for the selection event
+		configButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					//push comment to RestApi
+					pushComment();													
+					//Write configuration file to sensor
+					ConnectionManager.currentSensor(0).writeConfigFile();					
+					//change state of measurement in RestApi
+					updateMeasureState("CONFIGURING");
+					Thread.sleep(3000);
+					updateMeasureState("SENSOR_OUTBOX");										
+					statusBar.setText("Sensor is configurated.Please connect another sensor.");					
+					//statusBar.setText("Configuration is failed");				
+					Thread.sleep(2000);
+					statusBar.setText("Reseting GUI..");	
+					resetData();															
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
+
+			}
+		});
+
+	}
+
+	public void pushComment(){
+		String text = commentText.getText();		
+		json.put("comment",text);
+		json.put("user", login);
+		String s = json.toJSONString();	
+		String id = measureText.getText().substring(4,17);								
+		String cURL ="http://chili/mk/backend.mesana.com/api/v4/measurements/"+id+"/comments";
+		try {
+			mObject.postMethod(s,cURL);
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+	}
+
+	public void updateMeasureState(String state) throws Exception{
+		
+		json.put("state", state);
+		json.put("user", login);
+		json.put("sensorId",ConfigSensor.getSensorID());
+		String a = json.toJSONString();	
+		String ID = measureText.getText().substring(4,17);
+		String core = conf.getProperty("HTML_URL");
+		String mUri ="http://chili/mk/backend.mesana.com/api/v4/measurements/"+ID+"/";
+		mObject.putMethod(a,mUri);
+		
+	}
+	
+	public void setTrayIcon() {
+		// image for tray icon
+		Image image = new Image(display, "C:/Users/gasimov/Documents/Repo/HttpTest-3/res/images/bulb.gif");
+		final Tray tray = display.getSystemTray();
+
+		if (tray == null) {
+			System.out.println("The system tray is not available");
+		} else {
+			final TrayItem item = new TrayItem(tray, SWT.NONE);
+			item.setToolTipText("Mesana TrayItem");
+			item.addListener(SWT.Show, new Listener() {
+				public void handleEvent(Event event) {
+
+					System.out.println("show");
+				}
+			});
+			item.addListener(SWT.Hide, new Listener() {
+				public void handleEvent(Event event) {
+
+					System.out.println("hide");
+				}
+			});
+			item.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+
+				}
+			});
+			item.addListener(SWT.DefaultSelection, new Listener() {
+				public void handleEvent(Event event) {
+
+				}
+			});
+
+			final Menu menu = new Menu(shell, SWT.POP_UP);
+
+			MenuItem mi1 = new MenuItem(menu, SWT.PUSH);
+			MenuItem mi2 = new MenuItem(menu, SWT.PUSH);
+			MenuItem mi3 = new MenuItem(menu, SWT.PUSH);
+
+			mi1.setText("Show");
+			mi1.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+					System.out.println("selection " + event.widget);
+				}
+			});
+
+			mi2.setText("Hide");
+			mi2.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+					System.out.println("selection " + event.widget);
+				}
+			});
+
+			mi3.setText("About");
+			mi3.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+
+					System.out.println("selection " + event.widget);
+				}
+			});
+
+			// menu.setDefaultItem(mi1);
+
+			item.addListener(SWT.MenuDetect, new Listener() {
+				public void handleEvent(Event event) {
+					menu.setVisible(true);
+				}
+			});
+
+			item.setImage(image);
+		}
+	}
+
+	public void setCustomerData() {
+		mCollect = new MeasurementCollection();
+		mCollect.setList();
+
+		for (int i=0 ; i<mCollect.getList().size(); i++ ) {
+			mObject = mCollect.getList().get(i);			
+			String mID = mObject.getID();
+			aData = new AddressData(mID);
+			if(mObject.getPriority().equals("HIGH")){				
+					customerList.add("+ "+aData.guiAddressData());
+				}else if(mObject.getPriority().equals("MEDIUM")){
+					customerList.add("- "+aData.guiAddressData());
+				}else {
+					customerList.add("o "+aData.guiAddressData());
+				}
+			
+		}
+		customerText.setText(aData.getCustomerData());
+		measureText.setText(mObject.getMeasurementData());
+
+	}
+	
+	
+	public void setSensorData() throws IOException {
+		if (ConnectionManager.state) {
+			System.out.println(ConnectionManager.currentSensor(0)+" sensor");
+			SensorCollection sCollect = new SensorCollection();
+			sCollect.setList();			
+			for (SensorData sData : sCollect.getList()) {				
+				if (sData.getID().equalsIgnoreCase(ConnectionManager.currentSensor(0).getSerialNumber()));
+					sensorText.setText(sData.getSensorData());
+			}
+
+		}
+
+	}
+	
+	public void setTaskData(String mID) throws IOException{
+		tCollect = new TaskCollection(mID ,ConnectionManager.currentSensor(0).getSerialNumber());		
+		if(tCollect.getMeasTask().isEmpty()){			
+			measurTaskText.setText(" ");
+		}else{
+			for(int i=0; i<tCollect.getMeasTask().size(); i++){
+				measurTaskText.setText(tCollect.getMeasTask().get(i).getTaskDetails());	
+			}
+						
+		}
+		//if sensortask is set skip
+		if(!sensorTaskText.equals("")){
+			for(int i=0; i<tCollect.getSensorTask().size(); i++){
+				sensorTaskText.setText(tCollect.getSensorTask().get(i).getTaskDetails());
+				}
+		}
+		
+	}
+	
+	public void setShell() {
+		if (ConnectionManager.state)
+			shell.open();
+	}
+
+	public void resetData() {
+		priorityCombo.select(0);
+		customerList.removeAll();
+		customerText.setText("");
+		commentText.setText("");
+		sensorText.setText("");
+		measureText.setText("");
+		measurTaskText.setText("");
+		sensorTaskText.setText("");
+
+	}
+
+	public void updateGui() throws IOException {
+		setCustomerData();
+		setSensorData();
+		
+	}
+	
+	public void setOperatorData(String login, String password) {
+		this.login = login;
+		this.password = password;
+	}
+
+}

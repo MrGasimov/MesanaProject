@@ -47,5 +47,9 @@ public class Measurement extends RestApiConnector{
 		return id;
 	}
 	
+	public String getLinkId(){
+		return linkId;
+	}
+	
 
 }

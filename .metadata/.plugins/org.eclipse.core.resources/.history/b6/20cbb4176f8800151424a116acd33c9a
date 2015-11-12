@@ -1,0 +1,19 @@
+package com.corvolution.mesana.configurator;
+
+import com.corvolution.cm2.SensorEvent;
+import com.corvolution.cm2.SensorListener;
+import com.corvolution.mesana.gui.ReaderGui;
+
+public class GuiUpdater implements SensorListener{
+	
+		
+	@Override
+	public void sensorConnection(SensorEvent e) {
+		ReaderGui.listen.start();
+		System.out.println(ReaderGui.listen.isAlive());
+	}
+
+
+	
+
+}

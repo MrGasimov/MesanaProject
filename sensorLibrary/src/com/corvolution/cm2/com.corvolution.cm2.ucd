@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" size="1226,972" id="com.corvolution.cm2" metadata="uml2-1.0" initialized="true" zoom="0.75" scrolledY="128" tag="10" key="32303037303533312D31302073656E736F724C696272617279">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.4/@sourceConnections.3" name="Sensor" location="50,316" size="199,445" id="com.corvolution.cm2/Sensor" runTimeClassModel="setConfiguration(Lcom.corvolution.cm2.SensorConfiguration;),getSizeOfData(),serialNumber,getSerialNumber(),manufacturerName,flashDate,Sensor(Ljava.lang.String;),readMeasurementFromSensor(Ljava.lang.String;),getConfiguration(),getSensorVoltage(),getFlashDate(),deviceName,getDeviceName(),sensorVoltage,disconnect(),getSensorPath(),setSensorVoltage(D),writeConfigFile(Ljava.lang.String;),setFlashDate(Ljava.lang.String;),getManufacturerName(),sensorPath,update()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="145,108">
+      <children xsi:type="editmodel:AttributeEditModel" name="deviceName" id="com.corvolution.cm2/Sensor#deviceName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="flashDate" id="com.corvolution.cm2/Sensor#flashDate"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="manufacturerName" id="com.corvolution.cm2/Sensor#manufacturerName"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sensorPath" id="com.corvolution.cm2/Sensor#sensorPath"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sensorVoltage" id="com.corvolution.cm2/Sensor#sensorVoltage"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="serialNumber" id="com.corvolution.cm2/Sensor#serialNumber"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="176,288">
+      <children xsi:type="editmodel:MethodEditModel" name="Sensor" id="com.corvolution.cm2/Sensor#Sensor(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="disconnect" id="com.corvolution.cm2/Sensor#disconnect()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getConfiguration" id="com.corvolution.cm2/Sensor#getConfiguration()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getDeviceName" id="com.corvolution.cm2/Sensor#getDeviceName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFlashDate" id="com.corvolution.cm2/Sensor#getFlashDate()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getManufacturerName" id="com.corvolution.cm2/Sensor#getManufacturerName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSensorPath" id="com.corvolution.cm2/Sensor#getSensorPath()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSensorVoltage" id="com.corvolution.cm2/Sensor#getSensorVoltage()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSerialNumber" id="com.corvolution.cm2/Sensor#getSerialNumber()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSizeOfData" id="com.corvolution.cm2/Sensor#getSizeOfData()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readMeasurementFromSensor" id="com.corvolution.cm2/Sensor#readMeasurementFromSensor(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setConfiguration" id="com.corvolution.cm2/Sensor#setConfiguration(Lcom.corvolution.cm2.SensorConfiguration;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFlashDate" id="com.corvolution.cm2/Sensor#setFlashDate(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSensorVoltage" id="com.corvolution.cm2/Sensor#setSensorVoltage(D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="update" id="com.corvolution.cm2/Sensor#update()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeConfigFile" id="com.corvolution.cm2/Sensor#writeConfigFile(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="com.corvolution.cm2/Sensor->com.corvolution.cm2/SensorConfiguration*com.corvolution.cm2/Sensor-Soyatec::Import->com.corvolution.cm2/SensorConfiguration" source="//@children.0" target="//@children.3" targetEnd="//@children.0/@sourceConnections.0/@children.2" label="//@children.0/@sourceConnections.0/@children.0" sourceEnd="//@children.0/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="0,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="199,372" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,73"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.4/@sourceConnections.2" name="SensorListener" location="663,101" size="141,81" id="com.corvolution.cm2/SensorListener" runTimeClassModel="sensorConnection(Lcom.corvolution.cm2.SensorEvent;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="118,18">
+      <children xsi:type="editmodel:MethodEditModel" name="sensorConnection" id="com.corvolution.cm2/SensorListener#sensorConnection(Lcom.corvolution.cm2.SensorEvent;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="com.corvolution.cm2/SensorListener-Soyatec::Import->com.corvolution.cm2/SensorEvent" source="//@children.1" target="//@children.2" targetEnd="//@children.1/@sourceConnections.0/@children.2" label="//@children.1/@sourceConnections.0/@children.0" sourceEnd="//@children.1/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="41,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="57,81" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="135,0"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.1/@sourceConnections.0 //@children.4/@sourceConnections.1" name="SensorEvent" location="585,371" size="194,139" id="com.corvolution.cm2/SensorEvent" runTimeClassModel="getState(),getSensorPath(),state,SensorEvent(Ljava.lang.Object;ZLjava.lang.String;I),getNumOfConnectedSensors()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="87,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="state" id="com.corvolution.cm2/SensorEvent#state"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="171,72">
+      <children xsi:type="editmodel:MethodEditModel" name="SensorEvent" id="com.corvolution.cm2/SensorEvent#SensorEvent(Ljava.lang.Object;ZLjava.lang.String;I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getNumOfConnectedSensors" id="com.corvolution.cm2/SensorEvent#getNumOfConnectedSensors()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSensorPath" id="com.corvolution.cm2/SensorEvent#getSensorPath()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getState" id="com.corvolution.cm2/SensorEvent#getState()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0" name="SensorConfiguration" location="342,615" size="172,420" id="com.corvolution.cm2/SensorConfiguration" runTimeClassModel="getParameters(),addParameter(Ljava.lang.String;Ljava.lang.String;),setPatientData(Ljava.lang.String;),getStartMode(),patientData,addEncryptedParameter(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;),setSampleRate(Ljava.lang.String;),sampleRate,getSampleRate(),versionNumber,setStartMode(Ljava.lang.Enum;),getVersionNumber(),getLinkId(),linkId,startMode,setVersionNumber(Ljava.lang.String;),com.corvolution.cm2.SensorConfiguration.Description">
+    <children xsi:type="editmodel:CompartmentEditModel" size="126,90">
+      <children xsi:type="editmodel:AttributeEditModel" name="linkId" id="com.corvolution.cm2/SensorConfiguration#linkId"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="patientData" id="com.corvolution.cm2/SensorConfiguration#patientData"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sampleRate" id="com.corvolution.cm2/SensorConfiguration#sampleRate"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="startMode" id="com.corvolution.cm2/SensorConfiguration#startMode"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="versionNumber" id="com.corvolution.cm2/SensorConfiguration#versionNumber"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="146,198">
+      <children xsi:type="editmodel:MethodEditModel" name="addEncryptedParameter" id="com.corvolution.cm2/SensorConfiguration#addEncryptedParameter(Ljava.lang.String;Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addParameter" id="com.corvolution.cm2/SensorConfiguration#addParameter(Ljava.lang.String;Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLinkId" id="com.corvolution.cm2/SensorConfiguration#getLinkId()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParameters" id="com.corvolution.cm2/SensorConfiguration#getParameters()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSampleRate" id="com.corvolution.cm2/SensorConfiguration#getSampleRate()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStartMode" id="com.corvolution.cm2/SensorConfiguration#getStartMode()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getVersionNumber" id="com.corvolution.cm2/SensorConfiguration#getVersionNumber()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setPatientData" id="com.corvolution.cm2/SensorConfiguration#setPatientData(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSampleRate" id="com.corvolution.cm2/SensorConfiguration#setSampleRate(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setStartMode" id="com.corvolution.cm2/SensorConfiguration#setStartMode(Ljava.lang.Enum;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setVersionNumber" id="com.corvolution.cm2/SensorConfiguration#setVersionNumber(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="113,73">
+      <children xsi:type="editmodel:EnumerationEditModel" name="Description" size="113,71" id="com.corvolution.cm2/SensorConfiguration$Description" runTimeClassModel="HZ%">
+        <children xsi:type="editmodel:CompartmentEditModel" size="33,18">
+          <children xsi:type="editmodel:EnumerationLiteralEditModel" name="HZ" id="com.corvolution.cm2/SensorConfiguration$Description#HZ%"/>
+        </children>
+        <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+      </children>
+    </children>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.5/@sourceConnections.0" name="ConnectionManager" location="330,255" size="200,319" id="com.corvolution.cm2/ConnectionManager" runTimeClassModel="getCounter(),numberOfConnectedSensors,getConnectedSensorsList(),removeSensorFromList(Ljava.lang.String;),addSensorListener(Lcom.corvolution.cm2.SensorListener;),currentSensor(I),getState(),getInstance(),setCounter(I),setState(Z),measurementDataSize(Ljava.lang.String;),removeSensorListener(Lcom.corvolution.cm2.SensorListener;),startListener(),state,addSensorToList(Ljava.lang.String;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="177,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="numberOfConnectedSensors" id="com.corvolution.cm2/ConnectionManager#numberOfConnectedSensors"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="state" id="com.corvolution.cm2/ConnectionManager#state"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="155,234">
+      <children xsi:type="editmodel:MethodEditModel" name="addSensorListener" id="com.corvolution.cm2/ConnectionManager#addSensorListener(Lcom.corvolution.cm2.SensorListener;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSensorToList" id="com.corvolution.cm2/ConnectionManager#addSensorToList(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="currentSensor" id="com.corvolution.cm2/ConnectionManager#currentSensor(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getConnectedSensorsList" id="com.corvolution.cm2/ConnectionManager#getConnectedSensorsList()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getCounter" id="com.corvolution.cm2/ConnectionManager#getCounter()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getInstance" id="com.corvolution.cm2/ConnectionManager#getInstance()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getState" id="com.corvolution.cm2/ConnectionManager#getState()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="measurementDataSize" id="com.corvolution.cm2/ConnectionManager#measurementDataSize(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeSensorFromList" id="com.corvolution.cm2/ConnectionManager#removeSensorFromList(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeSensorListener" id="com.corvolution.cm2/ConnectionManager#removeSensorListener(Lcom.corvolution.cm2.SensorListener;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setCounter" id="com.corvolution.cm2/ConnectionManager#setCounter(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setState" id="com.corvolution.cm2/ConnectionManager#setState(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="startListener" id="com.corvolution.cm2/ConnectionManager#startListener()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="com.corvolution.cm2/ConnectionManager->com.corvolution.cm2/UsbListener" source="//@children.4" target="//@children.5" targetEnd="//@children.4/@sourceConnections.0/@children.2" label="//@children.4/@sourceConnections.0/@children.0" sourceEnd="//@children.4/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="32,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="92,85"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="com.corvolution.cm2/ConnectionManager->com.corvolution.cm2/SensorEvent*com.corvolution.cm2/ConnectionManager-Soyatec::Import->com.corvolution.cm2/SensorEvent" source="//@children.4" target="//@children.2" targetEnd="//@children.4/@sourceConnections.1/@children.2" label="//@children.4/@sourceConnections.1/@children.0" sourceEnd="//@children.4/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="41,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="200,185" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,69"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="com.corvolution.cm2/ConnectionManager->com.corvolution.cm2/SensorListener*com.corvolution.cm2/ConnectionManager-Soyatec::Import->com.corvolution.cm2/SensorListener" source="//@children.4" target="//@children.1" targetEnd="//@children.4/@sourceConnections.2/@children.2" label="//@children.4/@sourceConnections.2/@children.0" sourceEnd="//@children.4/@sourceConnections.2/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="41,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="200,69" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="24,81"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="com.corvolution.cm2/ConnectionManager->com.corvolution.cm2/Sensor*com.corvolution.cm2/ConnectionManager->com.corvolution.cm2/Sensor*com.corvolution.cm2/ConnectionManager-Soyatec::Import->com.corvolution.cm2/Sensor" source="//@children.4" target="//@children.0" targetEnd="//@children.4/@sourceConnections.3/@children.2" label="//@children.4/@sourceConnections.3/@children.0" sourceEnd="//@children.4/@sourceConnections.3/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="41,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,190" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="199,129"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.4/@sourceConnections.0" name="UsbListener" location="270,119" size="126,85" id="com.corvolution.cm2/UsbListener" runTimeClassModel="sensorListener(),run()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="103,36">
+      <children xsi:type="editmodel:MethodEditModel" name="run" id="com.corvolution.cm2/UsbListener#run()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="sensorListener" id="com.corvolution.cm2/UsbListener#sensorListener()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="com.corvolution.cm2/UsbListener->com.corvolution.cm2/ConnectionManager" source="//@children.5" target="//@children.4" targetEnd="//@children.5/@sourceConnections.0/@children.2" label="//@children.5/@sourceConnections.0/@children.0" sourceEnd="//@children.5/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="72,85" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="12,0"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=7;Product=eUML2" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

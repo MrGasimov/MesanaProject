@@ -1,0 +1,55 @@
+package com.corvolution.cm2;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class SensorConfiguration {	
+	
+	private static final String VERSION_NUMBER = "0001545";
+	private static enum START_MODE{};
+	private HashMap <String, HashMap> configSetMap;
+	private HashMap <String, String> addParameters;
+	
+	
+	public SensorConfiguration(){
+		configSetMap = new HashMap<>();
+		ConfigurationSet configSet = new ConfigurationSet();
+		//default set for configFile
+		configSetMap.put("1", configSet.getSet());
+	}
+	// Configuration Set
+		// Number		Name			Description
+		// 1			mesana			Standard configuration for mesana (ECG: 250Hz, ACC: 50Hz, ...)
+		// 2			Standard ECG	Use this configuration for standard 24 hrs ECG recording (ECG: 200Hz, ACC: no)
+		// 3			Test-Config		Use this configuration set only for testing pursposes
+		// 
+	
+	//set linkId for configuration file 
+	public void addParameter(String key, HashMap value){
+		//this.configSet.put(key, value);
+	}
+	
+	//set linkId for configuration file 
+	public void addEncryptedParameter(String key, String value, String password){
+		//this.configSet.put(key, value);
+	}
+	
+	public HashMap<String,String> getParameters(){
+		return addParameters ;
+	}
+	
+	public HashMap<String,HashMap>  getConfigurationSet() {
+		return configSetMap;
+	}
+	
+	public void setConfigurationSet(ConfigurationSet configurationSet, String byteNumber, ArrayList rateList) {
+		configurationSet = new ConfigurationSet()
+	}
+	 
+	
+
+	
+	
+
+}

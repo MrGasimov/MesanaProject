@@ -1,0 +1,23 @@
+
+import java.util.Calendar;
+import java.util.Date;
+
+public class Test {
+
+	public static void main(String[] args) {
+		 Date date = new Date();
+		 Calendar cal = Calendar.getInstance();
+		 cal.setTime(date);
+		 
+		 int month = cal.get(Calendar.MONTH);
+		 int day = cal.get(Calendar.DAY_OF_MONTH);
+		 byte y = 35;
+		 y += (byte) (cal.get(Calendar.YEAR)-2015);
+		
+		 System.out.println(month+" "+day);
+	}
+	
+	
+	
+	
+}

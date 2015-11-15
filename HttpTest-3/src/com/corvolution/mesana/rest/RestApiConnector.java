@@ -74,7 +74,6 @@ public class RestApiConnector {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
 		} else {
 			System.out.println(response.getStatusLine().getStatusCode());
-
 		}
 
 		//httpclient.close();

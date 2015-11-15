@@ -8,14 +8,23 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tray;
+import org.eclipse.swt.widgets.TrayItem;
+import org.json.simple.JSONObject;
+
 import com.corvolution.cm2.UsbListener;
 import com.corvolution.cm2.ConnectionManager;
 import com.corvolution.cm2.Sensor;
@@ -35,27 +44,31 @@ public class ReaderGui{
 	private Display display;
 	private Shell shell;
 	private Button button;
-	private ProgressBar bar;
+	private static ProgressBar bar;
 	private GridData gridData;
 	private static Text text;
 	PropertyManager pManager;
-	ConnectionManager manager;
 	MeasurementCollection mCollect;
 	private String measurementName;
+	RestApiConnector restApi;
 	
 	public ReaderGui(String login,String password){
 		this.login = login;
 		this.password = password;
 		mCollect = new MeasurementCollection();
-		mCollect.setList();
+		String url = "http://chili/mk/backend.mesana.com/api/v4/measurements?state=SENSOR_READOUT";
+		mCollect.setList(url);
 		pManager = new PropertyManager();
+		restApi = new RestApiConnector();
+		
 		
 		display = new Display();		
 		shell = new Shell(display, SWT.CLOSE | SWT.TITLE | SWT.MIN);
 		shell.setText("Sensor Reader");
 		GridLayout layout = new GridLayout(1, false);
 		shell.setLayout(layout);
-			
+		
+		
 		text = new Text(shell, SWT.READ_ONLY | SWT.MULTI | SWT.BORDER);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
@@ -79,27 +92,34 @@ public class ReaderGui{
 		gridData.horizontalSpan = 1;
 		gridData.verticalSpan = 1;
 		button.setLayoutData(gridData);
+		
+		setTrayIcon();
 		text.setText("Please connect Sensor!");
 		destSize=(int)FileUtils.sizeOf(new File("Z:/measurementData/"));
-		;
+	
 		
 		readOutDest = pManager.getProperty("READOUT_DEST");
 		button.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e){
-				text.setText("Reading data from sensors...");				
-				for(Sensor device:ConnectionManager.getConnectedSensorsList()){
-					for(Measurement element :mCollect.getList()){
-						System.out.println(device.getConfiguration());
-						element.getLinkId().equals(device.getConfiguration().getLinkId());
-						measurementName = element.getID();
-					};
-					device.readMeasurementFromSensor(readOutDest+measurementName);		
-					copySize =(int)FileUtils.sizeOf(new File("Z:/measurementData/"));
-					size = (int) ConnectionManager.measurementDataSize("all");
-					bar.setSelection((((copySize-destSize)/size)*100));										
-					if(bar.getMaximum()==size)						
-						break;									
+				text.setText("Reading data from sensors...");
+				if(!ConnectionManager.getConnectedSensorsList().isEmpty()){
+					for(Sensor device:ConnectionManager.getConnectedSensorsList()){
+						for(Measurement element :mCollect.getList()){						
+							if(element.getLinkId().equals(device.getConfiguration().getParameter("LinkId"))){
+								measurementName = element.getID();
+								restApiUpdate(element.getLinkId(),measurementName);
+							}
+							
+						}
+						device.readMeasurementFromSensor(readOutDest+measurementName);		
+						copySize =(int)FileUtils.sizeOf(new File("Z:/measurementData/"));
+						size = (int) ConnectionManager.measurementDataSize("all");
+						bar.setSelection((((copySize-destSize)/size)*100));										
+						if(bar.getMaximum()==size)						
+							break;									
+					}
 				}
+								
 				text.setText("All sensors were read out!");
 				text.setFocus();
 				
@@ -130,13 +150,83 @@ public class ReaderGui{
 					text.setText(str);
 				}else{
 					text.setText("Sensor "+e.getSensorPath()+" has been disconnected");
+					bar.setSelection(0);
 				}
 				
 			}
 			
 		});
 	}
+	
+	public void restApiUpdate(String deviceNumber, String mId){
+		JSONObject json = new JSONObject();
+		json.put("state","SENSOR_READOUT");
+		json.put("user", login);
+		json.put("sensorId",deviceNumber);
+		String jsonString = json.toJSONString();		
+		String sURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/";			
+		try {
+			restApi.putMethod(jsonString,sURL);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+	
+	public void setTrayIcon() {
+		// image for tray icon
+		Image image = new Image(display, "C:/Users/gasimov/Documents/Repo/HttpTest-3/res/images/bulb.gif");
+		final Tray tray = display.getSystemTray();
 
+		if (tray == null) {
+			System.out.println("The system tray is not available");
+		} else {
+			final TrayItem item = new TrayItem(tray, SWT.NONE);
+			item.setToolTipText("Mesana Sensor Reader \r\n Version 1.0.1 \r\n Author Suleyman Gasimov");
+			
+
+			final Menu menu = new Menu(shell, SWT.POP_UP);
+
+			MenuItem mi1 = new MenuItem(menu, SWT.PUSH);
+			MenuItem mi2 = new MenuItem(menu, SWT.PUSH);
+			MenuItem mi4 = new MenuItem(menu, SWT.PUSH);
+			
+			mi1.setText("Show");
+			mi1.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+					shell.setVisible(true);
+					System.out.println("selection " + event.widget);
+				}
+			});
+
+			mi2.setText("Hide");
+			mi2.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+					shell.setVisible(false);
+					System.out.println("selection " + event.widget);
+				}
+			});
+
+						
+			mi4.setText("Close");
+			mi4.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+					System.exit(0);
+					System.out.println("selection " + event.widget);
+				}
+			});
+
+			
+
+			item.addListener(SWT.MenuDetect, new Listener() {
+				public void handleEvent(Event event) {
+					menu.setVisible(true);
+				}
+			});
+
+			item.setImage(image);
+		}
+	}
 	
 	
 	

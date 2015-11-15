@@ -1,14 +1,15 @@
 package com.corvolution.mesana.configurator;
-
 import com.corvolution.cm2.ConnectionManager;
 import com.corvolution.cm2.UsbListener;
 import com.corvolution.mesana.gui.ConfigGui;
 import com.corvolution.mesana.gui.OperatorAccess;
 import com.corvolution.mesana.gui.ReaderGui;
 
+
 public class MainClass {
 
 	public static void main(String[] args) {
+		
 		Thread usbListener = new Thread(new UsbListener());
 		usbListener.start();
 		PropertyManager pManager = new PropertyManager();
@@ -19,10 +20,6 @@ public class MainClass {
 		}else{
 			new ReaderGui(opAccess.getLogin(),opAccess.getPassword());
 		}
-		
-	
-		
-		
 	}
 
 }

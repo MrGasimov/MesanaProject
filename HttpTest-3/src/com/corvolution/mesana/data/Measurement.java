@@ -51,5 +51,9 @@ public class Measurement extends RestApiConnector{
 		return linkId;
 	}
 	
+	public String getSensorId(){
+		return sensorId;
+	}
+	
 
 }

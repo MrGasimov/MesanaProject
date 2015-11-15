@@ -13,7 +13,7 @@ import com.google.gson.reflect.TypeToken;
 public class MeasurementCollection extends  RestApiConnector {	
 		
 	private List<Measurement> measList;	
-	String sURL = "http://chili/mk/backend.mesana.com/api/v4/measurements?state=WAIT_FOR_CONFIG";
+	
 	TypeToken<List<Measurement>> token = new TypeToken<List<Measurement>>() {
 	};
 	
@@ -43,10 +43,10 @@ public class MeasurementCollection extends  RestApiConnector {
 		String id= measList.get(index).getID();
 		return id;
 	}
-	public void setList(){		
+	public void setList(String url){		
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();
-		measList = gson.fromJson(getMethod(sURL), token.getType());
+		measList = gson.fromJson(getMethod(url), token.getType());
 	
 	}
 	

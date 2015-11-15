@@ -48,16 +48,16 @@ public class ConfigGui {
 	private static List customerList;			
 	private Button updateButton, configButton;	
 	private static MeasurementCollection mCollect;	
-	private SensorCollection sCollect;	
 	private TaskCollection tCollect;
 	private static Measurement mObject;	
 	private static AddressData aData;	
-	private SensorData sData;	
 	private PropertyManager pManager;
+	private ConnectionManager cManager;
 
 	// Constructor
 	public ConfigGui(String log, String pass) {
 		pManager = new PropertyManager();
+		cManager = ConnectionManager.getInstance();
 		setOperatorData(log, pass);
 		setGui();
 		if (ConnectionManager.state) {
@@ -69,7 +69,10 @@ public class ConfigGui {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}			
+			}
+			if(!ConnectionManager.currentSensor(0).getFirwareVersion().equals("1.4.2")){
+				//restApiUpdate(ConnectionManager.currentSensor(0).getSerialNumber(),"firmware");
+			}
 		}
 
 		setListeners();
@@ -437,15 +440,11 @@ public class ConfigGui {
 					//push comment to RestApi
 					restApiUpdate(null,"comment");												
 					//Write configuration file to sensor
-					//ConnectionManager.currentSensor(0).writeConfigFile(ConnectionManager.currentSensor(0).getSensorPath()+":/config2.txt");					
+					cManager.currentSensor(0).writeConfigFile();					
 					//change state of measurement in RestApi
 					restApiUpdate("CONFIGURING","state");
-					Thread.sleep(3000);
 					restApiUpdate("SENSOR_OUTBOX", "state");										
-					statusBar.setText("Sensor is configurated.Please connect another sensor.");					
-					//statusBar.setText("Configuration is failed");				
-					Thread.sleep(4000);
-					statusBar.setText("Reseting GUI..");	
+					statusBar.setText("Sensor is configurated.Please connect another sensor.");						
 					resetData();															
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
@@ -468,7 +467,7 @@ public class ConfigGui {
 				JSONObject jsonComment = new JSONObject();
 				jsonComment.put("comment",commentText.getText());
 				jsonComment.put("user", login);
-				jsonComment.put("sensorId",ConnectionManager.currentSensor(0).getSerialNumber());
+				jsonComment.put("sensorId",ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
 				String commentJSON = jsonComment.toJSONString();
 				String cURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/comments";			
 				try {
@@ -487,11 +486,23 @@ public class ConfigGui {
 				}catch (Exception e){			
 					e.printStackTrace();
 				}
+			/*case "firmware":
+				JSONObject jsonFirmware = new JSONObject();
+				jsonFirmware.put("firmware","1.32.4");
+				jsonFirmware.put("user", "kirst");	
+				String firmwareJson = jsonFirmware.toJSONString();
+				String fURL =pManager.getProperty("REST_PATH")+"sensors/"+para1;
+				try {
+					mObject.putMethod(firmwareJson,fURL);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
 			case "state":
 				JSONObject jsonState = new JSONObject();
 				jsonState.put("state", para1);
 				jsonState.put("user", login);
-				jsonState.put("sensorId",ConnectionManager.currentSensor(0).getSerialNumber());
+				jsonState.put("sensorId",cManager.currentSensor(0).getSerialNumber());
 				String stateJSON = jsonState.toJSONString();
 				String sURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/";	
 				try {
@@ -512,39 +523,20 @@ public class ConfigGui {
 			System.out.println("The system tray is not available");
 		} else {
 			final TrayItem item = new TrayItem(tray, SWT.NONE);
-			item.setToolTipText("Mesana TrayItem");
-			item.addListener(SWT.Show, new Listener() {
-				public void handleEvent(Event event) {
-
-					System.out.println("show");
-				}
-			});
-			item.addListener(SWT.Hide, new Listener() {
-				public void handleEvent(Event event) {
-
-					System.out.println("hide");
-				}
-			});
-			item.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event event) {
-
-				}
-			});
-			item.addListener(SWT.DefaultSelection, new Listener() {
-				public void handleEvent(Event event) {
-
-				}
-			});
+			item.setToolTipText("Mesana Configurator \r\n Version 1.0.1 \r\n Author Suleyman Gasimov");
+			
 
 			final Menu menu = new Menu(shell, SWT.POP_UP);
 
 			MenuItem mi1 = new MenuItem(menu, SWT.PUSH);
 			MenuItem mi2 = new MenuItem(menu, SWT.PUSH);
 			MenuItem mi3 = new MenuItem(menu, SWT.PUSH);
-
+			MenuItem mi4 = new MenuItem(menu, SWT.PUSH);
+			
 			mi1.setText("Show");
 			mi1.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event event) {
+					shell.setVisible(true);
 					System.out.println("selection " + event.widget);
 				}
 			});
@@ -552,6 +544,7 @@ public class ConfigGui {
 			mi2.setText("Hide");
 			mi2.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event event) {
+					shell.setVisible(false);
 					System.out.println("selection " + event.widget);
 				}
 			});
@@ -559,12 +552,20 @@ public class ConfigGui {
 			mi3.setText("About");
 			mi3.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event event) {
-
+					
+					System.out.println("selection " + event.widget);
+				}
+			});
+			
+			mi4.setText("Close");
+			mi4.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+					System.exit(0);
 					System.out.println("selection " + event.widget);
 				}
 			});
 
-			// menu.setDefaultItem(mi1);
+			
 
 			item.addListener(SWT.MenuDetect, new Listener() {
 				public void handleEvent(Event event) {
@@ -578,7 +579,8 @@ public class ConfigGui {
 
 	public static void setCustomerData() {
 		mCollect = new MeasurementCollection();
-		mCollect.setList();
+		String sURL = "http://chili/mk/backend.mesana.com/api/v4/measurements?state=WAIT_FOR_CONFIG";
+		mCollect.setList(sURL);
 
 		for (int i=0 ; i<mCollect.getList().size(); i++ ) {
 			mObject = mCollect.getList().get(i);			
@@ -599,7 +601,7 @@ public class ConfigGui {
 	}
 	
 	
-	public static void setSensorData() throws IOException {
+	public static  void setSensorData() throws IOException {
 		if (ConnectionManager.state) {
 			SensorCollection sCollect = new SensorCollection();
 			sCollect.setList();			
@@ -618,7 +620,7 @@ public class ConfigGui {
 	}
 	
 	public void setTaskData(String mID) throws IOException{
-		tCollect = new TaskCollection(mID ,ConnectionManager.currentSensor(0).getSerialNumber());		
+		tCollect = new TaskCollection(mID ,cManager.currentSensor(0).getSerialNumber());		
 		if(tCollect.getMeasTask().isEmpty()){			
 			measurTaskText.setText(" ");
 		}else{
@@ -654,11 +656,13 @@ public class ConfigGui {
 
 	}
 
-	public static void setData() throws IOException {
+	public static  void setData() throws IOException {
 		setCustomerData();
 		setSensorData();
 		
 	}
+	
+
 	
 	public void setOperatorData(String login, String password) {
 		this.login = login;

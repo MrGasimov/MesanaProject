@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/HttpTest-3/src/com/corvolution/mesana/configurator/AppStart.java"/>
+<listEntry value="/MesanaSoftware"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-<listEntry value="1"/>
+<listEntry value="4"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.corvolution.mesana.configurator.AppStart"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="HttpTest-3"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="MesanaSoftware"/>
 </launchConfiguration>

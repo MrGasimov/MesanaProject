@@ -1,6 +1,0 @@
-package com.corvolution.cm2;
-
-public interface SensorListener {
-	public void sensorConnected(SensorEvent e);
-	public void sensorDisconnected(SensorEvent e);
-}

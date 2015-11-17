@@ -8,12 +8,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import org.apache.commons.io.FileUtils;
+
 import java.util.Date;
 
 public class Sensor {
@@ -193,29 +196,38 @@ public class Sensor {
 		}
 
 		
-		public long getSizeOfData(){
+		public long getDataSize(){
 			long size = FileUtils.sizeOf(new File(sensorPath+":/project"));
 			return size;
 		}
 		
-	
-		public void update(){
-				this.restartUsb();
-			}
-
-			
-		public void disconnect() throws IOException{
-			this.restartUsb();
-		}
-
-		private void restartUsb(){
+		//method for time synchronizing
+		public void synchronize(){
 			try {
 				writeTimeSyncFile();
+				disconnect("restart");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// devcon restart
+			
+			
+		
+		}
+
+		//removing sensor	
+		public void disconnect(String command) throws IOException{
+			//remove Sensor			
+			ProcessBuilder builder = new ProcessBuilder( "cmd.exe", "/c", "cd \"C:/Users/Gasimov/Desktop\" && devcon.exe "+command+" *VID_05E3*");
+			builder.redirectErrorStream(true);
+			Process p = builder.start();
+			BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		    String line;
+		     while (true) {
+		        line = r.readLine();
+	            if (line == null) { break; }
+	            System.out.println(line);
+	        }
 		}
 
 

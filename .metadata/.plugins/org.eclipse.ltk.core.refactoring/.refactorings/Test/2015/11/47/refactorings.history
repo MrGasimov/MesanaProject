@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Test/res/devcon.exe.manifest&apos; to &apos;devcon.manifest&apos;" description="Rename resource &apos;devcon.exe.manifest&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="res/devcon.exe.manifest" name="devcon.manifest" stamp="1447779348522" updateReferences="true"/>
+</session>

@@ -114,10 +114,10 @@ public final class ConnectionManager {
 		long dataSize = 0; 
 		if(option.equalsIgnoreCase("all")){
 			for(Sensor device:sensorList){
-				dataSize += device.getSizeOfData();			
+				dataSize += device.getDataSize();			
 			}
 		} else if(option.equalsIgnoreCase("single")){
-			dataSize += sensorList.get(0).getSizeOfData();
+			dataSize += sensorList.get(0).getDataSize();
 		}
 	
 		return dataSize;

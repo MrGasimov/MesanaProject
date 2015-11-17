@@ -1,7 +1,0 @@
-import java.util.ArrayList;
-
-public class Car {
-	private SpeedListener listener; 
-	private ArrayList<SpeedListener> speedListenerList = new ArrayList<SpeedListener>();
-	
-}

@@ -1,9 +1,12 @@
 package com.corvolution.mesana.configurator;
+import org.json.simple.JSONObject;
+
 import com.corvolution.cm2.ConnectionManager;
 import com.corvolution.cm2.UsbListener;
 import com.corvolution.mesana.gui.ConfigGui;
 import com.corvolution.mesana.gui.OperatorAccess;
 import com.corvolution.mesana.gui.ReaderGui;
+import com.corvolution.mesana.rest.RestApiConnector;
 
 
 public class MainClass {
@@ -20,6 +23,9 @@ public class MainClass {
 		}else{
 			new ReaderGui(opAccess.getLogin(),opAccess.getPassword());
 		}
+		
+		
+		
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.corvolution.mesana.gui;
-
 import java.io.IOException;
-import java.util.HashMap;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,9 +23,7 @@ import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.json.simple.JSONObject;
 import com.corvolution.cm2.ConnectionManager;
-import com.corvolution.cm2.Sensor;
 import com.corvolution.cm2.SensorEvent;
-import com.corvolution.mesana.configurator.ConfigSensor;
 import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.data.AddressData;
 import com.corvolution.mesana.data.Measurement;
@@ -47,13 +43,15 @@ public class ConfigGui {
 	private static Combo priorityCombo, electrodeCombo;
 	private static List customerList;			
 	private Button updateButton, configButton;	
-	private static MeasurementCollection mCollect;	
+	private static MeasurementCollection mCollect;
+	private static SensorCollection sCollect;
 	private TaskCollection tCollect;
 	private static Measurement mObject;	
 	private static AddressData aData;	
 	private PropertyManager pManager;
 	private ConnectionManager cManager;
-
+	boolean configState =false;
+	
 	// Constructor
 	public ConfigGui(String log, String pass) {
 		pManager = new PropertyManager();
@@ -62,17 +60,12 @@ public class ConfigGui {
 		setGui();
 		if (ConnectionManager.state) {
 			// initialize customer data and SensorData to GUI if sensor connected		
-			statusBar.setText("Sensor connected Successfully");
-			setCustomerData();
 			try {
-				setSensorData();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				setData();				
+			} catch (IOException e) {				
 				e.printStackTrace();
 			}
-			if(!ConnectionManager.currentSensor(0).getFirwareVersion().equals("1.4.2")){
-				//restApiUpdate(ConnectionManager.currentSensor(0).getSerialNumber(),"firmware");
-			}
+			
 		}
 
 		setListeners();
@@ -101,23 +94,24 @@ public class ConfigGui {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
 					statusBar.setText("Sensor "+e.getSensorPath()+" has been connected Succussfully");
 					setShell();
 				}else if(e.getState() && shell.isVisible() && e.getNumOfConnectedSensors()==1){
 					try {
 						setData();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 					statusBar.setText("Sensor "+e.getSensorPath()+" has been connected Succussfully");
 				}else if(!e.getState()&& shell.isVisible() && e.getNumOfConnectedSensors()==1){
-					statusBar.setText("Only Sensor "+e.getSensorPath()+" has been connected");
+					statusBar.setText("Only Sensor "+ConnectionManager.currentSensor(0).getSensorPath()+" has been connected");
 				}else if(e.getNumOfConnectedSensors()>=2){
-					statusBar.setText("Multiple Sensors connected.Please remove all except single one");
+					statusBar.setText("Multiple Sensors connected.Please remove all except one sensor");
 				}else{
 					resetData();
-					statusBar.setText("Sensor "+e.getSensorPath()+" has been disconnected");
+					statusBar.setText("Sensor "+e.getSensorPath()+" has been disconnected. Please connect sensor for configuration");
 				}
 				
 			}
@@ -146,14 +140,14 @@ public class ConfigGui {
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.verticalAlignment = GridData.BEGINNING;
-		gridData.heightHint = 207;
-		gridData.widthHint = 160;
+		gridData.heightHint = 220;
+		gridData.widthHint = 150;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = false;
 		gridData.horizontalSpan = 1;
 		gridData.verticalSpan = 1;
 		customerList.setLayoutData(gridData);
-		//customerList.select();
+		customerList.select(0);
 		// customerList.showSelection();
 		
 		// Combo selection
@@ -197,8 +191,8 @@ public class ConfigGui {
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.verticalAlignment = GridData.BEGINNING;
-		gridData.heightHint = 135;
-		gridData.widthHint = 90;
+		gridData.heightHint = 145;
+		gridData.widthHint = 110;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = false;
 		gridData.horizontalSpan = 1;
@@ -210,8 +204,8 @@ public class ConfigGui {
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.verticalAlignment = GridData.BEGINNING;
-		gridData.heightHint = 135;
-		gridData.widthHint = 150;
+		gridData.heightHint = 145;
+		gridData.widthHint = 160;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalSpan = 1;
@@ -229,12 +223,12 @@ public class ConfigGui {
 		measTaskLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		
 		// Comment Text
-		commentText = new StyledText(groupCenter, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		commentText = new StyledText(groupCenter, SWT.BORDER  | SWT.MULTI);
 		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.CENTER;
+		gridData.horizontalAlignment = GridData.FILL;
 		gridData.verticalAlignment = GridData.BEGINNING;
 		gridData.heightHint = 80;
-		gridData.widthHint = 100;
+		gridData.widthHint = 110;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalSpan = 1;
@@ -242,12 +236,12 @@ public class ConfigGui {
 		commentText.setLayoutData(gridData);
 
 		// Measurement Task Text
-		measurTaskText = new StyledText(groupCenter, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		measurTaskText = new StyledText(groupCenter, SWT.BORDER  | SWT.READ_ONLY | SWT.MULTI);
 		gridData = new GridData();
-		gridData.horizontalAlignment = GridData.CENTER;
+		gridData.horizontalAlignment = GridData.FILL;
 		gridData.verticalAlignment = GridData.BEGINNING;
 		gridData.heightHint = 80;
-		gridData.widthHint = 150;
+		gridData.widthHint = 160;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalSpan = 1;
@@ -257,7 +251,7 @@ public class ConfigGui {
 		// Electrode selection
 		electrodeCombo = new Combo(groupCenter, SWT.READ_ONLY);
 		electrodeCombo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
-		electrodeCombo.setItems(new String[] {"Electrode", "Simple", "Test", "New" });
+		electrodeCombo.setItems(new String[] {"Electrode", "Simple", "Test", "New"});
 		electrodeCombo.select(0);		
 		
 		//right group 
@@ -272,9 +266,9 @@ public class ConfigGui {
 		sensorText = new StyledText(groupRight, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
-		gridData.verticalAlignment = GridData.BEGINNING;
-		gridData.heightHint = 130;
-		gridData.widthHint = 150;
+		gridData.verticalAlignment = GridData.FILL;
+		gridData.heightHint = 140;
+		gridData.widthHint = 180;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = false;
 		gridData.horizontalSpan = 1;
@@ -286,12 +280,12 @@ public class ConfigGui {
 		sensorTaskLabel.setText("Sensor Tasks");
 		sensorTaskLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		
-		sensorTaskText = new StyledText(groupRight, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY | SWT.MULTI);
+		sensorTaskText = new StyledText(groupRight, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.CENTER;
 		gridData.verticalAlignment = GridData.BEGINNING;
 		gridData.heightHint = 80;
-		gridData.widthHint = 150;
+		gridData.widthHint = 180;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalSpan = 1;
@@ -437,19 +431,27 @@ public class ConfigGui {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try {
-					//push comment to RestApi
-					restApiUpdate(null,"comment");												
-					//Write configuration file to sensor
-					ConnectionManager.currentSensor(0).writeConfigFile();					
+					
 					//change state of measurement in RestApi
-					restApiUpdate("CONFIGURING","state");
-					//restApiUpdate("SENSOR_OUTBOX", "state");										
-					statusBar.setText("Sensor is configurated.Please connect another sensor.");						
-					resetData();
-					ConnectionManager.currentSensor(0).synchronize();
-					ConnectionManager.currentSensor(0).disconnect("remove");
+					restApiUpdate("CONFIGURING","state1");
+					checkFirmwareVersion();
+					//Write configuration file to sensor
+					//ConnectionManager.currentSensor(0).writeConfigFile();
+										
+					//push comment to RestApi
+					restApiUpdate(ConnectionManager.currentSensor(0).getSerialNumber(),"comment");	
+					
+					//change state of measurement in RestApi
+					restApiUpdate("SENSOR_OUTBOX", "state2");
+					statusBar.setText("Sensor is configurated.Please connect another sensor.");										
+					//writing date to sensor for synchronization					
+					//ConnectionManager.currentSensor(0).synchronize();
+										
+					//resetData();
+					//remove sensor 
+					//ConnectionManager.currentSensor(0).disconnect("remove");
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				} 
 
@@ -463,62 +465,79 @@ public class ConfigGui {
 	public void restApiUpdate(String para1, String para2){		
 	
 		String mId = measureText.getText().substring(4,17);	
+		if(para2.equals("comment")){
+			JSONObject jsonComment = new JSONObject();
+			jsonComment.put("comment",commentText.getText());
+			jsonComment.put("user", login);
+			jsonComment.put("sensorId",ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
+			String commentJSON = jsonComment.toJSONString();
+			String cURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/comments";	
 			
-		switch(para2){
-			case "comment":
-				JSONObject jsonComment = new JSONObject();
-				jsonComment.put("comment",commentText.getText());
-				jsonComment.put("user", login);
-				jsonComment.put("sensorId",ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
-				String commentJSON = jsonComment.toJSONString();
-				String cURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/comments";			
-				try {
-					mObject.postMethod(commentJSON,cURL);
-				}catch (Exception e){			
-					e.printStackTrace();
-				}
-			case "electrode":
-				JSONObject jsonElectrode = new JSONObject();
-				jsonElectrode.put("comment",para1);
-				jsonElectrode.put("user", login);
-				String electrodeJSON = jsonElectrode.toJSONString();
-				String eURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/electrodes";	
-				try {
-					mObject.postMethod(electrodeJSON,eURL);
-				}catch (Exception e){			
-					e.printStackTrace();
-				}
-			/*case "firmware":
-				JSONObject jsonFirmware = new JSONObject();
-				jsonFirmware.put("firmware","1.32.4");
-				jsonFirmware.put("user", "kirst");	
-				String firmwareJson = jsonFirmware.toJSONString();
-				String fURL =pManager.getProperty("REST_PATH")+"sensors/"+para1;
-				try {
-					mObject.putMethod(firmwareJson,fURL);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
-			case "state":
-				JSONObject jsonState = new JSONObject();
-				jsonState.put("state", para1);
-				jsonState.put("user", login);
-				jsonState.put("sensorId",cManager.currentSensor(0).getSerialNumber());
-				String stateJSON = jsonState.toJSONString();
-				String sURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/";	
-				try {
-					mObject.putMethod(stateJSON,sURL);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}	
-		}		
+			try {
+				mObject.postMethod(commentJSON,cURL);
+			}catch (Exception e){			
+				e.printStackTrace();
+			}
+		}else if(para2.equals("electrode")){
+			JSONObject jsonElectrode = new JSONObject();
+			jsonElectrode.put("comment",para1);
+			jsonElectrode.put("user", login);
+			String electrodeJSON = jsonElectrode.toJSONString();
+			String eURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/electrodes";	
+			
+			try {
+				mObject.postMethod(electrodeJSON,eURL);
+			}catch (Exception e){			
+				e.printStackTrace();
+			}
+		}else if(para2.equals("firmware")){
+			JSONObject jsonFirmware = new JSONObject();
+			jsonFirmware.put("firmware","1.32.4");
+			jsonFirmware.put("user", login);	
+			String firmwareJson = jsonFirmware.toJSONString();
+			String fURL =pManager.getProperty("REST_PATH")+"sensors/"+para1;
+			
+			
+			try {
+				mObject.putMethod(firmwareJson,fURL);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+		
+		}else if(para2.equals("state1")) {			
+			JSONObject jsonState = new JSONObject();
+			jsonState.put("state",para1);
+			jsonState.put("user",login);			
+			String stateJSON = jsonState.toJSONString();
+			String sURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/";	
+			
+			try {
+				mObject.putMethod(stateJSON,sURL);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}					
+		}else {
+			JSONObject jsonState = new JSONObject();
+			jsonState.put("state",para1);
+			jsonState.put("user",login);
+			jsonState.put("sensorId",cManager.currentSensor(0).getSerialNumber());
+			String stateJSON = jsonState.toJSONString();
+			String sURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/";	
+			
+			try {
+				mObject.putMethod(stateJSON,sURL);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}					
+		}
 	}
 	
 	public void setTrayIcon() {
 		// image for tray icon
-		Image image = new Image(display, "C:/Users/gasimov/Documents/Repo/HttpTest-3/res/images/bulb.gif");
+		Image image = new Image(display, "C:/Users/gasimov/Documents/Repo/MesanaSoftware/res/images/bulb.gif");
 		final Tray tray = display.getSystemTray();
 
 		if (tray == null) {
@@ -604,25 +623,27 @@ public class ConfigGui {
 	
 	
 	public static  void setSensorData() throws IOException {
-		if (ConnectionManager.state) {
-			SensorCollection sCollect = new SensorCollection();
+			sCollect = new SensorCollection();
 			sCollect.setList();			
 			for (SensorData sData : sCollect.getList()) {				
-				if (sData.getID().equalsIgnoreCase(ConnectionManager.currentSensor(0).getSerialNumber()));
-							sensorText.setText(sData.getSensorData()+
-							"\r\n"+(ConnectionManager.currentSensor(0).getDeviceName()+
-							"\r\n"+ConnectionManager.currentSensor(0).getManufacturerName()+
-							"\r\n"+ConnectionManager.currentSensor(0).getFlashDate()+
-							"\r\n"+ConnectionManager.currentSensor(0).getSensorVoltage()));
+				if (sData.getID().equals(ConnectionManager.currentSensor(0).getSerialNumber())){					
+					sensorText.setText(sData.getSensorData()+
+					"\r\n"+"Device: "+(ConnectionManager.currentSensor(0).getDeviceName()+
+					"\r\n"+"Manufacture: "+ConnectionManager.currentSensor(0).getManufacturerName()+
+					"\r\n"+"FlashDate: "+ConnectionManager.currentSensor(0).getFlashDate()+
+					"\r\n"+"Battery: "+ConnectionManager.currentSensor(0).getSensorVoltage()));
+					break;
+				}
+							
 					
 			}
 
-		}
+		
 
 	}
 	
 	public void setTaskData(String mID) throws IOException{
-		tCollect = new TaskCollection(mID ,cManager.currentSensor(0).getSerialNumber());		
+		tCollect = new TaskCollection(mID ,ConnectionManager.currentSensor(0).getSerialNumber());		
 		if(tCollect.getMeasTask().isEmpty()){			
 			measurTaskText.setText(" ");
 		}else{
@@ -631,7 +652,7 @@ public class ConfigGui {
 			}
 						
 		}
-		//if sensortask is set skip
+		//if sensor task is set skip
 		if(!sensorTaskText.equals("")){
 			for(int i=0; i<tCollect.getSensorTask().size(); i++){
 				sensorTaskText.setText(tCollect.getSensorTask().get(i).getTaskDetails());
@@ -664,7 +685,19 @@ public class ConfigGui {
 		
 	}
 	
-
+	public void checkFirmwareVersion(){
+		for(SensorData sensorData: sCollect.getList()){
+			if(sensorData.getID().equals(ConnectionManager.currentSensor(0).getSerialNumber())){
+				if(!ConnectionManager.currentSensor(0).getFirwareVersion().equals(sensorData.getFirmware())){
+					restApiUpdate(ConnectionManager.currentSensor(0).getSerialNumber(),"firmware");
+				}
+			break;
+			}
+			
+			
+		}
+		
+	}
 	
 	public void setOperatorData(String login, String password) {
 		this.login = login;

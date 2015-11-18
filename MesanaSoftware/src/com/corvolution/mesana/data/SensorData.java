@@ -17,6 +17,9 @@ public class SensorData extends RestApiConnector{
 	public String getID(){
 		return id;
 	}
+	public String getFirmware(){
+		return firmware;
+	}
 	
 }
 

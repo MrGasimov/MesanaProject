@@ -9,14 +9,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-
+import java.util.zip.CRC32;
 import org.apache.commons.io.FileUtils;
-
 import java.util.Date;
 
 public class Sensor {
@@ -26,11 +24,12 @@ public class Sensor {
 		private String manufacturerName;
 		private String serialNumber;
 		private String firmwareVersion;		
-		private String flashDate;
+		private Date flashDate;
 		private String sensorVoltage;
 		private String currentState;
 		private String sensorSystemTime;
-				
+		private final static String VID = "01A1";
+		private final static String PID = "01B1";				
 		private SensorConfiguration sensorConfiguration;	
 		
 		//construct sensor object		
@@ -51,18 +50,20 @@ public class Sensor {
 		}
 		
 		public String getDeviceName(){
-			return deviceName;	
+			return deviceName.substring(11,16);	
 		}
 		
 		public String getManufacturerName(){
-			return manufacturerName;	
+			return manufacturerName.substring(17,33);	
 		}
 		
 		public String getSerialNumber(){
-			return serialNumber;	
+			
+			return serialNumber.substring(13,18);	
 		}
 		
-		public String getFlashDate(){
+		public Date getFlashDate(){
+			
 			return flashDate;
 		}			
 		
@@ -92,8 +93,15 @@ public class Sensor {
 			deviceName =fileReader(absolutePath).get(0);
 			manufacturerName = fileReader(absolutePath).get(1);
 			serialNumber = fileReader(absolutePath).get(2);
-			firmwareVersion = fileReader(absolutePath).get(3);
-			flashDate =  fileReader(absolutePath).get(4);					
+			firmwareVersion = fileReader(absolutePath).get(3);			
+			
+			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			try {
+				flashDate = ft.parse( fileReader(absolutePath).get(4).substring(10, 29));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		
@@ -124,7 +132,7 @@ public class Sensor {
 		//write configuration file to sensor		
 		public void writeConfigFile() throws IOException{
 			String absolutePath =sensorPath+":/config.cm2";
-			
+			//,sensorConfiguration.checksum[0], sensorConfiguration.checksum[1],sensorConfiguration.checksum[2],sensorConfiguration.checksum[3]
 			byte[] buffer = {SensorConfiguration.VERSION_MAJOR,SensorConfiguration.VERSION_MINOR,SensorConfiguration.startMode[0],
 							 sensorConfiguration.configSet[0],sensorConfiguration.recordDuration[0],
 							 sensorConfiguration.recordDuration[1],sensorConfiguration.recordDuration[2],
@@ -132,9 +140,9 @@ public class Sensor {
 							 sensorConfiguration.recordDuration[5],sensorConfiguration.startTime[0],
 							 sensorConfiguration.startTime[1],sensorConfiguration.startTime[2],
 							 sensorConfiguration.startTime[3],sensorConfiguration.startTime[4],
-							 sensorConfiguration.startTime[5],sensorConfiguration.latency,sensorConfiguration.checksum[0],
-							 sensorConfiguration.checksum[1],sensorConfiguration.checksum[2],sensorConfiguration.checksum[3]};
-			
+							 sensorConfiguration.startTime[5],sensorConfiguration.latency};
+			CRC32 myCRC = new CRC32();
+		    myCRC.update( buffer) ;
 			FileOutputStream outputStream = new FileOutputStream(absolutePath);
             BufferedOutputStream out = new BufferedOutputStream(outputStream);
             outputStream.write(buffer);
@@ -172,7 +180,7 @@ public class Sensor {
 		//read measurement data from sensor		
 		public void readMeasurementFromSensor(String dest){			
 			File destination = new File(dest);
-			File source =  new File(sensorPath+":/project");				
+			File source =  new File(sensorPath+":/data");				
 			try {
 				FileUtils.copyDirectoryToDirectory(source,destination);
 			} catch (IOException e) {
@@ -197,7 +205,7 @@ public class Sensor {
 
 		
 		public long getDataSize(){
-			long size = FileUtils.sizeOf(new File(sensorPath+":/project"));
+			long size = FileUtils.sizeOf(new File(sensorPath+":/data"));
 			return size;
 		}
 		
@@ -215,7 +223,7 @@ public class Sensor {
 		
 		}
 
-		//removing sensor	
+		//removing or restarting sensor	
 		public void disconnect(String command) throws IOException{
 			//remove Sensor			
 			ProcessBuilder builder = new ProcessBuilder( "cmd.exe", "/c", "cd \"C:/Users/Gasimov/Desktop\" && devcon.exe "+command+" *VID_05E3*");
@@ -223,7 +231,7 @@ public class Sensor {
 			Process p = builder.start();
 			BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
 		    String line;
-		     while (true) {
+		    while (true) {
 		        line = r.readLine();
 	            if (line == null) { break; }
 	            System.out.println(line);

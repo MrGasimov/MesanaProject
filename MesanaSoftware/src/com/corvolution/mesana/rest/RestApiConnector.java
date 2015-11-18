@@ -1,34 +1,42 @@
 package com.corvolution.mesana.rest;
 import java.io.InputStream;
+
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 
 import com.corvolution.mesana.configurator.PropertyManager;
 
 
 public class RestApiConnector {
-	
-	public static CloseableHttpClient httpclient = HttpClients.createDefault();
-	PropertyManager conf = new PropertyManager();
-	public String getMethod(String URL){
 		
+	CloseableHttpClient httpclient = HttpClients.createDefault();	
+	PropertyManager conf = new PropertyManager();
+	
+	
+	public String getMethod(String URL){
+	
 		HttpGet httpGet = new HttpGet(URL);
+		//httpGet.setConfig(params);
 		String json=null;
 		try {
 
-			HttpResponse response = httpclient.execute(httpGet);
+			CloseableHttpResponse response = httpclient.execute(httpGet);
 			StatusLine statusLine = response.getStatusLine();
 			int statusCode = statusLine.getStatusCode();
-
+			response.close();
 			if (statusCode == 200) {				
 				HttpEntity entity = response.getEntity();
 				InputStream inputStream = entity.getContent();
@@ -41,16 +49,18 @@ public class RestApiConnector {
 		}
 		
 		return json;
+		
+		
 	}
 		
 	public void postMethod(String json, String url) throws Exception {		
 		
 		HttpPost httpPost = new HttpPost(url);
+		//httpPost.setConfig(params);
 		httpPost.addHeader("Content-Type", "application/json");
-		httpPost.addHeader("Accept", "application/json");
+		
 		httpPost.setEntity(new StringEntity(json));
-		HttpResponse response = httpclient.execute(httpPost);
-
+		CloseableHttpResponse response = httpclient.execute(httpPost);
 		if (response.getStatusLine().getStatusCode() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
 		} else {
@@ -58,25 +68,25 @@ public class RestApiConnector {
 
 		}
 
-		//httpclient.close();
-
+		response.close();
 	}
 	
 	public void putMethod(String json, String url) throws Exception {		
-		
+		CloseableHttpResponse response ;
 		HttpPut httpPut = new HttpPut(url);
 		httpPut.addHeader("Content-Type", "application/json");
-		httpPut.addHeader("Accept", "application/json");
+		
 		httpPut.setEntity(new StringEntity(json));
-		HttpResponse response = httpclient.execute(httpPut);
+		
+		response = httpclient.execute(httpPut);
+		
 
 		if (response.getStatusLine().getStatusCode() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
 		} else {
 			System.out.println(response.getStatusLine().getStatusCode());
 		}
-
-		//httpclient.close();
-
+		response.close();
+		
 	}
 	}

@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.google.gson.JsonElement"/>
-<fullyQualifiedTypeName name="com.google.gson.JsonObject"/>
-<fullyQualifiedTypeName name="com.corvolution.mesana.data.TaskCollection"/>
-<fullyQualifiedTypeName name="org.json.simple.JSONObject"/>
-<fullyQualifiedTypeName name="org.apache.http.client.methods.HttpPost"/>
-<fullyQualifiedTypeName name="org.apache.http.client.methods.CloseableHttpResponse"/>
-<fullyQualifiedTypeName name="com.corvolution.mesana.configurator.ConfigApp"/>
 <fullyQualifiedTypeName name="org.eclipse.swt.widgets.Button"/>
 <fullyQualifiedTypeName name="org.eclipse.swt.widgets.ProgressBar"/>
 <fullyQualifiedTypeName name="org.eclipse.swt.graphics.Rectangle"/>
@@ -47,7 +40,6 @@
 <fullyQualifiedTypeName name="java.io.FileInputStream"/>
 <fullyQualifiedTypeName name="java.io.FileNotFoundException"/>
 <fullyQualifiedTypeName name="com.corvolution.mesana.configurator.PropertyManager"/>
-<fullyQualifiedTypeName name="com.corvolution.cm2.ConnectionManager"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="java.util.List"/>
@@ -56,8 +48,16 @@
 <fullyQualifiedTypeName name="java.io.BufferedInputStream"/>
 <fullyQualifiedTypeName name="java.util.Calendar"/>
 <fullyQualifiedTypeName name="java.time.Year"/>
-<fullyQualifiedTypeName name="com.corvolution.mesana.rest.RestApiConnector"/>
 <fullyQualifiedTypeName name="org.apache.commons.io.FileUtils"/>
 <fullyQualifiedTypeName name="java.io.BufferedReader"/>
 <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
+<fullyQualifiedTypeName name="java.util.zip.CRC32"/>
+<fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
+<fullyQualifiedTypeName name="com.corvolution.cm2.ConnectionManager"/>
+<fullyQualifiedTypeName name="org.apache.http.impl.client.DefaultHttpClient"/>
+<fullyQualifiedTypeName name="org.apache.http.impl.client.HttpClientBuilder"/>
+<fullyQualifiedTypeName name="org.apache.http.client.HttpClient"/>
+<fullyQualifiedTypeName name="org.apache.http.client.config.RequestConfig"/>
+<fullyQualifiedTypeName name="com.corvolution.mesana.rest.RestApiConnector"/>
+<fullyQualifiedTypeName name="org.apache.commons.httpclient.MultiThreadedHttpConnectionManager"/>
 </qualifiedTypeNameHistroy>

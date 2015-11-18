@@ -122,6 +122,5 @@ public final class ConnectionManager {
 	
 		return dataSize;
 	}
-
 	
 }

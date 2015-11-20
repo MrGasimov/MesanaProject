@@ -13,9 +13,7 @@ import com.google.gson.reflect.TypeToken;
 public class AddressData extends RestApiConnector {
 	
 	private List<AddressData> addressList;
-	TypeToken<List<AddressData>> token = new TypeToken<List<AddressData>>() {
-	};
-
+	TypeToken<List<AddressData>> token = new TypeToken<List<AddressData>>() {};
 	private String salutation = "";
 	private String firstName = "";
 	private String lastName = "";
@@ -23,7 +21,7 @@ public class AddressData extends RestApiConnector {
 	private String street = "";
 	private String zip = "";
 	private String country = "";
-	
+	PropertyManager pManager = new PropertyManager();
 	
 	public List<AddressData> getList(){
 		return addressList;
@@ -37,13 +35,12 @@ public class AddressData extends RestApiConnector {
 			salutation = "Herr";
 		} else {
 			salutation = "Frau";
-		}
-		
-		if (country.equalsIgnoreCase("Deutschland")){
+		}		
+		if (country.equalsIgnoreCase(pManager.getProperty("HOME_COUNTRY"))){
 			country="";
-			city = city.substring(0, 1).toUpperCase() + city.substring(1).toLowerCase();			
+			city = city.toUpperCase();			
 		}else{
-			city = city.toUpperCase();
+			city = city.substring(0, 1).toUpperCase() + city.substring(1).toLowerCase();					
 		}
 		country = country.toUpperCase();
 		firstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
@@ -64,7 +61,7 @@ public class AddressData extends RestApiConnector {
 	}
 
 	public void setList(String mID){
-		String addressUrl = "http://chili/mk/backend.mesana.com/api/v4/measurements/"+mID+"/addresses?type=sensor";
+		String addressUrl = pManager.getProperty("REST_PATH")+"measurements/"+mID+"/addresses?type=sensor";
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();		
 		

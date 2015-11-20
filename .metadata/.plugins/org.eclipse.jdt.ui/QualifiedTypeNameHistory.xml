@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="org.eclipse.swt.widgets.Button"/>
-<fullyQualifiedTypeName name="org.eclipse.swt.widgets.ProgressBar"/>
-<fullyQualifiedTypeName name="org.eclipse.swt.graphics.Rectangle"/>
-<fullyQualifiedTypeName name="gui.ReaderGui"/>
-<fullyQualifiedTypeName name="org.eclipse.swt.events.SelectionAdapter"/>
-<fullyQualifiedTypeName name="com.corvolution.mesana.configurator.FindSensor"/>
-<fullyQualifiedTypeName name="org.apache.http.client.methods.HttpRequestBase"/>
-<fullyQualifiedTypeName name="com.corvolution.mesana.configurator.ConfigSensor"/>
-<fullyQualifiedTypeName name="javax.swing.filechooser.FileSystemView"/>
-<fullyQualifiedTypeName name="com.corvolution.cm2.FindSensor"/>
-<fullyQualifiedTypeName name="java.io.File"/>
-<fullyQualifiedTypeName name="java.nio.file.Files"/>
-<fullyQualifiedTypeName name="java.nio.file.Paths"/>
-<fullyQualifiedTypeName name="com.corvolution.cm2.SensorConfiguration"/>
-<fullyQualifiedTypeName name="java.lang.String"/>
-<fullyQualifiedTypeName name="com.corvolution.cm2.Sensor"/>
-<fullyQualifiedTypeName name="com.corvolution.cm2.PropertyManager"/>
-<fullyQualifiedTypeName name="org.eclipse.swt.events.SelectionListener"/>
-<fullyQualifiedTypeName name="java.util.concurrent.CopyOnWriteArrayList"/>
-<fullyQualifiedTypeName name="java.util.Date"/>
-<fullyQualifiedTypeName name="java.util.EventObject"/>
-<fullyQualifiedTypeName name="javax.swing.event.EventListenerList"/>
 <fullyQualifiedTypeName name="java.util.Iterator"/>
 <fullyQualifiedTypeName name="com.corvolution.mesana.data.MeasurementCollection"/>
 <fullyQualifiedTypeName name="com.corvolution.mesana.data.Measurement"/>
@@ -40,7 +18,6 @@
 <fullyQualifiedTypeName name="java.io.FileInputStream"/>
 <fullyQualifiedTypeName name="java.io.FileNotFoundException"/>
 <fullyQualifiedTypeName name="com.corvolution.mesana.configurator.PropertyManager"/>
-<fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="java.io.FileOutputStream"/>
@@ -60,4 +37,27 @@
 <fullyQualifiedTypeName name="org.apache.http.client.config.RequestConfig"/>
 <fullyQualifiedTypeName name="com.corvolution.mesana.rest.RestApiConnector"/>
 <fullyQualifiedTypeName name="org.apache.commons.httpclient.MultiThreadedHttpConnectionManager"/>
+<fullyQualifiedTypeName name="org.eclipse.swt.widgets.Composite"/>
+<fullyQualifiedTypeName name="org.eclipse.swt.widgets.MessageBox"/>
+<fullyQualifiedTypeName name="java.security.Key"/>
+<fullyQualifiedTypeName name="java.security.NoSuchAlgorithmException"/>
+<fullyQualifiedTypeName name="javax.crypto.KeyGenerator"/>
+<fullyQualifiedTypeName name="java.security.SecureRandom"/>
+<fullyQualifiedTypeName name="javax.crypto.IllegalBlockSizeException"/>
+<fullyQualifiedTypeName name="javax.crypto.BadPaddingException"/>
+<fullyQualifiedTypeName name="java.io.UnsupportedEncodingException"/>
+<fullyQualifiedTypeName name="java.security.InvalidKeyException"/>
+<fullyQualifiedTypeName name="javax.crypto.NoSuchPaddingException"/>
+<fullyQualifiedTypeName name="javax.crypto.Cipher"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
+<fullyQualifiedTypeName name="javax.crypto.spec.SecretKeySpec"/>
+<fullyQualifiedTypeName name="javax.crypto.spec.IvParameterSpec"/>
+<fullyQualifiedTypeName name="Decoder.BASE64Encoder"/>
+<fullyQualifiedTypeName name="Decoder.BASE64Decoder"/>
+<fullyQualifiedTypeName name="java.security.InvalidAlgorithmParameterException"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="java.io.FileWriter"/>
+<fullyQualifiedTypeName name="java.io.BufferedWriter"/>
+<fullyQualifiedTypeName name="java.io.ObjectOutputStream"/>
+<fullyQualifiedTypeName name="java.io.ObjectInputStream"/>
 </qualifiedTypeNameHistroy>

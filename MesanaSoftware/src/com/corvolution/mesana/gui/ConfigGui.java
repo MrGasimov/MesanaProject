@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -17,6 +18,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tray;
@@ -33,7 +35,7 @@ import com.corvolution.mesana.data.SensorData;
 import com.corvolution.mesana.data.TaskCollection;
 
 public class ConfigGui {
-	
+	private int messageCode;
 	private String login, password;
 	private Display display;
 	private static Shell shell;
@@ -42,7 +44,7 @@ public class ConfigGui {
 	private static Text statusBar;
 	private static Combo priorityCombo, electrodeCombo;
 	private static List customerList;			
-	private Button updateButton, configButton;	
+	private static Button updateButton, configButton;	
 	private static MeasurementCollection mCollect;
 	private static SensorCollection sCollect;
 	private TaskCollection tCollect;
@@ -88,6 +90,7 @@ public class ConfigGui {
 			@Override
 			public void run() {
 				if(e.getState() && !shell.isVisible() && e.getNumOfConnectedSensors()==1){
+					configButton.setEnabled(true);
 					try {
 						setData();
 					} catch (IOException e) {
@@ -98,19 +101,33 @@ public class ConfigGui {
 					statusBar.setText("Sensor "+e.getSensorPath()+" has been connected Succussfully");
 					setShell();
 				}else if(e.getState() && shell.isVisible() && e.getNumOfConnectedSensors()==1){
+					configButton.setEnabled(true);
 					try {
 						setData();
+						
 					} catch (IOException e) {
 						
 						e.printStackTrace();
 					}
 					statusBar.setText("Sensor "+e.getSensorPath()+" has been connected Succussfully");
+					configButton.setEnabled(true);
 				}else if(!e.getState()&& shell.isVisible() && e.getNumOfConnectedSensors()==1){
+					configButton.setEnabled(true);
+					resetData();
+					try {
+						setData();
+						
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
 					statusBar.setText("Only Sensor "+ConnectionManager.currentSensor(0).getSensorPath()+" has been connected");
 				}else if(e.getNumOfConnectedSensors()>=2){
+					configButton.setEnabled(false);
 					statusBar.setText("Multiple Sensors connected.Please remove all except one sensor");
 				}else{
 					resetData();
+					configButton.setEnabled(false);
 					statusBar.setText("Sensor "+e.getSensorPath()+" has been disconnected. Please connect sensor for configuration");
 				}
 				
@@ -317,7 +334,16 @@ public class ConfigGui {
 		statusBar.setLayoutData(gridData);
 
 	}
-
+	public int batteryWarning(){
+		// create a dialog with ok and cancel buttons and a question icon
+		MessageBox dialog = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK| SWT.CANCEL);
+		dialog.setText("Battery status");
+		dialog.setMessage("Sensor battery is below minimum. Do you want proceed configuration?");
+		// open dialog and await user selection
+		int returnCode = dialog.open(); 
+		System.out.println(returnCode);
+		return returnCode;
+	}
 	public void setListeners() {
 
 		// register listener for customerList.
@@ -429,38 +455,19 @@ public class ConfigGui {
 		// register listener for the selection event
 		configButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				try {
-					
-					//change state of measurement in RestApi
-					restApiUpdate("CONFIGURING","state1");
-					checkFirmwareVersion();
-					//Write configuration file to sensor
-					//ConnectionManager.currentSensor(0).writeConfigFile();
-										
-					//push comment to RestApi
-					restApiUpdate(ConnectionManager.currentSensor(0).getSerialNumber(),"comment");	
-					
-					//change state of measurement in RestApi
-					restApiUpdate("SENSOR_OUTBOX", "state2");
-					statusBar.setText("Sensor is configurated.Please connect another sensor.");										
-					//writing date to sensor for synchronization					
-					//ConnectionManager.currentSensor(0).synchronize();
-										
-					//resetData();
-					//remove sensor 
-					//ConnectionManager.currentSensor(0).disconnect("remove");
-				} catch (Exception e1) {
-					
-					e1.printStackTrace();
-				} 
-
-			}
+			public void widgetSelected(SelectionEvent e) {								
+					if(ConnectionManager.currentSensor(0).getSensorVoltage()<3.8){
+						messageCode = batteryWarning();
+						if(messageCode==32)
+							configurate();
+					} else{
+						configurate();
+						printAddress();
+					}																									
+			}			
 		});
-
 	}
-	
-	
+		
 	//para1 is state for measurement update , para2 which method run
 	public void restApiUpdate(String para1, String para2){		
 	
@@ -533,6 +540,33 @@ public class ConfigGui {
 				e.printStackTrace();
 			}					
 		}
+	}
+	public void configurate(){
+		//change state of measurement in RestApi
+		restApiUpdate("CONFIGURING","state1");
+		checkFirmwareVersion();
+		//Write configuration file to sensor
+		//ConnectionManager.currentSensor(0).writeConfigFile();
+							
+		//push comment to RestApi
+		restApiUpdate(ConnectionManager.currentSensor(0).getSerialNumber(),"comment");	
+		
+		//change state of measurement in RestApi
+		restApiUpdate("SENSOR_OUTBOX", "state2");
+		//print address
+		statusBar.setText("Sensor is configurated.Please connect another sensor.");										
+		
+		
+		//writing date to sensor for synchronization					
+		//ConnectionManager.currentSensor(0).synchronize();
+							
+		//resetData();
+		//remove sensor 
+		//ConnectionManager.currentSensor(0).disconnect("remove");
+	}
+	
+	private void printAddress() {
+		ConnectionManager.currentSensor(0).writeEncryptedParameters();		
 	}
 	
 	public void setTrayIcon() {

@@ -2,13 +2,17 @@ package com.corvolution.cm2;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +20,7 @@ import java.util.Calendar;
 import java.util.zip.CRC32;
 import org.apache.commons.io.FileUtils;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Sensor {
 		
@@ -30,11 +35,13 @@ public class Sensor {
 		private String sensorSystemTime;
 		private final static String VID = "01A1";
 		private final static String PID = "01B1";				
-		private SensorConfiguration sensorConfiguration;	
+		private SensorConfiguration sensorConfiguration;
+		private SensorPropertyManager pManager;
 		
 		//construct sensor object		
 		public Sensor(String path) throws IOException{
 			sensorConfiguration = new SensorConfiguration();
+			pManager = new SensorPropertyManager(path);
 			this.sensorPath = path;
 			readSensorInfo();
 			if(new File(path+":/config.cm2").exists()){
@@ -42,33 +49,27 @@ public class Sensor {
 			}			
 			readCustomFile();
 			readFeedBackFile();
+			readEncryptedParameters();
 		}
-			
-		
+					
 		public String  getSensorPath(){
 			return sensorPath;
-		}
-		
+		}	
 		public String getDeviceName(){
-			return deviceName.substring(11,16);	
-		}
-		
+			return deviceName;	
+		}		
 		public String getManufacturerName(){
-			return manufacturerName.substring(17,33);	
-		}
-		
-		public String getSerialNumber(){
-			
-			return serialNumber.substring(13,18);	
-		}
-		
-		public Date getFlashDate(){
-			
+			return manufacturerName;	
+		}		
+		public String getSerialNumber(){			
+			return serialNumber;	
+		}		
+		public Date getFlashDate(){			
 			return flashDate;
-		}			
-		
-		public String getSensorVoltage(){
-			return sensorVoltage;
+		}					
+		public double getSensorVoltage(){
+			double voltage = Double.parseDouble(sensorVoltage);
+			return voltage;
 		}
 		public String getFirwareVersion(){
 			return  firmwareVersion;
@@ -88,38 +89,36 @@ public class Sensor {
 		
 		//read sensor info file from sensor
 		private void readSensorInfo() throws IOException{
-			 
-			String absolutePath =sensorPath+":/info.txt";			 
-			deviceName =fileReader(absolutePath).get(0);
-			manufacturerName = fileReader(absolutePath).get(1);
-			serialNumber = fileReader(absolutePath).get(2);
-			firmwareVersion = fileReader(absolutePath).get(3);			
-			
+		
+			deviceName = pManager.getInfoProperty("DeviceName");
+			manufacturerName = pManager.getInfoProperty("ManufacturerName");
+			serialNumber = pManager.getInfoProperty("SerialNumber");
+			firmwareVersion = pManager.getInfoProperty("FirmwareVersion");
 			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			try {
-				flashDate = ft.parse( fileReader(absolutePath).get(4).substring(10, 29));
+				flashDate = ft.parse( pManager.getInfoProperty("FlashDate"));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
-		
+				
 		//read configuration file from sensor
 		private void readConfigFile() throws IOException{
 			String absolutePath = sensorPath+":/config.cm2";
 			try {
 				byte[] buffer = new byte[21];
 				FileInputStream inputStream = new FileInputStream(absolutePath);
-				BufferedInputStream out = new BufferedInputStream(inputStream);
+				BufferedInputStream bufferedOutStream = new BufferedInputStream(inputStream);
 				int total = 0;
 		        int nRead = 0;
-		        
-		        while((nRead = inputStream.read(buffer)) != -1) {
+		        CRC32 myCRC = new CRC32() ;			   
+		        while((nRead = bufferedOutStream.read(buffer)) != -1) {
 		        	total += nRead;	
 		        	System.out.println(nRead);
+		        	System.out.println(total);
 	            }  
-		        
+		        myCRC.update(buffer,0,17) ;
 		        inputStream.close();  				
 			}catch(FileNotFoundException ex){
 					ex.printStackTrace();
@@ -173,6 +172,7 @@ public class Sensor {
 			
 			
 		}
+		
 		public SensorConfiguration getConfiguration(){
 			return this.sensorConfiguration;
 		}
@@ -189,18 +189,55 @@ public class Sensor {
 		 
 		}
 		
-		
-		public void readCustomFile() throws IOException{
-			 String absolutePath =sensorPath+":/custom.txt";			
-			 sensorConfiguration.addParameter("LinkId", fileReader(absolutePath).get(0).substring(7,13));
+		public void readEncryptedParameters(){
+			File encryptedCustomFile = new File(sensorPath+":/encryptedCustom.txt");
+			if(encryptedCustomFile.exists()){
+				try {
+					FileInputStream ois = new FileInputStream(encryptedCustomFile);
+					BufferedInputStream bis = new BufferedInputStream(ois);
+					byte [] buffer = new byte [(int) encryptedCustomFile.length()];
+					bis.read(buffer);					
+					sensorConfiguration.addEncryptedParameter("enryptedcustomIO",buffer, "0123456789ABCDEF");
+					System.out.println(sensorConfiguration.getEncryptedParameter("enryptedcustomIO", "0123456789ABCDEF"));
+					bis.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+			}
+								
+		}
+		public void writeEncryptedParameters(){
+			//key and inital vector must be at least 16 bytes--1st and 3rd arguments
+			String text = "some text for encryption";
+			
+			try {
+				sensorConfiguration.addEncryptedParameter("enryptedcustomIO",text.getBytes("UTF8"), "0123456789ABCDEF");
+				File encryptedCustomFile = new File(sensorPath+":/encryptedCustom.txt");
+				ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(encryptedCustomFile));
+				oos.writeObject(sensorConfiguration.getEncrypetdParameters().get("enryptedcustomIO"));
+				oos.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+			}
 			
 		}
 		
+		public void writeCustomeFile(String text){
+			
+		}
+		public void readCustomFile() throws IOException{
+			 String absolutePath =sensorPath+":/custom.txt";			
+			 sensorConfiguration.addParameter("LinkId", pManager.getCustomProperty("LinkId"));			
+		}
+		
 		public void readFeedBackFile() throws IOException{
-			String absolutePath =sensorPath+":/status.txt";			
-			sensorVoltage = fileReader(absolutePath).get(0).substring(15, 18);
-			currentState = fileReader(absolutePath).get(1).substring(13, 22);
-			sensorSystemTime = fileReader(absolutePath).get(2).substring(11, 30);
+					
+			sensorVoltage = pManager.getStatusProperty("BatteryVoltage");
+			currentState = pManager.getStatusProperty("CurrentState");
+			sensorSystemTime = pManager.getStatusProperty("SystemTime");
 		}
 
 		

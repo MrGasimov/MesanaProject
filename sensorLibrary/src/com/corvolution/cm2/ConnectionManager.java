@@ -78,8 +78,8 @@ public final class ConnectionManager {
 	public  void addSensorToList(String path) throws IOException{
 		sensorPath  = path;
 		Sensor sensor = new Sensor(path);
-		fireSensorEvent();
 		sensorList.add(sensor);
+		fireSensorEvent();
 		
 	}
 	//deletes disconnected sensor from array

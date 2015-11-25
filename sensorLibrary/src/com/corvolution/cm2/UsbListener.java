@@ -5,21 +5,24 @@ import java.io.IOException;
 
 import javax.swing.filechooser.FileSystemView;
 
-public class UsbListener implements Runnable {
-	
-	
-	public void run() {
+public class UsbListener implements Runnable
+{
+
+	public void run()
+	{
 		sensorListener();
 	}
 
-	public void sensorListener() {
+	public void sensorListener()
+	{
 		int counter = 0;
-		String[] letters = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M" };
+		String[] letters = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P", "Y" };
 		File[] sensors = new File[letters.length];
 		boolean[] isDrive = new boolean[letters.length];
 
 		// init the file objects and the initial drive state
-		for (int i = 0; i < letters.length; ++i) {
+		for (int i = 0; i < letters.length; ++i)
+		{
 			sensors[i] = new File(letters[i] + ":/");
 
 			isDrive[i] = sensors[i].canRead();
@@ -27,30 +30,40 @@ public class UsbListener implements Runnable {
 		System.out.println("Find Sensor: waiting for devices...");
 		// loop indefinitely
 
-		while (true) {
+		while (true)
+		{
 			// check each drive
-			for (int i = 0; i < letters.length; ++i) {
+			for (int i = 0; i < letters.length; ++i)
+			{
 				boolean pluggedIn = sensors[i].canRead();
 				// if the state has changed output a message
-				if (pluggedIn != isDrive[i]) {
-					if (pluggedIn) {
-						FileSystemView view = FileSystemView.getFileSystemView();						
+				if (pluggedIn != isDrive[i])
+				{
+					if (pluggedIn)
+					{
+						FileSystemView view = FileSystemView.getFileSystemView();
 						File dir = new File(letters[i] + ":/");
 						String name = view.getSystemDisplayName(dir).substring(0, 5);
-						if (name.equals("STICK")) {							
-							counter++;							
+						if (name.equals("STICK")) //TODO use constant
+						{
+							counter++;
 							ConnectionManager.setState(true);
-							ConnectionManager.setCounter(counter);							
-							try {
+							ConnectionManager.setCounter(counter);
+							try
+							{
 								ConnectionManager.getInstance().addSensorToList(letters[i]);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
+							}
+							catch (IOException e)
+							{
 								e.printStackTrace();
 							}
-							System.out.println(ConnectionManager.getConnectedSensorsList());							
+							System.out.println(ConnectionManager.getConnectedSensorsList());
 						}
-					} else {
-						if (counter != 0) {
+					}
+					else
+					{
+						if (counter != 0)
+						{
 							counter--;
 							ConnectionManager.setState(false);
 							ConnectionManager.setCounter(counter);

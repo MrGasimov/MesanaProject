@@ -6,6 +6,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -30,6 +31,8 @@ public class SensorConfiguration
 	private HashMap<String, HashMap> configSetMap;
 	private HashMap<String, String> addParameters;
 	private HashMap<String, byte[]> encryptedParameters;
+	private Date recordingStartTime;
+	private int durationMinutes;
 
 	public SensorConfiguration()
 	{
@@ -165,4 +168,31 @@ public class SensorConfiguration
 		configurationSet = new ConfigurationSet(byteNumber, rateList);
 	}
 
+	/**
+	 * Set the recording starting point. Only day, hour and minute will be assessed. 
+	 * @param date Starting point of the next measurement
+	 */
+	public void setRecordingStartTime(Date date)
+	{
+		this.recordingStartTime = date;
+	}
+	
+	/**
+	 * Set the recording duration for the next measurement.	
+	 * @param duration Duration of the next measurement in minutes
+	 */
+	public void setRecordingDuration(int duration)
+	{
+		this.durationMinutes = duration;
+	}
+	
+	public Date getRecordingStartTime()
+	{
+		return this.recordingStartTime;
+	}
+	
+	public int getDurationMinutes()
+	{
+		return this.durationMinutes;
+	}	
 }

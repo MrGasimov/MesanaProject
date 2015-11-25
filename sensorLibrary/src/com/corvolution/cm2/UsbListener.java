@@ -16,7 +16,7 @@ public class UsbListener implements Runnable
 	public void sensorListener()
 	{
 		int counter = 0;
-		String[] letters = new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"};
+		String[] letters = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P", "Y" };
 		File[] sensors = new File[letters.length];
 		boolean[] isDrive = new boolean[letters.length];
 
@@ -44,7 +44,7 @@ public class UsbListener implements Runnable
 						FileSystemView view = FileSystemView.getFileSystemView();
 						File dir = new File(letters[i] + ":/");
 						String name = view.getSystemDisplayName(dir).substring(0, 5);
-						if (name.equals("STICK"))
+						if (name.equals("STICK")) //TODO use constant
 						{
 							counter++;
 							ConnectionManager.setState(true);
@@ -55,7 +55,6 @@ public class UsbListener implements Runnable
 							}
 							catch (IOException e)
 							{
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							System.out.println(ConnectionManager.getConnectedSensorsList());
@@ -77,12 +76,9 @@ public class UsbListener implements Runnable
 				}
 			}
 			// wait before looping
-			try
-			{
+			try {
 				Thread.sleep(100);
-			}
-			catch (InterruptedException e)
-			{
+			} catch (InterruptedException e) {
 				/* do nothing */ }
 
 		}

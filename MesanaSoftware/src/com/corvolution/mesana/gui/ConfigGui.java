@@ -1,14 +1,22 @@
 package com.corvolution.mesana.gui;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -17,6 +25,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tray;
@@ -33,7 +42,7 @@ import com.corvolution.mesana.data.SensorData;
 import com.corvolution.mesana.data.TaskCollection;
 
 public class ConfigGui {
-	
+	private int messageCode;
 	private String login, password;
 	private Display display;
 	private static Shell shell;
@@ -42,7 +51,7 @@ public class ConfigGui {
 	private static Text statusBar;
 	private static Combo priorityCombo, electrodeCombo;
 	private static List customerList;			
-	private Button updateButton, configButton;	
+	private static Button updateButton, configButton;	
 	private static MeasurementCollection mCollect;
 	private static SensorCollection sCollect;
 	private TaskCollection tCollect;
@@ -50,7 +59,8 @@ public class ConfigGui {
 	private static AddressData aData;	
 	private PropertyManager pManager;
 	private ConnectionManager cManager;
-	boolean configState =false;
+	boolean configState = false;
+	boolean shellCheck ;
 	
 	// Constructor
 	public ConfigGui(String log, String pass) {
@@ -88,6 +98,7 @@ public class ConfigGui {
 			@Override
 			public void run() {
 				if(e.getState() && !shell.isVisible() && e.getNumOfConnectedSensors()==1){
+					configButton.setEnabled(true);
 					try {
 						setData();
 					} catch (IOException e) {
@@ -98,19 +109,33 @@ public class ConfigGui {
 					statusBar.setText("Sensor "+e.getSensorPath()+" has been connected Succussfully");
 					setShell();
 				}else if(e.getState() && shell.isVisible() && e.getNumOfConnectedSensors()==1){
+					configButton.setEnabled(true);
 					try {
 						setData();
+						
 					} catch (IOException e) {
 						
 						e.printStackTrace();
 					}
 					statusBar.setText("Sensor "+e.getSensorPath()+" has been connected Succussfully");
+					configButton.setEnabled(true);
 				}else if(!e.getState()&& shell.isVisible() && e.getNumOfConnectedSensors()==1){
+					configButton.setEnabled(true);
+					resetData();
+					try {
+						setData();
+						
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
 					statusBar.setText("Only Sensor "+ConnectionManager.currentSensor(0).getSensorPath()+" has been connected");
 				}else if(e.getNumOfConnectedSensors()>=2){
+					configButton.setEnabled(false);
 					statusBar.setText("Multiple Sensors connected.Please remove all except one sensor");
 				}else{
 					resetData();
+					configButton.setEnabled(false);
 					statusBar.setText("Sensor "+e.getSensorPath()+" has been disconnected. Please connect sensor for configuration");
 				}
 				
@@ -317,7 +342,16 @@ public class ConfigGui {
 		statusBar.setLayoutData(gridData);
 
 	}
-
+	public int batteryWarning(){
+		// create a dialog with ok and cancel buttons and a question icon
+		MessageBox dialog = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK| SWT.CANCEL);
+		dialog.setText("Battery status");
+		dialog.setMessage("Sensor battery is below minimum. Do you want proceed configuration?");
+		// open dialog and await user selection
+		int returnCode = dialog.open(); 
+		System.out.println(returnCode);
+		return returnCode;
+	}
 	public void setListeners() {
 
 		// register listener for customerList.
@@ -429,35 +463,139 @@ public class ConfigGui {
 		// register listener for the selection event
 		configButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				try {
-					
-					//change state of measurement in RestApi
-					restApiUpdate("CONFIGURING","state1");
-					checkFirmwareVersion();
-					//Write configuration file to sensor
-					//ConnectionManager.currentSensor(0).writeConfigFile();
-										
-					//push comment to RestApi
-					restApiUpdate(ConnectionManager.currentSensor(0).getSerialNumber(),"comment");	
-					
-					//change state of measurement in RestApi
-					restApiUpdate("SENSOR_OUTBOX", "state2");
-					statusBar.setText("Sensor is configurated.Please connect another sensor.");										
-					//writing date to sensor for synchronization					
-					//ConnectionManager.currentSensor(0).synchronize();
-										
-					//resetData();
-					//remove sensor 
-					//ConnectionManager.currentSensor(0).disconnect("remove");
-				} catch (Exception e1) {
-					
-					e1.printStackTrace();
-				} 
-
+			public void widgetSelected(SelectionEvent e) {								
+					if(ConnectionManager.currentSensor(0).getSensorVoltage()<3.8){
+						messageCode = batteryWarning();
+						if(messageCode==32)
+							configurate();
+					} else{
+						configurate();
+						printAddress();
+					}																									
+			}			
+		});
+		
+		shell.addShellListener(new ShellAdapter(){
+			public void shellDeactivated(ShellEvent shellEvent) {
+				shellCheck = false;
+				System.out.println("shell deactivated");				
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask(){
+					@Override
+					public void run() {							
+						Display.getDefault().asyncExec(new Runnable(){
+							@Override
+							public void run() {
+								while(!shellCheck){
+									statusBar.setText("Operator access requesting.....");
+									InputDialog opdialog = new InputDialog (shell, SWT.DIALOG_TRIM);
+									opdialog.createDialogArea();																			
+									statusBar.setText("You have logged in as "+login);
+								}																	
+						}						
+					});
+	    						
+				}
+		    	  
+		      }, 10000);
+				
+		      
+			}			
+			public void shellActivated(ShellEvent arg1){
+				shellCheck = true;
+				System.out.println("Shell activated");
 			}
 		});
+	
+	}
+	
+	
+	public class InputDialog extends Dialog{
+		private Label userLabel, passwordLabel, msgLabel;
+		private Text userField,passwordField;
+	    private String userString,passwordString;
+		private boolean status;
+	    public InputDialog(Shell arg0, int arg1) {
 
+			super(arg0, arg1);
+			// TODO Auto-generated constructor stub
+		}
+	    
+	    protected boolean createDialogArea() {
+	    	Shell shell = new Shell(getParent(), getStyle());
+	    	shell.setText(getText());
+			shell.setLayout(new GridLayout(1, false));
+			shell.setText("Operator credentials");
+			
+			Group group = new Group(shell, SWT.SHADOW_OUT);
+			group.setLayout(new GridLayout());
+			group.setText("Operator Access");
+			group.setLayout(new GridLayout(2,false));
+			
+			msgLabel = new Label(group, SWT.NONE);
+			msgLabel.setText("Please enter operator credentials!");
+			msgLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+			
+			userLabel = new Label(group, SWT.RIGHT);
+			userLabel.setText("Login: ");			
+			userField =new Text(group, SWT.SINGLE | SWT.BORDER ); 
+			
+			passwordLabel = new Label(group, SWT.RIGHT);
+			passwordLabel.setText("Password: ");			
+			passwordField = new Text(group, SWT.SINGLE | SWT.BORDER | SWT.PASSWORD);	
+			
+			GridData data = new GridData(SWT.FILL, SWT.CENTER, true, false);
+			userField.setLayoutData(data);
+			passwordField.setLayoutData(data);
+			
+			Button okButton = new Button(group, SWT.PUSH);
+			okButton.setText("OK");
+			data = new GridData(SWT.CENTER,SWT.CENTER,false,false,1,1);
+			data.heightHint = 30;
+			data.widthHint = 60;
+			okButton.setLayoutData(data);
+			
+			Button cancelButton = new Button(group, SWT.PUSH);
+			cancelButton.setText("Cancel");
+			data = new GridData(SWT.CENTER,SWT.CENTER,false,false,1,1);
+			data.heightHint = 30;
+			data.widthHint = 60;
+			cancelButton.setLayoutData(data);
+			
+			okButton.addSelectionListener(new SelectionAdapter() {
+			      public void widgetSelected(SelectionEvent event) {
+			        userString = userField.getText();
+			        passwordString = passwordField.getText();
+			        if(userString.equals(login)&& passwordString.equals(password)){
+			        	shell.close();
+			        }else{
+			        	userField.setText("");
+			        	passwordField.setText("");
+			        	msgLabel.setText("Login or password is wrong");
+			        }			        
+			      }
+			    });
+			
+			cancelButton.addSelectionListener(new SelectionAdapter() {
+			      public void widgetSelected(SelectionEvent event) {
+			        System.exit(0);
+			    	  shell.close();
+			      }
+			    });
+			
+			shell.setDefaultButton(okButton);
+			
+			shell.pack();
+			shell.open();
+			
+			Display display = getParent().getDisplay();
+		    while (!shell.isDisposed()) {
+		      if (!display.readAndDispatch()) {
+		        display.sleep();
+		      }
+		    }
+			return status;
+	    }		
 	}
 	
 	
@@ -533,6 +671,33 @@ public class ConfigGui {
 				e.printStackTrace();
 			}					
 		}
+	}
+	public void configurate(){
+		//change state of measurement in RestApi
+		restApiUpdate("CONFIGURING","state1");
+		checkFirmwareVersion();
+		//Write configuration file to sensor
+		//ConnectionManager.currentSensor(0).writeConfigFile();
+							
+		//push comment to RestApi
+		restApiUpdate(ConnectionManager.currentSensor(0).getSerialNumber(),"comment");	
+		
+		//change state of measurement in RestApi
+		restApiUpdate("SENSOR_OUTBOX", "state2");
+		//print address
+		statusBar.setText("Sensor is configurated.Please connect another sensor.");										
+		
+		
+		//writing date to sensor for synchronization					
+		//ConnectionManager.currentSensor(0).synchronize();
+							
+		//resetData();
+		//remove sensor 
+		//ConnectionManager.currentSensor(0).disconnect("remove");
+	}
+	
+	private void printAddress() {
+		ConnectionManager.currentSensor(0).writeEncryptedParameters();		
 	}
 	
 	public void setTrayIcon() {

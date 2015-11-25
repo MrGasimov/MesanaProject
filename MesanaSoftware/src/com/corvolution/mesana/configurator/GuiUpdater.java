@@ -5,18 +5,26 @@ import com.corvolution.cm2.SensorListener;
 import com.corvolution.mesana.gui.ConfigGui;
 import com.corvolution.mesana.gui.ReaderGui;
 
-public class GuiUpdater implements SensorListener{
+public class GuiUpdater implements SensorListener
+{
 	String guiMode;
-	public GuiUpdater(String mode){
+
+	public GuiUpdater(String mode)
+	{
 		guiMode = mode;
 	}
+
 	@Override
-	public void sensorConnection(SensorEvent e) {		
-		if(guiMode.equals("READER")){
+	public void sensorConnection(SensorEvent e)
+	{
+		if (guiMode.equals("READER"))
+		{
 			ReaderGui.update(e);
-		}else{
+		}
+		else
+		{
 			ConfigGui.update(e);
 		}
-		
+
 	}
 }

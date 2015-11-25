@@ -1,0 +1,28 @@
+package com.corvolution.cm2;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+public class PropertyManager {
+	private static Properties info, custom,status;
+	private static PropertyManager instance;
+
+	public PropertyManager(String path) {
+		try {
+			info = new Properties();
+			custom = new Properties();
+			status = new Properties();
+			info.load(new FileInputStream(path+":/info.txt"));
+			custom.load(new FileInputStream(path+":/custom.txt"));
+			status.load(new FileInputStream(path+":/status.txt"));
+		} catch (IOException e) {
+			System.out.println("Cannot read " + Constants.PROPERTIES_FILE + ".");
+			e.printStackTrace();
+		}
+	}
+
+	public String getProperty(String property) {
+		return prop.getProperty(property);
+	}
+
+}

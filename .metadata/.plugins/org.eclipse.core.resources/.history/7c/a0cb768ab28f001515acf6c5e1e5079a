@@ -1,0 +1,149 @@
+package com.corvolution.cm2;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import Decoder.BASE64Decoder;
+import Decoder.BASE64Encoder;
+
+public class SensorConfiguration {
+
+	public static final byte VERSION_MAJOR = 1;
+	public static final byte VERSION_MINOR = 1;
+	public static final byte[] startMode = { 1, 2, 3 };
+	public byte[] configSet = { 1, 2, 3 };
+	public byte[] recordDuration = { 2, 3, 4, 5, 6, 7 };
+	public byte[] startTime = { 1, 3, 1, 1, 1, 5 };
+	public byte latency = 0;
+	public byte[] checksum = { 2, 2, 2, 2 };
+	private HashMap<String, HashMap> configSetMap;
+	private HashMap<String, String> addParameters;
+	private HashMap<String,String> encrypetdParameters;
+
+	
+	public SensorConfiguration() {
+		configSetMap = new HashMap<>();
+		addParameters = new HashMap<>();
+		encrypetdParameters = new HashMap<>();
+		// constructing default configset which is number 1--> configset[0]
+		ConfigurationSet configSet = new ConfigurationSet();
+		// default set for configFile
+		configSetMap.put("1", configSet.getSet());
+	}
+
+	private static String encrypt( String skey,String message, String ivx) throws UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+ 
+		SecretKeySpec keySpec = new SecretKeySpec(skey.getBytes(), "AES");
+		IvParameterSpec ivSpec = new IvParameterSpec(ivx.getBytes());
+ 
+		Cipher cipher = getCypher(keySpec, ivSpec, Cipher.ENCRYPT_MODE);
+ 
+		// Gets the raw bytes to encrypt, UTF8 is needed for
+		// having a standard character set
+		byte[] stringBytes;
+ 
+		stringBytes = message.getBytes("UTF8");
+ 
+		// encrypt using the cypher
+		byte[] raw = cipher.doFinal(stringBytes);
+		
+		// converts to base64 for easier display.
+		BASE64Encoder encoder = new BASE64Encoder();
+		String base64 = encoder.encode(raw);
+ 
+		return base64;
+	}
+	
+	public static String decrypt(String encrypted, String skey, String ivx) throws InvalidKeyException, IOException, IllegalBlockSizeException, BadPaddingException   {
+		 
+		 
+		SecretKeySpec keySpec = new SecretKeySpec(skey.getBytes(), "AES");
+		IvParameterSpec ivSpec = new IvParameterSpec(ivx.getBytes());
+ 
+		Cipher cipher = getCypher(keySpec, ivSpec, Cipher.DECRYPT_MODE);
+ 
+		// decode the BASE64 coded message
+		BASE64Decoder decoder = new BASE64Decoder();
+		byte[] raw = decoder.decodeBuffer(encrypted);
+		
+		// decode the message
+		byte[] stringBytes = cipher.doFinal(raw);
+		
+		// converts the decoded message to a String
+		String clear = new String(stringBytes, "UTF8");
+		
+		return clear;
+	}
+	
+	public static Cipher getCypher(SecretKeySpec keySpec,IvParameterSpec ivSpec, int mode) throws InvalidKeyException  {
+		// Get a cipher object.
+		Cipher cipher;
+		try {
+			cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("invalid algorithm", e);
+		} catch (NoSuchPaddingException e) {
+			throw new RuntimeException("invalid padding", e);
+		}
+		try {
+			cipher.init(mode, keySpec, ivSpec);
+		
+		} catch (InvalidAlgorithmParameterException e) {
+			throw new RuntimeException("invalid algorithm parameter.", e);
+		}
+		return cipher;
+	}
+	
+	
+	// set linkId to add parameter file
+	public void addParameter(String key, String value) {
+		this.addParameters.put(key, value);
+	}
+
+	public String getParameter(String key) {
+		return addParameters.get(key);
+	}
+
+	// set linkId for configuration file
+	public void addEncryptedParameter(String key, String value, String password) {					
+		try {
+			this.addParameters.put(key,encrypt(key,value,password));
+		} catch (InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException| BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}						
+	}
+
+	public String getEncryptedParameter(String key, String password) {		
+		try {
+			decrypt(addParameters.get(key),key,password);
+		} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	// returns map of parameters from additional parameter file in sensor
+	public HashMap<String, String> getParametersMap() {
+		return addParameters;
+	}
+
+	public HashMap<String, HashMap> getConfigurationSet() {
+		return configSetMap;
+	}
+
+	public void setConfigurationSet(ConfigurationSet configurationSet, String byteNumber, ArrayList rateList) {
+		configurationSet = new ConfigurationSet(byteNumber, rateList);
+	}
+
+}

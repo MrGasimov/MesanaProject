@@ -18,7 +18,7 @@ public class MainClass
 		usbListener.start();
 		PropertyManager pManager = new PropertyManager();
 		OperatorAccess opAccess = new OperatorAccess();
-		ConnectionManager.getInstance().addSensorListener(new GuiUpdater(pManager.getProperty("GUI_MODE")));
+		ConnectionManager.getInstance().addSensorListener(new GuiUpdater(pManager.getProperty(Constants.GUI_MODE)));
 		if (pManager.getProperty("GUI_MODE").equals("CONFIGURATOR"))
 		{
 			new ConfigGui(opAccess.getLogin(), opAccess.getPassword());

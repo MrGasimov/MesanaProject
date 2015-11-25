@@ -14,8 +14,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import Decoder.BASE64Decoder;
-import Decoder.BASE64Encoder;
 
 public class SensorConfiguration
 {
@@ -169,30 +167,34 @@ public class SensorConfiguration
 	}
 
 	/**
-	 * Set the recording starting point. Only day, hour and minute will be assessed. 
-	 * @param date Starting point of the next measurement
+	 * Set the recording starting point. Only day, hour and minute will be assessed.
+	 * 
+	 * @param date
+	 *            Starting point of the next measurement
 	 */
 	public void setRecordingStartTime(Date date)
 	{
 		this.recordingStartTime = date;
 	}
-	
+
 	/**
-	 * Set the recording duration for the next measurement.	
-	 * @param duration Duration of the next measurement in minutes
+	 * Set the recording duration for the next measurement.
+	 * 
+	 * @param duration
+	 *            Duration of the next measurement in minutes
 	 */
 	public void setRecordingDuration(int duration)
 	{
 		this.durationMinutes = duration;
 	}
-	
+
 	public Date getRecordingStartTime()
 	{
 		return this.recordingStartTime;
 	}
-	
+
 	public int getDurationMinutes()
 	{
 		return this.durationMinutes;
-	}	
+	}
 }

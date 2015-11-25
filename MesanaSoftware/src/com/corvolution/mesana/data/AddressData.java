@@ -2,6 +2,7 @@ package com.corvolution.mesana.data;
 
 import java.util.List;
 
+import com.corvolution.mesana.configurator.Constants;
 import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.rest.RestApiConnector;
 import com.google.gson.Gson;
@@ -47,7 +48,7 @@ public class AddressData extends RestApiConnector
 		{
 			salutation = "Frau";
 		}
-		if (country.equalsIgnoreCase(pManager.getProperty("HOME_COUNTRY")))
+		if (country.equalsIgnoreCase(pManager.getProperty(Constants.HOME_COUNTRY)))
 		{
 			country = "";
 			city = city.toUpperCase();

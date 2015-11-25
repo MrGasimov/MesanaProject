@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.zip.CRC32;
@@ -162,6 +163,13 @@ public class Sensor
 //		}
 
 	}
+	
+	private static int BYTE_STARTTIME_DAY = 4;
+	private static int BYTE_STARTTIME_HOUR = 5;
+	private static int BYTE_STARTTIME_MINUTE = 6;
+	private static int BYTE_DURATION_DAY = 7;
+	private static int BYTE_DURATION_HOUR = 8;
+	private static int BYTE_DURATION_MINUTE = 9;
 
 	// write configuration file to sensor
 	private void writeConfigFile() throws IOException
@@ -177,6 +185,21 @@ public class Sensor
 				sensorConfiguration.startTime[0], sensorConfiguration.startTime[1], sensorConfiguration.startTime[2],
 				sensorConfiguration.startTime[3], sensorConfiguration.startTime[4], sensorConfiguration.startTime[5],
 				sensorConfiguration.latency};
+		
+		Calendar cal = Calendar.getInstance();
+		
+		// Set the recording starting point (date and time)
+		cal.setTime(sensorConfiguration.getRecordingStartTime());
+		buffer[BYTE_STARTTIME_DAY] = (byte) cal.get(Calendar.DAY_OF_MONTH);
+		buffer[BYTE_STARTTIME_HOUR] = (byte) cal.get(Calendar.HOUR_OF_DAY);
+		buffer[BYTE_STARTTIME_MINUTE] = (byte) cal.get(Calendar.MINUTE);
+		
+		// Set the recording duration 
+		buffer[BYTE_DURATION_DAY] = (byte) Math.abs(sensorConfiguration.getDurationMinutes() / 1440);
+		buffer[BYTE_DURATION_HOUR] = (byte) Math.abs((sensorConfiguration.getDurationMinutes() % 1440) / 60);
+		buffer[BYTE_DURATION_MINUTE] = (byte) (sensorConfiguration.getDurationMinutes() % 60);
+		
+		
 		CRC32 myCRC = new CRC32();
 		myCRC.update(buffer);
 		FileOutputStream outputStream = new FileOutputStream(absolutePath);
@@ -186,6 +209,9 @@ public class Sensor
 		outputStream.close();
 	}
 
+	/**
+	 * @throws IOException
+	 */
 	private void writeTimeSyncFile() throws IOException
 	{
 		String absolutePath = sensorPath + ":/timesync.cm2";
@@ -212,6 +238,11 @@ public class Sensor
 	public SensorConfiguration getConfiguration()
 	{
 		return this.sensorConfiguration;
+	}
+
+	public void setSensorConfiguration(SensorConfiguration sensorConfiguration)
+	{
+		this.sensorConfiguration = sensorConfiguration;
 	}
 
 	// read measurement data from sensor

@@ -3,29 +3,24 @@ package com.corvolution.cm2;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.zip.CRC32;
+
 import org.apache.commons.io.FileUtils;
 
 import com.corvolution.cm2.fileadapter.InfoFile;
-
-import java.util.Date;
-import java.util.HashMap;
 
 public class Sensor
 {
@@ -255,14 +250,15 @@ public class Sensor
 		String absolutePath = sensorPath + ":/config.cm2";
 		// ,sensorConfiguration.checksum[0],
 		// sensorConfiguration.checksum[1],sensorConfiguration.checksum[2],sensorConfiguration.checksum[3]
-		byte[] buffer = {SensorConfiguration.VERSION_MAJOR, SensorConfiguration.VERSION_MINOR,
+		byte[] buffer = {
+				SensorConfiguration.VERSION_MAJOR, SensorConfiguration.VERSION_MINOR,
 				SensorConfiguration.startMode[0], sensorConfiguration.configSet[0],
 				sensorConfiguration.recordDuration[0], sensorConfiguration.recordDuration[1],
 				sensorConfiguration.recordDuration[2], sensorConfiguration.recordDuration[3],
 				sensorConfiguration.recordDuration[4], sensorConfiguration.recordDuration[5],
 				sensorConfiguration.startTime[0], sensorConfiguration.startTime[1], sensorConfiguration.startTime[2],
 				sensorConfiguration.startTime[3], sensorConfiguration.startTime[4], sensorConfiguration.startTime[5],
-				sensorConfiguration.latency};
+				sensorConfiguration.latency, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 		Calendar cal = Calendar.getInstance();
 
@@ -297,7 +293,7 @@ public class Sensor
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		byte year = (byte) (cal.get(Calendar.YEAR) - 2000); // Year 0 is mapped to year 2000
-		byte month = (byte) cal.get(Calendar.MONTH);
+		byte month = (byte) (cal.get(Calendar.MONTH) + 1); // Month is zero based
 		byte day = (byte) cal.get(Calendar.DAY_OF_MONTH);
 		byte hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
 		byte minute = (byte) cal.get(Calendar.MINUTE);

@@ -11,11 +11,7 @@ public class ConfigurationSet
 	// constructor for default configurationSet which is number 1
 	public ConfigurationSet()
 	{
-		sampleRate.add("ACG:250Hz");
-		sampleRate.add("ACC:50Hz");
-		sampleRate.add("TEMP:120Hz");
-		sampleRate.add("IMP:50Hz");
-		description.put("Mesana", sampleRate);
+		
 	}
 
 	// second constructor for setting another configurationSet

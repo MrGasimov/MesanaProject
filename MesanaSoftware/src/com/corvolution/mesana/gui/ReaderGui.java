@@ -100,7 +100,7 @@ public class ReaderGui{
 							}
 							
 						}
-						device.readMeasurementFromSensor(readOutDest+measurementName);		
+						device.readMeasurement(readOutDest+measurementName);		
 						copySize =(int)FileUtils.sizeOf(new File("Z:/measurementData/"));
 						size = (int) ConnectionManager.measurementDataSize("all");
 						bar.setSelection((((copySize-destSize)/size)*100));										

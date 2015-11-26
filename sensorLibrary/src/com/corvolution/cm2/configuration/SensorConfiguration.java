@@ -15,13 +15,14 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class SensorConfiguration
+public class SensorConfiguration implements ConfigurationInterface
 {
 	private HashMap<String, String> additionalParameters;
 	private HashMap<String, byte[]> encryptedParameters;
 	private Date recordingStartTime;
 	private int durationMinutes;
 	private ConfigurationSet configurationSet;
+	private ConfigurationSets configurationSets;
 	private byte startMode;
 	public final static byte START_MODE_IMMEDIATELY = 1;
 	public final static byte START_MODE_AFTER_ATTACHING = 2;
@@ -31,6 +32,7 @@ public class SensorConfiguration
 	{
 		additionalParameters = new HashMap<>();
 		encryptedParameters = new HashMap<>();
+		
 	}
 
 	public byte getStartMode()
@@ -176,24 +178,13 @@ public class SensorConfiguration
 		// - valid ConfigSet 
 	}
 
-	/**
-	* Set the recording starting point. Only day, hour and minute will be assessed.
-	 * 
-	 * @param date
-	 *            Starting point of the next measurement
-	 */
+	
 	public void setRecordingStartTime(Date date)
 	{
 		this.recordingStartTime = date;
 	}
 	
 
-	/**
-	 * Set the recording duration for the next measurement.
-	 * 
-	 * @param duration
-	 *            Duration of the next measurement in minutes
-	 */
 	public void setRecordingDuration(int duration)
 	{
 		this.durationMinutes = duration;

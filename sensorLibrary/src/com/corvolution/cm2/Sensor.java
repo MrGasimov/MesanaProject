@@ -27,6 +27,7 @@ import com.corvolution.cm2.fileadapter.ConfigFile;
 import com.corvolution.cm2.fileadapter.CustomFile;
 import com.corvolution.cm2.fileadapter.InfoFile;
 import com.corvolution.cm2.fileadapter.StatusFile;
+import com.corvolution.cm2.fileadapter.TimeSyncFile;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ public class Sensor
 	private StatusFile statusFile;
 	private CustomFile customFile;
 	private ConfigFile configFile;
+	private TimeSyncFile timeSyncFile;
 
 	// construct sensor object
 	public Sensor(String path) throws IOException
@@ -189,44 +191,22 @@ public class Sensor
 	private void readConfigFile() throws IOException
 	{	
 		String absolutePath = sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
-		this.configFile = new ConfigFile(sensorConfiguration);
-		configFile.readBinaryFile(absolutePath);
+		this.configFile = new ConfigFile(absolutePath);
 	}
 			
 	// write configuration file to sensor
 	private void writeConfigFile() throws IOException
 	{	
-		CRC32 myCRC = new CRC32();
-		myCRC.update(this.configFile.buffer);
 		String absolutePath = sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
-		this.configFile.writeBinaryFile(absolutePath, this.configFile.buffer);
-		
-		
+		this.configFile = new ConfigFile(absolutePath);	
+		this.configFile.writeBinaryFile(sensorConfiguration);				
 	}
 
 	private void writeTimeSyncFile() throws IOException
 	{
 		String absolutePath = this.sensorPath + ":" + File.separator + Constants.CM2_TIMESYNC_FILE;
-
-		Date date = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		
-		 
-		byte year = (byte) (cal.get(Calendar.YEAR) - 2000); // Year 0 is mapped to year 2000
-		byte month = (byte) cal.get(Calendar.MONTH + 1);
-		byte day = (byte) cal.get(Calendar.DAY_OF_MONTH);
-		byte hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
-		byte minute = (byte) cal.get(Calendar.MINUTE);
-		byte second = (byte) cal.get(Calendar.SECOND);
-		byte[] buffer = {year, month, day, hour, minute, second};
-
-		FileOutputStream outputStream = new FileOutputStream(absolutePath);
-		BufferedOutputStream out = new BufferedOutputStream(outputStream);
-		outputStream.write(buffer);
-		out.flush();
-		outputStream.close();
-
+		this.timeSyncFile = new TimeSyncFile(absolutePath);
+		timeSyncFile.writeBinaryFile();
 	}
 
 	public SensorConfiguration getConfiguration()

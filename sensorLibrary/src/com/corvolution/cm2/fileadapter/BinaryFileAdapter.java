@@ -9,8 +9,14 @@ import java.io.IOException;
 import java.util.zip.CRC32;
 
 public class BinaryFileAdapter
-{
-	public void writeBinaryFile(String path, byte[] buffer){
+{	
+	String path;
+	
+	public BinaryFileAdapter(String path){
+		this.path = path;
+	}
+	
+	public void writeBinaryFile( byte[] buffer){
 		
 		try
 		{
@@ -18,14 +24,13 @@ public class BinaryFileAdapter
 			BufferedOutputStream out = new BufferedOutputStream(outputStream);
 			outputStream.write(buffer);
 			out.flush();
-			outputStream.close();
+			outputStream.close();		
 			
 		}catch (FileNotFoundException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (IOException e)
+		}catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,10 +38,10 @@ public class BinaryFileAdapter
 		
 	}
 	
-	public void readBinaryFile(String path){
+	public byte[] readBinaryFile(){
+		byte[] buffer = new byte[33];
 		try
-		{
-			byte[] buffer = new byte[33];
+		{			
 			FileInputStream inputStream = new FileInputStream(path);
 			BufferedInputStream bufferedOutStream = new BufferedInputStream(inputStream);
 			int total = 0;
@@ -59,5 +64,6 @@ public class BinaryFileAdapter
 		{
 			ex.printStackTrace();
 		}
+		return buffer;
 	}
 }

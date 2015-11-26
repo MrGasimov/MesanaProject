@@ -1,7 +1,7 @@
 package com.corvolution.occ;
 
-import com.corvolution.cm2.ConnectionManager;
-import com.corvolution.cm2.UsbListener;
+import com.corvolution.cm2.connection.ConnectionManager;
+import com.corvolution.cm2.connection.SensorNotifier;
 
 /**
  * OneClickConfigurator is a very, very small and lightweigt command line implementation for sensor configuration using
@@ -15,7 +15,7 @@ public class OneClickConfigurator
 
 	public static void main(String[] args)
 	{
-		Thread usbListener = new Thread(new UsbListener());
+		Thread usbListener = new Thread(new SensorNotifier());
 		usbListener.start();
 		ConnectionManager.getInstance().addSensorListener(new MySensorListener());
 	}

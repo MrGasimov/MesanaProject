@@ -1,4 +1,4 @@
-package com.corvolution.cm2;
+package com.corvolution.cm2.configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;

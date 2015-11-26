@@ -1,4 +1,4 @@
-package com.corvolution.cm2;
+package com.corvolution.cm2.configuration;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -17,15 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class SensorConfiguration
 {
-
-	public static final byte VERSION_MAJOR = 1;
-	public static final byte VERSION_MINOR = 1;
-	public static final byte[] startMode = {1, 2, 3};
-	public byte[] configSet = {1, 2, 3};
-	public byte[] recordDuration = {2, 3, 4, 5, 6, 7};
-	public byte[] startTime = {1, 3, 1, 1, 1, 5};
-	public byte latency = 0;
-	public byte[] checksum = {2, 2, 2, 2};
+	
 	private HashMap<String, HashMap> configSetMap;
 	private HashMap<String, String> addParameters;
 	private HashMap<String, byte[]> encryptedParameters;

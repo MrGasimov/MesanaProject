@@ -5,22 +5,26 @@ import java.util.EventObject;
 public class SensorEvent extends EventObject
 {
 
-	private boolean state;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private boolean connectionState;
 	private String path;
-	private int numOfSensors;
+	private int nConnectedSensors;
 
 	public SensorEvent(Object source, boolean state, String path, int num)
 	{
 		super(source);
-		this.state = state;
+		this.connectionState = state;
 		this.path = path;
-		this.numOfSensors = num;
+		this.nConnectedSensors = num;
 
 	}
 
 	public boolean getState()
 	{
-		return state;
+		return connectionState;
 	}
 
 	public String getSensorPath()
@@ -30,6 +34,6 @@ public class SensorEvent extends EventObject
 
 	public int getNumOfConnectedSensors()
 	{
-		return numOfSensors;
+		return nConnectedSensors;
 	}
 }

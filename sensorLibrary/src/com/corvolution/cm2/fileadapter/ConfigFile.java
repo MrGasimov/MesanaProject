@@ -7,27 +7,37 @@ import com.corvolution.cm2.Constants;
 import com.corvolution.cm2.configuration.SensorConfiguration;
 
 public class ConfigFile extends BinaryFileAdapter
-{	
-	private static int VERSION_MAJOR = 0;
-	private static int VERSION_MINOR = 1;
-	public 	static int START_MODE =2;
-	public 	static int CONFIG_SET = 3;
+{
+	private static int BYTE_VERSION_MAJOR = 0;
+	private static int BYTE_VERSION_MINOR = 1;
+	public static int BYTE_START_MODE = 2;
+	public static int BYTE_CONFIG_SET = 3;
 	private static int BYTE_STARTTIME_DAY = 4;
 	private static int BYTE_STARTTIME_HOUR = 5;
 	private static int BYTE_STARTTIME_MINUTE = 6;
 	private static int BYTE_DURATION_DAY = 7;
 	private static int BYTE_DURATION_HOUR = 8;
 	private static int BYTE_DURATION_MINUTE = 9;
-	public byte[] buffer;
 	
-	public ConfigFile(SensorConfiguration sensorConfiguration){
-		
-		Calendar cal = Calendar.getInstance();	
-		
-		buffer[VERSION_MAJOR] = 0;
-		buffer[VERSION_MINOR] = 1;
-		buffer[START_MODE] = 2;
-		buffer[CONFIG_SET] = 3;
+	private final static int CONFIG_FILE_LENGTH = 33;
+	private final static String CONFIG_FILE_VERSION = "0.1";
+	
+	public byte[] buffer = new byte[CONFIG_FILE_LENGTH];
+
+	public ConfigFile(SensorConfiguration sensorConfiguration)
+	{
+		// Initialize buffer with zeros
+		for (int i = 0; i < CONFIG_FILE_LENGTH; i++)
+		{
+			buffer[i] = 0;
+		}
+
+		Calendar cal = Calendar.getInstance();
+
+		buffer[BYTE_VERSION_MAJOR] = 0; //TODO parse version number and use getter methods
+		buffer[BYTE_VERSION_MINOR] = 1;//TODO parse version number and use getter methods
+		buffer[BYTE_START_MODE] = sensorConfiguration.getStartMode();
+		buffer[BYTE_CONFIG_SET] = sensorConfiguration.getConfigurationSet().getConfigSetByte();
 		cal.setTime(sensorConfiguration.getRecordingStartTime());
 		buffer[BYTE_STARTTIME_DAY] = (byte) cal.get(Calendar.DAY_OF_MONTH);
 		buffer[BYTE_STARTTIME_HOUR] = (byte) cal.get(Calendar.HOUR_OF_DAY);
@@ -35,16 +45,8 @@ public class ConfigFile extends BinaryFileAdapter
 		buffer[BYTE_DURATION_DAY] = (byte) Math.abs(sensorConfiguration.getDurationMinutes() / 1440);
 		buffer[BYTE_DURATION_HOUR] = (byte) Math.abs((sensorConfiguration.getDurationMinutes() % 1440) / 60);
 		buffer[BYTE_DURATION_MINUTE] = (byte) (sensorConfiguration.getDurationMinutes() % 60);
-		for(int i=10; i<31; i++)
-		{
-			buffer[i] = 0;
-		}
-		
-		
+
+		//TODO add CRC16
 	}
-	
-	
-	
-	
 
 }

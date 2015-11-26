@@ -17,22 +17,30 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class SensorConfiguration
 {
-	
-	private HashMap<String, HashMap> configSetMap;
-	private HashMap<String, String> addParameters;
+	private HashMap<String, String> additionalParameters;
 	private HashMap<String, byte[]> encryptedParameters;
 	private Date recordingStartTime;
 	private int durationMinutes;
-
+	private ConfigurationSet configurationSet;
+	private byte startMode;
+	public final static byte START_MODE_IMMEDIATELY = 1;
+	public final static byte START_MODE_AFTER_ATTACHING = 2;
+	public final static byte START_MODE_DEFINED_TIME = 4;
+	
 	public SensorConfiguration()
 	{
-		configSetMap = new HashMap<>();
-		addParameters = new HashMap<>();
+		additionalParameters = new HashMap<>();
 		encryptedParameters = new HashMap<>();
-		// constructing default configset which is number 1--> configset[0]
-		ConfigurationSet configSet = new ConfigurationSet();
-		// default set for configFile
-		configSetMap.put("1", configSet.getSet());
+	}
+
+	public byte getStartMode()
+	{
+		return startMode;
+	}
+
+	public void setStartMode(byte startMode)
+	{
+		this.startMode = startMode;
 	}
 
 	private static byte[] encrypt(String skey, byte[] message, String ivx)
@@ -99,12 +107,12 @@ public class SensorConfiguration
 	// add parameter to parameter hashmap
 	public void addParameter(String key, String value)
 	{
-		this.addParameters.put(key, value);
+		this.additionalParameters.put(key, value);
 	}
 
 	public String getParameter(String key)
 	{
-		return addParameters.get(key);
+		return additionalParameters.get(key);
 	}
 
 	// set linkId for configuration file
@@ -139,7 +147,7 @@ public class SensorConfiguration
 	// returns map of parameters
 	public HashMap<String, String> getParametersMap()
 	{
-		return addParameters;
+		return additionalParameters;
 	}
 
 	// returns map of encrypted parameters
@@ -148,18 +156,28 @@ public class SensorConfiguration
 		return encryptedParameters;
 	}
 
-	public HashMap<String, HashMap> getConfigurationSet()
+	public ConfigurationSet getConfigurationSet()
 	{
-		return configSetMap;
+		return configurationSet;
 	}
 
-	public void setConfigurationSet(ConfigurationSet configurationSet, String byteNumber, ArrayList rateList)
+	public void setConfigurationSet(ConfigurationSet configurationSet)
+	{	
+		
+		this.configurationSet = configurationSet;
+	}
+	
+	private void checkConfiguration()
 	{
-		configurationSet = new ConfigurationSet(byteNumber, rateList);
+		// Checks 
+		// - start mode
+		// - valid recordingStartTime
+		// - valid duration
+		// - valid ConfigSet 
 	}
 
 	/**
-	 * Set the recording starting point. Only day, hour and minute will be assessed.
+	* Set the recording starting point. Only day, hour and minute will be assessed.
 	 * 
 	 * @param date
 	 *            Starting point of the next measurement
@@ -168,6 +186,7 @@ public class SensorConfiguration
 	{
 		this.recordingStartTime = date;
 	}
+	
 
 	/**
 	 * Set the recording duration for the next measurement.

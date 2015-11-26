@@ -263,7 +263,7 @@ public class Sensor
 
 	public void writeCustomeFile(String text)
 	{
-		sensorConfiguration.getParameter("LinkId");
+		//sensorConfiguration.getParameter("LinkId");
 	}
 	public long getDataSize()
 	{

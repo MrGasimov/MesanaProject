@@ -1,28 +1,51 @@
 package com.corvolution.cm2.configuration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class ConfigurationSet
 {
-	ArrayList<String> sampleRate = new ArrayList<>();
-	HashMap<String, ArrayList> description = new HashMap<>();
+	private byte configSetByte;
+	private String name;
+	private String description;
+	private String compatibleConfigurationVersion;
 
-	// constructor for default configurationSet which is number 1
-	public ConfigurationSet()
+	// default constructor
+	public ConfigurationSet(byte configSet, String name, String description, String compatibleConfigurationVersion)
 	{
-		
+		this.configSetByte = configSet;
+		this.name = name;
+		this.description = description;
+		this.compatibleConfigurationVersion = compatibleConfigurationVersion;
+
 	}
 
-	// second constructor for setting another configurationSet
-	public ConfigurationSet(String name, ArrayList<String> sampleRateList)
+	public String getName()
 	{
-		this.sampleRate = sampleRateList;
-		this.description.put(name, sampleRateList);
+		return name;
 	}
 
-	public HashMap<String, ArrayList> getSet()
+	public String getDescription()
 	{
 		return description;
+	}
+
+	public String getCompatibleConfigurationVersion()
+	{
+		return compatibleConfigurationVersion;
+	}
+
+	public byte getConfigSetByte()
+	{
+		return configSetByte;
+	}
+	
+	public  boolean isCompatibleWithSensor(String configurationVersion)
+	{
+		//	configurationVersion	compatibleConfigurationVersion	return
+		//	1.0						1.0								true
+		// 	1.1						1.0								true
+		//	1.0						1.1								false
+		//  2.0						1.1								false
+		// major version difference is always false
+		
+		return true;
 	}
 }

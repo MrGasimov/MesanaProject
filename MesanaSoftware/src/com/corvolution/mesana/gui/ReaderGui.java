@@ -19,9 +19,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.json.simple.JSONObject;
-import com.corvolution.cm2.ConnectionManager;
+
 import com.corvolution.cm2.Sensor;
-import com.corvolution.cm2.SensorEvent;
+import com.corvolution.cm2.connection.ConnectionManager;
+import com.corvolution.cm2.connection.SensorEvent;
 import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.data.Measurement;
 import com.corvolution.mesana.data.MeasurementCollection;

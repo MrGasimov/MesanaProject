@@ -20,19 +20,19 @@ public class SensorConfiguration implements ConfigurationInterface
 	private HashMap<String, String> additionalParameters;
 	private HashMap<String, byte[]> encryptedParameters;
 	private Date recordingStartTime;
-	private int durationMinutes;
+	private int recordingDuration;
 	private ConfigurationSet configurationSet;
 	private ConfigurationSets configurationSets;
 	private byte startMode;
 	public final static byte START_MODE_IMMEDIATELY = 1;
 	public final static byte START_MODE_AFTER_ATTACHING = 2;
 	public final static byte START_MODE_DEFINED_TIME = 4;
-	
+
 	public SensorConfiguration()
 	{
 		additionalParameters = new HashMap<>();
 		encryptedParameters = new HashMap<>();
-		
+
 	}
 
 	public byte getStartMode()
@@ -40,9 +40,41 @@ public class SensorConfiguration implements ConfigurationInterface
 		return startMode;
 	}
 
-	public void setStartMode(byte startMode)
+	public void setStartMode()
 	{
-		this.startMode = startMode;
+		this.startMode = SensorConfiguration.START_MODE_AFTER_ATTACHING;
+	}
+
+	public ConfigurationSet getConfigurationSet()
+	{
+		return configurationSet;
+	}
+
+	public void setConfigurationSet(ConfigurationSet configurationSet)
+	{
+
+		this.configurationSet = configurationSet;
+	}
+
+	public void setRecordingStartTime(Date date)
+	{
+		this.recordingStartTime = date;
+	}
+
+	public Date getRecordingStartTime()
+	{
+		return this.recordingStartTime;
+	}
+
+	public void setRecordingDuration(int duration)
+	{
+		this.recordingDuration = duration;
+	}
+
+	public int getRecordingDuration()
+	{
+
+		return this.recordingDuration;
 	}
 
 	private static byte[] encrypt(String skey, byte[] message, String ivx)
@@ -158,45 +190,13 @@ public class SensorConfiguration implements ConfigurationInterface
 		return encryptedParameters;
 	}
 
-	public ConfigurationSet getConfigurationSet()
-	{
-		return configurationSet;
-	}
-
-	public void setConfigurationSet(ConfigurationSet configurationSet)
-	{	
-		
-		this.configurationSet = configurationSet;
-	}
-	
 	private void checkConfiguration()
 	{
-		// Checks 
+		// Checks
 		// - start mode
 		// - valid recordingStartTime
 		// - valid duration
-		// - valid ConfigSet 
+		// - valid ConfigSet
 	}
 
-	
-	public void setRecordingStartTime(Date date)
-	{
-		this.recordingStartTime = date;
-	}
-	
-
-	public void setRecordingDuration(int duration)
-	{
-		this.durationMinutes = duration;
-	}
-
-	public Date getRecordingStartTime()
-	{
-		return this.recordingStartTime;
-	}
-
-	public int getDurationMinutes()
-	{
-		return this.durationMinutes;
-	}
 }

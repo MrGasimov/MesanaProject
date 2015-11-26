@@ -214,7 +214,7 @@ public class Sensor
 		
 		 
 		byte year = (byte) (cal.get(Calendar.YEAR) - 2000); // Year 0 is mapped to year 2000
-		byte month = (byte) cal.get(Calendar.MONTH);
+		byte month = (byte) cal.get(Calendar.MONTH + 1);
 		byte day = (byte) cal.get(Calendar.DAY_OF_MONTH);
 		byte hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
 		byte minute = (byte) cal.get(Calendar.MINUTE);

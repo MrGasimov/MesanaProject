@@ -10,12 +10,12 @@ import com.corvolution.cm2.Sensor;
 
 public final class ConnectionManager
 {
-	private static Vector<SensorListener> sensorListeners;
-	public static boolean connectionState;
-	private static String sensorPath;
+	private  Vector<SensorListener> sensorListeners;
+	public  boolean connectionState;
+	private  String sensorPath;
 	private SensorEvent sensorEvent;
-	public static int nConnectedSensors;
-	private static List<Sensor> sensorList = new CopyOnWriteArrayList<>();
+	public  int nConnectedSensors;
+	private  List<Sensor> sensorList = new CopyOnWriteArrayList<>();
 	private static ConnectionManager instance = null;
 
 	private ConnectionManager()

@@ -27,23 +27,24 @@ public class RestApiConnector {
 	
 	
 	public String getMethod(String URL){
-	
+		CloseableHttpResponse response;
 		HttpGet httpGet = new HttpGet(URL);
+		
 		//httpGet.setConfig(params);
 		String json=null;
 		try {
 
-			CloseableHttpResponse response = httpclient.execute(httpGet);
+			response = httpclient.execute(httpGet);
 			StatusLine statusLine = response.getStatusLine();
 			int statusCode = statusLine.getStatusCode();
-			response.close();
+			
 			if (statusCode == 200) {				
 				HttpEntity entity = response.getEntity();
 				InputStream inputStream = entity.getContent();
 				json = IOUtils.toString(inputStream, "UTF-8");
 				
 			}
-
+			response.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

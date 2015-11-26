@@ -92,8 +92,8 @@ public class ReaderGui{
 		button.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e){
 				text.setText("Reading data from sensors...");
-				if(!ConnectionManager.getConnectedSensorsList().isEmpty()){
-					for(Sensor device:ConnectionManager.getConnectedSensorsList()){
+				if(!ConnectionManager.getInstance().getConnectedSensorsList().isEmpty()){
+					for(Sensor device:ConnectionManager.getInstance().getConnectedSensorsList()){
 						for(Measurement element :mCollect.getList()){						
 							if(element.getLinkId().equals(device.getConfiguration().getParameter("LinkId"))){
 								measurementName = element.getID();
@@ -103,7 +103,7 @@ public class ReaderGui{
 						}
 						device.readMeasurement(readOutDest+measurementName);		
 						copySize =(int)FileUtils.sizeOf(new File("Z:/measurementData/"));
-						size = (int) ConnectionManager.measurementDataSize("all");
+						size = (int) ConnectionManager.getInstance().measurementDataSize("all");
 						bar.setSelection((((copySize-destSize)/size)*100));										
 						if(bar.getMaximum()==size)						
 							break;									

@@ -21,6 +21,9 @@ public class SensorConfiguration implements ConfigurationInterface
 	private HashMap<String, byte[]> encryptedParameters;
 	private Date recordingStartTime;
 	private int recordingDuration;
+	private int durationMinutes;
+	
+
 	private ConfigurationSet configurationSet;
 	private ConfigurationSets configurationSets;
 	private byte startMode;
@@ -33,6 +36,11 @@ public class SensorConfiguration implements ConfigurationInterface
 		additionalParameters = new HashMap<>();
 		encryptedParameters = new HashMap<>();
 
+	}
+	
+	public int getDurationMinutes()
+	{
+		return durationMinutes;
 	}
 
 	public byte getStartMode()

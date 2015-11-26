@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 import com.corvolution.cm2.connection.ConnectionManager;
 import com.corvolution.cm2.connection.SensorNotifier;
-import com.corvolution.mesana.gui.ConfigGui;
+import com.corvolution.mesana.gui.MesanaConfigurator;
 import com.corvolution.mesana.gui.OperatorAccess;
 import com.corvolution.mesana.gui.ReaderGui;
 import com.corvolution.mesana.rest.RestApiConnector;
@@ -22,7 +22,7 @@ public class MainClass
 		ConnectionManager.getInstance().addSensorListener(new GuiUpdater(pManager.getProperty(Constants.GUI_MODE)));
 		if (pManager.getProperty("GUI_MODE").equals("CONFIGURATOR"))
 		{
-			new ConfigGui(opAccess.getLogin(), opAccess.getPassword());
+			new MesanaConfigurator(opAccess.getLogin(), opAccess.getPassword());
 		}
 		else
 		{

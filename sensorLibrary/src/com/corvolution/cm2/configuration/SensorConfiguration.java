@@ -1,4 +1,4 @@
-package com.corvolution.cm2;
+package com.corvolution.cm2.configuration;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -15,32 +15,74 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class SensorConfiguration
+public class SensorConfiguration implements ConfigurationInterface
 {
-
-	public static final byte VERSION_MAJOR = 1;
-	public static final byte VERSION_MINOR = 1;
-	public static final byte[] startMode = {1, 2, 3};
-	public byte[] configSet = {1, 2, 3};
-	public byte[] recordDuration = {2, 3, 4, 5, 6, 7};
-	public byte[] startTime = {1, 3, 1, 1, 1, 5};
-	public byte latency = 0;
-	public byte[] checksum = {2, 2, 2, 2};
-	private HashMap<String, HashMap> configSetMap;
-	private HashMap<String, String> addParameters;
+	private HashMap<String, String> additionalParameters;
 	private HashMap<String, byte[]> encryptedParameters;
 	private Date recordingStartTime;
+	private int recordingDuration;
 	private int durationMinutes;
+	
+
+	private ConfigurationSet configurationSet;
+	private ConfigurationSets configurationSets;
+	private byte startMode;
+	public final static byte START_MODE_IMMEDIATELY = 1;
+	public final static byte START_MODE_AFTER_ATTACHING = 2;
+	public final static byte START_MODE_DEFINED_TIME = 4;
 
 	public SensorConfiguration()
 	{
-		configSetMap = new HashMap<>();
-		addParameters = new HashMap<>();
+		additionalParameters = new HashMap<>();
 		encryptedParameters = new HashMap<>();
-		// constructing default configset which is number 1--> configset[0]
-		ConfigurationSet configSet = new ConfigurationSet();
-		// default set for configFile
-		configSetMap.put("1", configSet.getSet());
+
+	}
+	
+	public int getDurationMinutes()
+	{
+		return durationMinutes;
+	}
+
+	public byte getStartMode()
+	{
+		return startMode;
+	}
+
+	public void setStartMode()
+	{
+		this.startMode = SensorConfiguration.START_MODE_AFTER_ATTACHING;
+	}
+
+	public ConfigurationSet getConfigurationSet()
+	{
+		return configurationSet;
+	}
+
+	public void setConfigurationSet(ConfigurationSet configurationSet)
+	{
+
+		this.configurationSet = configurationSet;
+	}
+
+	public void setRecordingStartTime(Date date)
+	{
+		this.recordingStartTime = date;
+	}
+
+	public Date getRecordingStartTime()
+	{
+		return this.recordingStartTime;
+	}
+
+	public void setRecordingDuration(int duration)
+	{
+		this.recordingDuration = duration;
+	}
+
+	public int getRecordingDuration()
+	{
+
+		return this.recordingDuration;
 	}
 
 	private static byte[] encrypt(String skey, byte[] message, String ivx)
@@ -107,12 +149,12 @@ public class SensorConfiguration
 	// add parameter to parameter hashmap
 	public void addParameter(String key, String value)
 	{
-		this.addParameters.put(key, value);
+		this.additionalParameters.put(key, value);
 	}
 
 	public String getParameter(String key)
 	{
-		return addParameters.get(key);
+		return additionalParameters.get(key);
 	}
 
 	// set linkId for configuration file
@@ -147,7 +189,7 @@ public class SensorConfiguration
 	// returns map of parameters
 	public HashMap<String, String> getParametersMap()
 	{
-		return addParameters;
+		return additionalParameters;
 	}
 
 	// returns map of encrypted parameters
@@ -156,45 +198,13 @@ public class SensorConfiguration
 		return encryptedParameters;
 	}
 
-	public HashMap<String, HashMap> getConfigurationSet()
+	private void checkConfiguration()
 	{
-		return configSetMap;
+		// Checks
+		// - start mode
+		// - valid recordingStartTime
+		// - valid duration
+		// - valid ConfigSet
 	}
 
-	public void setConfigurationSet(ConfigurationSet configurationSet, String byteNumber, ArrayList rateList)
-	{
-		configurationSet = new ConfigurationSet(byteNumber, rateList);
-	}
-
-	/**
-	 * Set the recording starting point. Only day, hour and minute will be assessed.
-	 * 
-	 * @param date
-	 *            Starting point of the next measurement
-	 */
-	public void setRecordingStartTime(Date date)
-	{
-		this.recordingStartTime = date;
-	}
-
-	/**
-	 * Set the recording duration for the next measurement.
-	 * 
-	 * @param duration
-	 *            Duration of the next measurement in minutes
-	 */
-	public void setRecordingDuration(int duration)
-	{
-		this.durationMinutes = duration;
-	}
-
-	public Date getRecordingStartTime()
-	{
-		return this.recordingStartTime;
-	}
-
-	public int getDurationMinutes()
-	{
-		return this.durationMinutes;
-	}
 }

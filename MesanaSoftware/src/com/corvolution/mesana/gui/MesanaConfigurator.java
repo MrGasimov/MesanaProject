@@ -32,8 +32,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.json.simple.JSONObject;
-import com.corvolution.cm2.ConnectionManager;
-import com.corvolution.cm2.SensorEvent;
+
+import com.corvolution.cm2.connection.ConnectionManager;
+import com.corvolution.cm2.connection.SensorEvent;
 import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.data.AddressData;
 import com.corvolution.mesana.data.Measurement;
@@ -42,7 +43,7 @@ import com.corvolution.mesana.data.SensorCollection;
 import com.corvolution.mesana.data.SensorData;
 import com.corvolution.mesana.data.TaskCollection;
 
-public class ConfigGui
+public class MesanaConfigurator
 {
 	private int messageCode;
 	private String login, password;
@@ -65,13 +66,13 @@ public class ConfigGui
 	boolean shellCheck;
 
 	// Constructor
-	public ConfigGui(String log, String pass)
+	public MesanaConfigurator(String log, String pass)
 	{
 		pManager = new PropertyManager();
 		cManager = ConnectionManager.getInstance();
 		setOperatorData(log, pass);
 		setGui();
-		if (ConnectionManager.state)
+		if (ConnectionManager.getInstance().connectionState)
 		{
 			// initialize customer data and SensorData to GUI if sensor connected
 			try
@@ -152,7 +153,7 @@ public class ConfigGui
 
 						e.printStackTrace();
 					}
-					statusBar.setText("Only Sensor " + ConnectionManager.currentSensor(0).getSensorPath()
+					statusBar.setText("Only Sensor " + ConnectionManager.getInstance().currentSensor(0).getSensorPath()
 							+ " has been connected");
 				}
 				else if (e.getNumOfConnectedSensors() >= 2)
@@ -544,7 +545,7 @@ public class ConfigGui
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				if (ConnectionManager.currentSensor(0).getBatteryVoltage() < 3.8)
+				if (ConnectionManager.getInstance().currentSensor(0).getBatteryVoltage() < 3.8)
 				{
 					messageCode = batteryWarning();
 					if (messageCode == 32)
@@ -562,8 +563,7 @@ public class ConfigGui
 		{
 			public void shellDeactivated(ShellEvent shellEvent)
 			{
-				shellCheck = false;
-				System.out.println("shell deactivated");
+				shellCheck = false;			
 				Timer timer = new Timer();
 				timer.schedule(new TimerTask()
 				{
@@ -587,14 +587,14 @@ public class ConfigGui
 
 					}
 
-				}, 10000);
+				}, 600000);
 
 			}
 
 			public void shellActivated(ShellEvent arg1)
 			{
 				shellCheck = true;
-				System.out.println("Shell activated");
+				
 			}
 		});
 
@@ -808,7 +808,7 @@ public class ConfigGui
 		// ConnectionManager.currentSensor(0).writeConfigFile();
 
 		// push comment to RestApi
-		restApiUpdate(ConnectionManager.currentSensor(0).getSerialNumber(), "comment");
+		restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "comment");
 
 		// change state of measurement in RestApi
 		restApiUpdate("SENSOR_OUTBOX", "state2");
@@ -825,7 +825,7 @@ public class ConfigGui
 
 	private void printAddress()
 	{
-		ConnectionManager.currentSensor(0).writeEncryptedParameters();
+		ConnectionManager.getInstance().currentSensor(0).writeEncryptedParameters();
 	}
 
 	public void setTrayIcon()
@@ -938,13 +938,13 @@ public class ConfigGui
 		sCollect.setList();
 		for (SensorData sData : sCollect.getList())
 		{
-			if (sData.getID().equals(ConnectionManager.currentSensor(0).getSerialNumber()))
+			if (sData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 			{
 				sensorText.setText(sData.getSensorData() + "\r\n" + "Device: "
-						+ (ConnectionManager.currentSensor(0).getDeviceName() + "\r\n" + "Manufacture: "
-								+ ConnectionManager.currentSensor(0).getManufacturerName() + "\r\n" + "FlashDate: "
-								+ ConnectionManager.currentSensor(0).getFlashDate() + "\r\n" + "Battery: "
-								+ ConnectionManager.currentSensor(0).getBatteryVoltage()));
+						+ (ConnectionManager.getInstance().currentSensor(0).getDeviceName() + "\r\n" + "Manufacture: "
+								+ ConnectionManager.getInstance().currentSensor(0).getManufacturerName() + "\r\n" + "FlashDate: "
+								+ ConnectionManager.getInstance().currentSensor(0).getFlashDate() + "\r\n" + "Battery: "
+								+ ConnectionManager.getInstance().currentSensor(0).getBatteryVoltage()));
 				break;
 			}
 
@@ -954,7 +954,7 @@ public class ConfigGui
 
 	public void setTaskData(String mID) throws IOException
 	{
-		tCollect = new TaskCollection(mID, ConnectionManager.currentSensor(0).getSerialNumber());
+		tCollect = new TaskCollection(mID, ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
 		if (tCollect.getMeasTask().isEmpty())
 		{
 			measurTaskText.setText(" ");
@@ -980,7 +980,7 @@ public class ConfigGui
 
 	public static void setShell()
 	{
-		if (ConnectionManager.state)
+		if (ConnectionManager.getInstance().connectionState)
 			shell.open();
 	}
 
@@ -1009,11 +1009,11 @@ public class ConfigGui
 	{
 		for (SensorData sensorData : sCollect.getList())
 		{
-			if (sensorData.getID().equals(ConnectionManager.currentSensor(0).getSerialNumber()))
+			if (sensorData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 			{
-				if (!ConnectionManager.currentSensor(0).getFirwareVersion().equals(sensorData.getFirmware()))
+				if (!ConnectionManager.getInstance().currentSensor(0).getFirwareVersion().equals(sensorData.getFirmware()))
 				{
-					restApiUpdate(ConnectionManager.currentSensor(0).getSerialNumber(), "firmware");
+					restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "firmware");
 				}
 				break;
 			}

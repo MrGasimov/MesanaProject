@@ -1,8 +1,8 @@
 package com.corvolution.mesana.configurator;
 
-import com.corvolution.cm2.SensorEvent;
-import com.corvolution.cm2.SensorListener;
-import com.corvolution.mesana.gui.ConfigGui;
+import com.corvolution.cm2.connection.SensorEvent;
+import com.corvolution.cm2.connection.SensorListener;
+import com.corvolution.mesana.gui.MesanaConfigurator;
 import com.corvolution.mesana.gui.ReaderGui;
 
 public class GuiUpdater implements SensorListener
@@ -23,7 +23,7 @@ public class GuiUpdater implements SensorListener
 		}
 		else
 		{
-			ConfigGui.update(e);
+			MesanaConfigurator.update(e);
 		}
 
 	}

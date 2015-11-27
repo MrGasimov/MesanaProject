@@ -3,26 +3,34 @@ package com.corvolution.cm2;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.zip.CRC32;
-
 import org.apache.commons.io.FileUtils;
 
+import com.corvolution.cm2.configuration.SensorConfiguration;
+import com.corvolution.cm2.fileadapter.ConfigFile;
 import com.corvolution.cm2.fileadapter.CustomFile;
 import com.corvolution.cm2.fileadapter.InfoFile;
 import com.corvolution.cm2.fileadapter.StatusFile;
+import com.corvolution.cm2.fileadapter.TimeSyncFile;
+
+import java.util.Date;
+import java.util.HashMap;
 
 public class Sensor
 {
@@ -42,6 +50,8 @@ public class Sensor
 	private InfoFile infoFile;
 	private StatusFile statusFile;
 	private CustomFile customFile;
+	private ConfigFile configFile;
+	private TimeSyncFile timeSyncFile;
 
 	// construct sensor object
 	public Sensor(String path) throws IOException
@@ -134,40 +144,7 @@ public class Sensor
 		this.currentState = this.statusFile.getProperty(StatusFile.CURRENT_STATE);
 		this.sensorSystemTime = this.statusFile.getProperty(StatusFile.SYSTEM_TIME);
 
-	}
-
-	// read configuration file from sensor
-	private void readConfigFile() throws IOException
-	{
-		String absolutePath = sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
-		try
-		{
-			byte[] buffer = new byte[21];
-			FileInputStream inputStream = new FileInputStream(absolutePath);
-			BufferedInputStream bufferedOutStream = new BufferedInputStream(inputStream);
-			int total = 0;
-			int nRead = 0;
-			CRC32 myCRC = new CRC32();
-			while ((nRead = bufferedOutStream.read(buffer)) != -1)
-			{
-				total += nRead;
-				System.out.println(nRead);
-				System.out.println(total);
-			}
-			myCRC.update(buffer, 0, 17);
-			inputStream.close();
-		}
-		catch (FileNotFoundException ex)
-		{
-			ex.printStackTrace();
-		}
-		catch (IOException ex)
-		{
-			ex.printStackTrace();
-		}
-
-	}
-		
+	}	
 	// read measurement data from sensor
 	public void readMeasurement(String dest)
 		{
@@ -209,70 +186,27 @@ public class Sensor
 
 		}
 	
-	private static int BYTE_STARTTIME_DAY = 4;
-	private static int BYTE_STARTTIME_HOUR = 5;
-	private static int BYTE_STARTTIME_MINUTE = 6;
-	private static int BYTE_DURATION_DAY = 7;
-	private static int BYTE_DURATION_HOUR = 8;
-	private static int BYTE_DURATION_MINUTE = 9;
-
+	
+	// read configuration file from sensor
+	private void readConfigFile() throws IOException
+	{	
+		String absolutePath = sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
+		this.configFile = new ConfigFile(absolutePath);
+	}
+			
 	// write configuration file to sensor
 	private void writeConfigFile() throws IOException
-	{
-		String absolutePath = this.sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
-
-		byte[] buffer = {SensorConfiguration.VERSION_MAJOR, SensorConfiguration.VERSION_MINOR,
-				SensorConfiguration.startMode[0], sensorConfiguration.configSet[0],
-				sensorConfiguration.recordDuration[0], sensorConfiguration.recordDuration[1],
-				sensorConfiguration.recordDuration[2], sensorConfiguration.recordDuration[3],
-				sensorConfiguration.recordDuration[4], sensorConfiguration.recordDuration[5],
-				sensorConfiguration.startTime[0], sensorConfiguration.startTime[1], sensorConfiguration.startTime[2],
-				sensorConfiguration.startTime[3], sensorConfiguration.startTime[4], sensorConfiguration.startTime[5],
-				sensorConfiguration.latency, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-		Calendar cal = Calendar.getInstance();
-
-		// Set the recording starting point (date and time)
-		cal.setTime(sensorConfiguration.getRecordingStartTime());
-		buffer[BYTE_STARTTIME_DAY] = (byte) cal.get(Calendar.DAY_OF_MONTH);
-		buffer[BYTE_STARTTIME_HOUR] = (byte) cal.get(Calendar.HOUR_OF_DAY);
-		buffer[BYTE_STARTTIME_MINUTE] = (byte) cal.get(Calendar.MINUTE);
-
-		// Set the recording duration
-		buffer[BYTE_DURATION_DAY] = (byte) Math.abs(sensorConfiguration.getDurationMinutes() / 1440);
-		buffer[BYTE_DURATION_HOUR] = (byte) Math.abs((sensorConfiguration.getDurationMinutes() % 1440) / 60);
-		buffer[BYTE_DURATION_MINUTE] = (byte) (sensorConfiguration.getDurationMinutes() % 60);
-
-		CRC32 myCRC = new CRC32();
-		myCRC.update(buffer);
-		FileOutputStream outputStream = new FileOutputStream(absolutePath);
-		BufferedOutputStream out = new BufferedOutputStream(outputStream);
-		outputStream.write(buffer);
-		out.flush();
-		outputStream.close();
+	{	
+		String absolutePath = sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
+		this.configFile = new ConfigFile(absolutePath);	
+		this.configFile.writeBinaryFile(sensorConfiguration);				
 	}
 
 	private void writeTimeSyncFile() throws IOException
 	{
 		String absolutePath = this.sensorPath + ":" + File.separator + Constants.CM2_TIMESYNC_FILE;
-
-		Date date = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		byte year = (byte) (cal.get(Calendar.YEAR) - 2000); // Year 0 is mapped to year 2000
-		byte month = (byte) (cal.get(Calendar.MONTH) + 1); // Month is zero based
-		byte day = (byte) cal.get(Calendar.DAY_OF_MONTH);
-		byte hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
-		byte minute = (byte) cal.get(Calendar.MINUTE);
-		byte second = (byte) cal.get(Calendar.SECOND);
-		byte[] buffer = {year, month, day, hour, minute, second};
-
-		FileOutputStream outputStream = new FileOutputStream(absolutePath);
-		BufferedOutputStream out = new BufferedOutputStream(outputStream);
-		outputStream.write(buffer);
-		out.flush();
-		outputStream.close();
-
+		this.timeSyncFile = new TimeSyncFile(absolutePath);
+		timeSyncFile.writeBinaryFile();
 	}
 
 	public SensorConfiguration getConfiguration()
@@ -309,7 +243,7 @@ public class Sensor
 
 	public void writeCustomeFile(String text)
 	{
-		sensorConfiguration.getParameter("LinkId");
+		//sensorConfiguration.getParameter("LinkId");
 	}
 	public long getDataSize()
 	{

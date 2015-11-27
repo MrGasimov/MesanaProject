@@ -19,9 +19,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.json.simple.JSONObject;
-import com.corvolution.cm2.ConnectionManager;
+
 import com.corvolution.cm2.Sensor;
-import com.corvolution.cm2.SensorEvent;
+import com.corvolution.cm2.connection.ConnectionManager;
+import com.corvolution.cm2.connection.SensorEvent;
 import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.data.Measurement;
 import com.corvolution.mesana.data.MeasurementCollection;
@@ -91,8 +92,8 @@ public class ReaderGui{
 		button.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e){
 				text.setText("Reading data from sensors...");
-				if(!ConnectionManager.getConnectedSensorsList().isEmpty()){
-					for(Sensor device:ConnectionManager.getConnectedSensorsList()){
+				if(!ConnectionManager.getInstance().getConnectedSensorsList().isEmpty()){
+					for(Sensor device:ConnectionManager.getInstance().getConnectedSensorsList()){
 						for(Measurement element :mCollect.getList()){						
 							if(element.getLinkId().equals(device.getConfiguration().getParameter("LinkId"))){
 								measurementName = element.getID();
@@ -102,7 +103,7 @@ public class ReaderGui{
 						}
 						device.readMeasurement(readOutDest+measurementName);		
 						copySize =(int)FileUtils.sizeOf(new File("Z:/measurementData/"));
-						size = (int) ConnectionManager.measurementDataSize("all");
+						size = (int) ConnectionManager.getInstance().measurementDataSize("all");
 						bar.setSelection((((copySize-destSize)/size)*100));										
 						if(bar.getMaximum()==size)						
 							break;									

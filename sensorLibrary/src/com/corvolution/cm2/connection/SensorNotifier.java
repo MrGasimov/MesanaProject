@@ -1,11 +1,11 @@
-package com.corvolution.cm2;
+package com.corvolution.cm2.connection;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.swing.filechooser.FileSystemView;
 
-public class UsbListener implements Runnable
+public class SensorNotifier implements Runnable
 {
 
 	public void run()
@@ -15,8 +15,10 @@ public class UsbListener implements Runnable
 
 	public void sensorListener()
 	{
-		int counter = 0;
-		String[] letters = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P", "Y" };
+		int nConnectedSensors = 0;
+		// String letters = "ABCDEFGH";
+		String[] letters = new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P",
+				"Y"};
 		File[] sensors = new File[letters.length];
 		boolean[] isDrive = new boolean[letters.length];
 
@@ -27,6 +29,7 @@ public class UsbListener implements Runnable
 
 			isDrive[i] = sensors[i].canRead();
 		}
+		// TODO Create Logging Class with output like "2015-11-23 23:00:43 Blah..."
 		System.out.println("Find Sensor: waiting for devices...");
 		// loop indefinitely
 
@@ -43,12 +46,12 @@ public class UsbListener implements Runnable
 					{
 						FileSystemView view = FileSystemView.getFileSystemView();
 						File dir = new File(letters[i] + ":/");
-						String name = view.getSystemDisplayName(dir).substring(0, 5);
-						if (name.equals("STICK")) //TODO use constant
+						String name = view.getSystemDisplayName(dir);// .substring(0, 5);
+						if (name.equals("STICK" + " (" + letters[i] + ":)")) // TODO use constant
 						{
-							counter++;
-							ConnectionManager.setState(true);
-							ConnectionManager.setCounter(counter);
+							nConnectedSensors++;
+							ConnectionManager.getInstance().setConnected(true);
+							ConnectionManager.getInstance().setNumberOfConnectedSensors(nConnectedSensors);
 							try
 							{
 								ConnectionManager.getInstance().addSensorToList(letters[i]);
@@ -57,18 +60,16 @@ public class UsbListener implements Runnable
 							{
 								e.printStackTrace();
 							}
-							System.out.println(ConnectionManager.getConnectedSensorsList());
 						}
 					}
 					else
 					{
-						if (counter != 0)
+						if (nConnectedSensors != 0)
 						{
-							counter--;
-							ConnectionManager.setState(false);
-							ConnectionManager.setCounter(counter);
+							nConnectedSensors--;
+							ConnectionManager.getInstance().setConnected(false);
+							ConnectionManager.getInstance().setNumberOfConnectedSensors(nConnectedSensors);
 							ConnectionManager.getInstance().removeSensorFromList(letters[i]);
-							System.out.println(ConnectionManager.getConnectedSensorsList());
 						}
 
 					}
@@ -76,9 +77,13 @@ public class UsbListener implements Runnable
 				}
 			}
 			// wait before looping
-			try {
+			try
+			{
+				// sleep time make constant
 				Thread.sleep(100);
-			} catch (InterruptedException e) {
+			}
+			catch (InterruptedException e)
+			{
 				/* do nothing */ }
 
 		}

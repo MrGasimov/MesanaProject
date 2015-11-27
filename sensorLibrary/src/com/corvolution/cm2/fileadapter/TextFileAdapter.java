@@ -12,7 +12,7 @@ import java.util.Properties;
  */
 public class TextFileAdapter
 {
-	private static Properties prop;
+	private Properties prop;
 
 	public TextFileAdapter(String path)
 	{

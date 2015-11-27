@@ -1,4 +1,4 @@
-package com.corvolution.cm2;
+package com.corvolution.cm2.connection;
 
 public interface SensorListener
 {

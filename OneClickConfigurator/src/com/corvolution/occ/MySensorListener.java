@@ -3,13 +3,13 @@ package com.corvolution.occ;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import com.corvolution.cm2.ConnectionManager;
-import com.corvolution.cm2.Sensor;
-import com.corvolution.cm2.SensorConfiguration;
-import com.corvolution.cm2.SensorEvent;
-import com.corvolution.cm2.SensorListener;
 import java.util.Scanner;
+
+import com.corvolution.cm2.Sensor;
+import com.corvolution.cm2.configuration.SensorConfiguration;
+import com.corvolution.cm2.connection.ConnectionManager;
+import com.corvolution.cm2.connection.SensorEvent;
+import com.corvolution.cm2.connection.SensorListener;
 
 public class MySensorListener implements SensorListener
 {
@@ -21,7 +21,7 @@ public class MySensorListener implements SensorListener
 	public void sensorConnection(SensorEvent e)
 	{
 		System.out.println("Sensor verbunden in Laufwerk " + e.getSensorPath());
-		List<Sensor> sensorList = ConnectionManager.getConnectedSensorsList();
+		List<Sensor> sensorList = ConnectionManager.getInstance().getConnectedSensorsList();
 
 		Scanner scanner = new Scanner(System.in);
 		String startTimeStr;

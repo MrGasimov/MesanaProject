@@ -47,7 +47,8 @@ public class Sensor
 	private String sensorSystemTime;
 	private final static String VID = "VID_05E3";
 	private final static String PID = "01B1";
-	private SensorConfiguration sensorConfiguration;
+	private SensorConfiguration writeSensorConfiguration;
+	private SensorConfiguration readSensorConfiguration;
 	private InfoFile infoFile;
 	private StatusFile statusFile;
 	private CustomFile customFile;
@@ -56,8 +57,8 @@ public class Sensor
 
 	// construct sensor object
 	public Sensor(String path) throws IOException
-	{
-		sensorConfiguration = new SensorConfiguration();
+	{	
+		readSensorConfiguration = new SensorConfiguration();
 		this.sensorPath = path;
 		readSensorInfo();
 		if (new File(this.sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE).exists())
@@ -139,7 +140,7 @@ public class Sensor
 	private void readCustomFile() throws IOException
 	{
 		this.customFile = new CustomFile(this.sensorPath);
-		sensorConfiguration.addParameter("LinkId", this.customFile.getProperty(CustomFile.LINK_ID));
+		readSensorConfiguration.addParameter("LinkId", this.customFile.getProperty(CustomFile.LINK_ID));
 
 	}
 
@@ -178,8 +179,8 @@ public class Sensor
 					BufferedInputStream bis = new BufferedInputStream(ois);
 					byte[] buffer = new byte[(int) encryptedCustomFile.length()];
 					bis.read(buffer);
-					sensorConfiguration.addEncryptedParameter("enryptedcustomIO", buffer, "0123456789ABCDEF");
-					System.out.println(sensorConfiguration.getEncryptedParameter("enryptedcustomIO", "0123456789ABCDEF"));
+					readSensorConfiguration.addEncryptedParameter("enryptedcustomIO", buffer, "0123456789ABCDEF");
+					System.out.println(readSensorConfiguration.getEncryptedParameter("enryptedcustomIO", "0123456789ABCDEF"));
 					bis.close();
 				}
 				catch (IOException e)
@@ -203,7 +204,7 @@ public class Sensor
 	{	
 		String absolutePath = sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
 		this.configFile = new ConfigFile(absolutePath);	
-		this.configFile.writeBinaryFile(sensorConfiguration);				
+		this.configFile.writeBinaryFile(this.writeSensorConfiguration);				
 	}
 
 	public void writeTimeSyncFile() throws IOException
@@ -215,12 +216,12 @@ public class Sensor
 
 	public SensorConfiguration getConfiguration()
 	{
-		return this.sensorConfiguration;
+		return this.writeSensorConfiguration;
 	}
 
-	public void setSensorConfiguration(SensorConfiguration sensorConfiguration)
+	public void setSensorConfiguration(SensorConfiguration config)
 	{
-		this.sensorConfiguration = sensorConfiguration;
+		this.writeSensorConfiguration = config;
 	}
 
 	public void writeEncryptedParameters()
@@ -230,10 +231,10 @@ public class Sensor
 
 		try
 		{
-			sensorConfiguration.addEncryptedParameter("enryptedcustomIO", text.getBytes("UTF8"), "0123456789ABCDEF");
+			writeSensorConfiguration.addEncryptedParameter("enryptedcustomIO", text.getBytes("UTF8"), "0123456789ABCDEF");
 			File encryptedCustomFile = new File(this.sensorPath+":"+File.separator+Constants.CM2_ENCRYPTED_FILE);
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(encryptedCustomFile));
-			oos.writeObject(sensorConfiguration.getEncrypetdParameters().get("enryptedcustomIO"));
+			oos.writeObject(writeSensorConfiguration.getEncrypetdParameters().get("enryptedcustomIO"));
 			oos.close();
 		}
 		catch (IOException e)
@@ -245,10 +246,17 @@ public class Sensor
 
 	}
 
-	public void writeCustomeFile(String text)
-	{
-		//sensorConfiguration.getParameter("LinkId");
+	public void writeCustomFile()
+	{	
+		 String data = null;
+		for (HashMap.Entry<String,String> entry : writeSensorConfiguration.getParametersMap().entrySet()) {
+			 data =data+ entry.getKey()+"="+entry.getValue()+"\r\n";
+			 
+			}
+		this.customFile = new CustomFile(sensorPath);
+		customFile.writeCustomData(data, sensorPath);
 	}
+	
 	public long getDataSize()
 	{
 		long size = FileUtils.sizeOf(new File(this.sensorPath + ":" + File.separator + Constants.MEASUREMENT_FOLDER)); 

@@ -73,7 +73,6 @@ public class MesanaConfigurator
 	// Constructor
 	public MesanaConfigurator(String log, String pass)
 	{
-		cManager = ConnectionManager.getInstance();
 		setOperatorData(log, pass);
 		setGui();
 		if (ConnectionManager.getInstance().connectionState)
@@ -82,6 +81,7 @@ public class MesanaConfigurator
 			try
 			{
 				setData();
+				statusBar.setText("Sensor "+ConnectionManager.getInstance().currentSensor(0).getSensorPath()+" has been connected successfully!");
 			}
 			catch (IOException e)
 			{
@@ -90,7 +90,7 @@ public class MesanaConfigurator
 
 		}
 
-		setListeners();
+		setGuiListeners();
 		shell.pack();
 		setShell();
 
@@ -390,7 +390,7 @@ public class MesanaConfigurator
 		return returnCode;
 	}
 
-	public void setListeners()
+	public void setGuiListeners()
 	{
 
 		// register listener for customerList.
@@ -553,12 +553,12 @@ public class MesanaConfigurator
 				{
 					messageCode = batteryWarning();
 					if (messageCode == 32)
-						configurate();
+						configurateSensor();
 				}
 				else
 				{
-					configurate();
-					writeEncryptedData();
+					configurateSensor();
+					
 				}
 			}
 		});
@@ -802,15 +802,14 @@ public class MesanaConfigurator
 		}
 	}
 
-	public void configurate()
+	public void configurateSensor()
 	{
 		// change state of measurement in RestApi
 		restApiUpdate("CONFIGURING", "state1");
 		checkFirmwareVersion();
 		// Write configuration file to sensor
-		 writeCongifurationFile();
+		 setAndWriteFiles();
 		
-
 		// push comment to RestApi
 		restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "comment");
 
@@ -827,19 +826,14 @@ public class MesanaConfigurator
 		// ConnectionManager.currentSensor(0).disconnect("remove");
 	}
 
-	private void writeEncryptedData()
-	{
-		ConnectionManager.getInstance().currentSensor(0).writeEncryptedParameters();
-	}
+	
 
-	private void writeCongifurationFile()
+	private void setAndWriteFiles()
 	{	
-		SensorConfiguration configuration = new SensorConfiguration();
-		configuration = ConnectionManager.getInstance().currentSensor(0).getConfiguration();
-		
-		String versionMajor = ConfigurationInterface_v1_0.VERSION.substring(0,ConfigurationInterface_v1_0.VERSION.indexOf(','));
-		String versionMinor = ConfigurationInterface_v1_0.VERSION.substring(ConfigurationInterface_v1_0.VERSION.indexOf(',')+1);		
-		configuration.setConfigurationInterfaceVersion(versionMajor, versionMinor);
+		SensorConfiguration config = new SensorConfiguration();
+		String versionMajor = ConfigurationInterface_v1_0.VERSION.substring(0,ConfigurationInterface_v1_0.VERSION.indexOf('.'));
+		String versionMinor = ConfigurationInterface_v1_0.VERSION.substring(ConfigurationInterface_v1_0.VERSION.indexOf('.')+1);		
+		config.setConfigurationInterfaceVersion(versionMajor, versionMinor);
 		
 		StartModes startModes  = new StartModes();
 		//set startMode for sensorConfiguration
@@ -847,7 +841,7 @@ public class MesanaConfigurator
 		{
 			if(element.getName().equals("AFTER_ATTACHING"))
 			{
-				configuration.setStartMode(element);
+				config.setStartMode(element);
 			}
 		}
 		
@@ -858,11 +852,11 @@ public class MesanaConfigurator
 			if(element.getName().equals("mesana"))
 			{	
 				
-				configuration.setConfigurationSet(element);
+				config.setConfigurationSet(element);
 			}
 		}
 		
-		if(configuration.getStartMode().getName().equals("DEFINED_TIME"))
+		if(config.getStartMode().getName().equals("DEFINED_TIME"))
 		{
 						
 			Calendar calendar = Calendar.getInstance();
@@ -870,11 +864,24 @@ public class MesanaConfigurator
 			calendar.set(Calendar.HOUR_OF_DAY,5);
 			calendar.set(Calendar.MINUTE, 11);
 			Date date = calendar.getTime();			
-			configuration.setRecordingStartTime(date);
+			config.setRecordingStartTime(date);
+		}else{
+			config.setRecordingStartTime(null);
 		}
 		
-		configuration.setRecordingDuration(120000);
+		config.setRecordingDuration(120000);
+		ConnectionManager.getInstance().currentSensor(0).setSensorConfiguration(config);
 		ConnectionManager.getInstance().currentSensor(0).writeConfigFile();
+		
+		//write Encrypted data to sensor
+		 ConnectionManager.getInstance().currentSensor(0).writeEncryptedParameters();
+		 
+		 
+		 //FIXME config.addParameter("LinkId",customerList);
+		 //write custom data to additional file in sensor		
+		 ConnectionManager.getInstance().currentSensor(0).writeCustomFile();
+		
+		
 
 	}
 

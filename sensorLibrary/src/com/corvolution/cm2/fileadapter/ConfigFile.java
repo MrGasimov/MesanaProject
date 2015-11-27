@@ -22,7 +22,6 @@ public class ConfigFile extends BinaryFileAdapter
 	private static int BYTE_DURATION_HOUR = 8;
 	private static int BYTE_DURATION_MINUTE = 9;
 	private final static int CONFIG_FILE_LENGTH = 33;
-	private final static String CONFIG_FILE_VERSION = "0.1";
 	public 	byte[] buffer = new byte[CONFIG_FILE_LENGTH];
 
 	public ConfigFile(String absolutePath)

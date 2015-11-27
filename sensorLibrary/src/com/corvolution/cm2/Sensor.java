@@ -41,6 +41,7 @@ public class Sensor
 	private String serialNumber;
 	private String firmwareVersion;
 	private Date flashDate;
+	private String configurationInterfaceVersion;
 	private String batteryVoltage;
 	private String currentState;
 	private String sensorSystemTime;
@@ -104,6 +105,11 @@ public class Sensor
 	{
 
 		return this.flashDate;
+	}
+	
+	public String getConfigurationInterfaceVersion()
+	{
+		return configurationInterfaceVersion;
 	}
 
 	private void readSensorInfo() throws IOException

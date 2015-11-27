@@ -21,39 +21,26 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 	private HashMap<String, byte[]> encryptedParameters;
 	private Date recordingStartTime;
 	private int recordingDuration;
-	private int durationMinutes;
-	
 	private ConfigurationSet configurationSet;
-	private ConfigurationSets configurationSets;
-	private StartMode startModeObject;
-	private byte startMode;
-	public final static byte START_MODE_IMMEDIATELY = 1;
-	public final static byte START_MODE_AFTER_ATTACHING = 2;
-	public final static byte START_MODE_DEFINED_TIME = 4;
+	private StartMode startMode;
+
 
 	public SensorConfiguration()
 	{	
 		additionalParameters = new HashMap<>();
 		encryptedParameters = new HashMap<>();
-		configurationSets = new ConfigurationSets();
+		
 	}
 	
-	public int getDurationMinutes()
-	{
-		return durationMinutes;
-	}
-	
-	public void setStartMode(byte startModebyte, String name, String description, String compatibleVersion)
+	public void setStartMode(StartMode startMode)
 	{	
-		startModeObject = new StartMode(startModebyte, name, description,compatibleVersion);
-		startModeObject.addStartModeToList(startModeObject);
-		this.startMode = startModebyte;
+		this.startMode = startMode;
 		
 	}
 	
 	public StartMode getStartMode()
 	{
-		return startModeObject;
+		return this.startMode;
 	}
 	
 	public ConfigurationSet getConfigurationSet()

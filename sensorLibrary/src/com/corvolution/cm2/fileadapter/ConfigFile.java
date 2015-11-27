@@ -49,18 +49,15 @@ public class ConfigFile extends BinaryFileAdapter
 
 		buffer[BYTE_VERSION_MAJOR] = 0; // TODO parse version number and use getter methods
 		buffer[BYTE_VERSION_MINOR] = 1;// TODO parse version number and use getter methods
-		buffer[BYTE_START_MODE] = sensorConfiguration.getStartMode().getConfigSetByte();
-		
-		ConfigurationSets configsets= new ConfigurationSets();
-		sensorConfiguration.setConfigurationSet(configsets.getConfigSetList().get(0));
-		buffer[BYTE_CONFIG_SET] = sensorConfiguration.getConfigurationSet().getConfigSetByte();
+		buffer[BYTE_START_MODE] = sensorConfiguration.getStartMode().getEncodedByte();		
+		buffer[BYTE_CONFIG_SET] = sensorConfiguration.getConfigurationSet().getEncodedByte();
 		cal.setTime(sensorConfiguration.getRecordingStartTime());
 		buffer[BYTE_STARTTIME_DAY] = (byte) cal.get(Calendar.DAY_OF_MONTH);
 		buffer[BYTE_STARTTIME_HOUR] = (byte) cal.get(Calendar.HOUR_OF_DAY);
 		buffer[BYTE_STARTTIME_MINUTE] = (byte) cal.get(Calendar.MINUTE);
-		buffer[BYTE_DURATION_DAY] = (byte) Math.abs(sensorConfiguration.getDurationMinutes() / 1440);
-		buffer[BYTE_DURATION_HOUR] = (byte) Math.abs((sensorConfiguration.getDurationMinutes() % 1440) / 60);
-		buffer[BYTE_DURATION_MINUTE] = (byte) (sensorConfiguration.getDurationMinutes() % 60);
+		buffer[BYTE_DURATION_DAY] = (byte) Math.abs(sensorConfiguration.getRecordingDuration() / 1440);
+		buffer[BYTE_DURATION_HOUR] = (byte) Math.abs((sensorConfiguration.getRecordingDuration() % 1440) / 60);
+		buffer[BYTE_DURATION_MINUTE] = (byte) (sensorConfiguration.getRecordingDuration() % 60);
 		// TODO add CRC16
 		
 		CRC32 myCRC = new CRC32();

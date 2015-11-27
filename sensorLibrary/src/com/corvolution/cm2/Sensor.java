@@ -119,7 +119,7 @@ public class Sensor
 		this.manufacturerName = this.infoFile.getProperty(InfoFile.MANUFACTURER_NAME);
 		this.serialNumber = this.infoFile.getProperty(InfoFile.SERIAL_NUMBER);
 		this.firmwareVersion = this.infoFile.getProperty(InfoFile.FIRMWARE_VERSION);
-
+		this.configurationInterfaceVersion = this.infoFile.getProperty(InfoFile.CONFIGURATION_INTERFACE_VERSION);
 		SimpleDateFormat ft = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 		try
 		{
@@ -166,6 +166,7 @@ public class Sensor
 			}
 
 		}
+	
 	public void readEncryptedParameters()
 		{
 			File encryptedCustomFile = new File(this.sensorPath + ":" + File.separator + Constants.CM2_ENCRYPTED_FILE);
@@ -189,24 +190,23 @@ public class Sensor
 			}
 
 		}
-	
-	
+		
 	// read configuration file from sensor
-	private void readConfigFile() throws IOException
+	public void readConfigFile() 
 	{	
 		String absolutePath = sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
 		this.configFile = new ConfigFile(absolutePath);
 	}
 			
 	// write configuration file to sensor
-	private void writeConfigFile() throws IOException
+	public void writeConfigFile() 
 	{	
 		String absolutePath = sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
 		this.configFile = new ConfigFile(absolutePath);	
 		this.configFile.writeBinaryFile(sensorConfiguration);				
 	}
 
-	private void writeTimeSyncFile() throws IOException
+	public void writeTimeSyncFile() throws IOException
 	{
 		String absolutePath = this.sensorPath + ":" + File.separator + Constants.CM2_TIMESYNC_FILE;
 		this.timeSyncFile = new TimeSyncFile(absolutePath);

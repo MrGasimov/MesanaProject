@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.corvolution.cm2.connection.ConnectionManager;
+
 public class PropertyManager
 {
 	private static Properties prop;
@@ -27,5 +29,14 @@ public class PropertyManager
 	{
 		return prop.getProperty(property);
 	}
+	public static PropertyManager getInstance()
+	{
+		if (instance == null)
+		{
+			instance = new PropertyManager();
+		}
+		return instance;
+	}
+	
 
 }

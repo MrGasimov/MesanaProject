@@ -23,26 +23,43 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 	private int recordingDuration;
 	private ConfigurationSet configurationSet;
 	private StartMode startMode;
-
+	private String configInterfaceVersionMajor;
+	private String configInterfaceVersionMinor;
 
 	public SensorConfiguration()
-	{	
+	{
 		additionalParameters = new HashMap<>();
 		encryptedParameters = new HashMap<>();
-		
+
+	}
+
+	public void setConfigurationInterfaceVersion(String major, String minor)
+	{
+		this.configInterfaceVersionMajor = major;
+		this.configInterfaceVersionMinor = minor;
+	}
+
+	public byte getConfigurationInterfaceVersionMajor()
+	{
+		return  Byte.parseByte(configInterfaceVersionMajor); 
+	}
+	
+	public byte getConfigurationInterfaceVersionMinor()
+	{
+		return  Byte.parseByte(configInterfaceVersionMinor); 
 	}
 	
 	public void setStartMode(StartMode startMode)
-	{	
+	{
 		this.startMode = startMode;
-		
+
 	}
-	
+
 	public StartMode getStartMode()
 	{
 		return this.startMode;
 	}
-	
+
 	public ConfigurationSet getConfigurationSet()
 	{
 		return configurationSet;
@@ -195,8 +212,7 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		// - valid recordingStartTime
 		// - valid duration
 		// - valid ConfigSet
-		
-		
+
 	}
 
 }

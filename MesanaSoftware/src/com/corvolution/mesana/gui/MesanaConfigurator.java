@@ -1,9 +1,10 @@
 package com.corvolution.mesana.gui;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,7 +33,12 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.json.simple.JSONObject;
-
+import com.corvolution.cm2.configuration.ConfigurationInterface_v1_0;
+import com.corvolution.cm2.configuration.ConfigurationSet;
+import com.corvolution.cm2.configuration.ConfigurationSets;
+import com.corvolution.cm2.configuration.SensorConfiguration;
+import com.corvolution.cm2.configuration.StartMode;
+import com.corvolution.cm2.configuration.StartModes;
 import com.corvolution.cm2.connection.ConnectionManager;
 import com.corvolution.cm2.connection.SensorEvent;
 import com.corvolution.mesana.configurator.PropertyManager;
@@ -60,7 +66,6 @@ public class MesanaConfigurator
 	private TaskCollection tCollect;
 	private static Measurement mObject;
 	private static AddressData aData;
-	private PropertyManager pManager;
 	private ConnectionManager cManager;
 	boolean configState = false;
 	boolean shellCheck;
@@ -68,7 +73,6 @@ public class MesanaConfigurator
 	// Constructor
 	public MesanaConfigurator(String log, String pass)
 	{
-		pManager = new PropertyManager();
 		cManager = ConnectionManager.getInstance();
 		setOperatorData(log, pass);
 		setGui();
@@ -554,7 +558,7 @@ public class MesanaConfigurator
 				else
 				{
 					configurate();
-					printAddress();
+					writeEncryptedData();
 				}
 			}
 		});
@@ -563,7 +567,7 @@ public class MesanaConfigurator
 		{
 			public void shellDeactivated(ShellEvent shellEvent)
 			{
-				shellCheck = false;			
+				shellCheck = false;
 				Timer timer = new Timer();
 				timer.schedule(new TimerTask()
 				{
@@ -594,7 +598,7 @@ public class MesanaConfigurator
 			public void shellActivated(ShellEvent arg1)
 			{
 				shellCheck = true;
-				
+
 			}
 		});
 
@@ -609,9 +613,8 @@ public class MesanaConfigurator
 
 		public InputDialog(Shell arg0, int arg1)
 		{
-
 			super(arg0, arg1);
-			// TODO Auto-generated constructor stub
+			
 		}
 
 		protected boolean createDialogArea()
@@ -713,7 +716,7 @@ public class MesanaConfigurator
 			jsonComment.put("user", login);
 			jsonComment.put("sensorId", ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
 			String commentJSON = jsonComment.toJSONString();
-			String cURL = pManager.getProperty("REST_PATH") + "measurements/" + mId + "/comments";
+			String cURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/comments";
 
 			try
 			{
@@ -730,7 +733,7 @@ public class MesanaConfigurator
 			jsonElectrode.put("comment", para1);
 			jsonElectrode.put("user", login);
 			String electrodeJSON = jsonElectrode.toJSONString();
-			String eURL = pManager.getProperty("REST_PATH") + "measurements/" + mId + "/electrodes";
+			String eURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/electrodes";
 
 			try
 			{
@@ -747,7 +750,7 @@ public class MesanaConfigurator
 			jsonFirmware.put("firmware", "1.32.4");
 			jsonFirmware.put("user", login);
 			String firmwareJson = jsonFirmware.toJSONString();
-			String fURL = pManager.getProperty("REST_PATH") + "sensors/" + para1;
+			String fURL = PropertyManager.getInstance().getProperty("REST_PATH") + "sensors/" + para1;
 
 			try
 			{
@@ -766,7 +769,7 @@ public class MesanaConfigurator
 			jsonState.put("state", para1);
 			jsonState.put("user", login);
 			String stateJSON = jsonState.toJSONString();
-			String sURL = pManager.getProperty("REST_PATH") + "measurements/" + mId + "/";
+			String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/";
 
 			try
 			{
@@ -785,7 +788,7 @@ public class MesanaConfigurator
 			jsonState.put("user", login);
 			jsonState.put("sensorId", cManager.currentSensor(0).getSerialNumber());
 			String stateJSON = jsonState.toJSONString();
-			String sURL = pManager.getProperty("REST_PATH") + "measurements/" + mId + "/";
+			String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/";
 
 			try
 			{
@@ -805,7 +808,8 @@ public class MesanaConfigurator
 		restApiUpdate("CONFIGURING", "state1");
 		checkFirmwareVersion();
 		// Write configuration file to sensor
-		// ConnectionManager.currentSensor(0).writeConfigFile();
+		 writeCongifurationFile();
+		
 
 		// push comment to RestApi
 		restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "comment");
@@ -823,9 +827,55 @@ public class MesanaConfigurator
 		// ConnectionManager.currentSensor(0).disconnect("remove");
 	}
 
-	private void printAddress()
+	private void writeEncryptedData()
 	{
 		ConnectionManager.getInstance().currentSensor(0).writeEncryptedParameters();
+	}
+
+	private void writeCongifurationFile()
+	{	
+		SensorConfiguration configuration = new SensorConfiguration();
+		configuration = ConnectionManager.getInstance().currentSensor(0).getConfiguration();
+		
+		String versionMajor = ConfigurationInterface_v1_0.VERSION.substring(0,ConfigurationInterface_v1_0.VERSION.indexOf(','));
+		String versionMinor = ConfigurationInterface_v1_0.VERSION.substring(ConfigurationInterface_v1_0.VERSION.indexOf(',')+1);		
+		configuration.setConfigurationInterfaceVersion(versionMajor, versionMinor);
+		
+		StartModes startModes  = new StartModes();
+		//set startMode for sensorConfiguration
+		for(StartMode element: startModes.getStartModeList())
+		{
+			if(element.getName().equals("AFTER_ATTACHING"))
+			{
+				configuration.setStartMode(element);
+			}
+		}
+		
+		ConfigurationSets configSets = new ConfigurationSets();
+		//set configurationSet for sensorConfiguration
+		for(ConfigurationSet element:configSets.getConfigSetList())
+		{
+			if(element.getName().equals("mesana"))
+			{	
+				
+				configuration.setConfigurationSet(element);
+			}
+		}
+		
+		if(configuration.getStartMode().getName().equals("DEFINED_TIME"))
+		{
+						
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.DAY_OF_MONTH, 10);
+			calendar.set(Calendar.HOUR_OF_DAY,5);
+			calendar.set(Calendar.MINUTE, 11);
+			Date date = calendar.getTime();			
+			configuration.setRecordingStartTime(date);
+		}
+		
+		configuration.setRecordingDuration(120000);
+		ConnectionManager.getInstance().currentSensor(0).writeConfigFile();
+
 	}
 
 	public void setTrayIcon()
@@ -903,9 +953,9 @@ public class MesanaConfigurator
 	}
 
 	public static void setCustomerData()
-	{
-		mCollect = new MeasurementCollection();
-		String sURL = "http://chili/mk/backend.mesana.com/api/v4/measurements?state=WAIT_FOR_CONFIG";
+	{	
+		String sURL =PropertyManager.getInstance().getProperty("REST_PATH")+"measurements?state=WAIT_FOR_CONFIG";
+		mCollect = new MeasurementCollection();		
 		mCollect.setList(sURL);
 
 		for (int i = 0; i < mCollect.getList().size(); i++)
@@ -933,17 +983,19 @@ public class MesanaConfigurator
 	}
 
 	public static void setSensorData() throws IOException
-	{
+	{	
+		String sURL = PropertyManager.getInstance().getProperty("REST_PATH")+"sensors??state=STOCK";
 		sCollect = new SensorCollection();
-		sCollect.setList();
+		sCollect.setList(sURL);
 		for (SensorData sData : sCollect.getList())
 		{
 			if (sData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 			{
 				sensorText.setText(sData.getSensorData() + "\r\n" + "Device: "
 						+ (ConnectionManager.getInstance().currentSensor(0).getDeviceName() + "\r\n" + "Manufacture: "
-								+ ConnectionManager.getInstance().currentSensor(0).getManufacturerName() + "\r\n" + "FlashDate: "
-								+ ConnectionManager.getInstance().currentSensor(0).getFlashDate() + "\r\n" + "Battery: "
+								+ ConnectionManager.getInstance().currentSensor(0).getManufacturerName() + "\r\n"
+								+ "FlashDate: " + ConnectionManager.getInstance().currentSensor(0).getFlashDate()
+								+ "\r\n" + "Battery: "
 								+ ConnectionManager.getInstance().currentSensor(0).getBatteryVoltage()));
 				break;
 			}
@@ -1011,7 +1063,8 @@ public class MesanaConfigurator
 		{
 			if (sensorData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 			{
-				if (!ConnectionManager.getInstance().currentSensor(0).getFirwareVersion().equals(sensorData.getFirmware()))
+				if (!ConnectionManager.getInstance().currentSensor(0).getFirwareVersion()
+						.equals(sensorData.getFirmware()))
 				{
 					restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "firmware");
 				}

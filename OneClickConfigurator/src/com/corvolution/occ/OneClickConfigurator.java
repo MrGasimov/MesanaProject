@@ -4,7 +4,7 @@ import com.corvolution.cm2.ConnectionManager;
 import com.corvolution.cm2.UsbListener;
 
 /**
- * OneClickConfigurator is a very, very small and lightweigt command line implementation for sensor configuration using
+ * OneClickConfigurator is a very, very small and lightweight command line implementation for sensor configuration using
  * the CM200 library.
  * 
  * @author kirst

@@ -54,14 +54,7 @@ public class SensorNotifier implements Runnable
 							nConnectedSensors++;
 							ConnectionManager.getInstance().setConnected(true);
 							ConnectionManager.getInstance().setNumberOfConnectedSensors(nConnectedSensors);
-							try
-							{
-								ConnectionManager.getInstance().addSensorToList(letters[i]);
-							}
-							catch (IOException e)
-							{
-								e.printStackTrace();
-							}
+							ConnectionManager.getInstance().addSensorToList(letters[i]);							
 						}
 					}
 					else

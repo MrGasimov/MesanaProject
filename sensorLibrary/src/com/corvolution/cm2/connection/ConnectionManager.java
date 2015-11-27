@@ -10,7 +10,11 @@ import com.corvolution.cm2.Sensor;
 
 public final class ConnectionManager
 {
-	private  Vector<SensorListener> sensorListeners;
+	public static final int CONNECTION = 100;
+	public static final int DISCONNECTION = 101;
+	
+	private  Vector<SensorListener> connectionListeners;
+	private  Vector<SensorListener> disconnectionListeners;
 	public  boolean connectionState;
 	private  String sensorPath;
 	private SensorEvent sensorEvent;
@@ -33,29 +37,73 @@ public final class ConnectionManager
 	}
 
 	/** Register a listener for Events */
-	synchronized public void addSensorListener(SensorListener listener)
-	{
-		if (sensorListeners == null)
+	synchronized public void addSensorListener(SensorListener listener, int option)
+	{	
+		if(option == 100)
 		{
-			sensorListeners = new Vector<SensorListener>();
+			if (connectionListeners == null)
+			{
+				connectionListeners = new Vector<SensorListener>();
+				
+			}
+			connectionListeners.addElement(listener);
+		}else if(option == 101) 
+		{
+			if (disconnectionListeners == null)
+			{
+				disconnectionListeners = new Vector<SensorListener>();
+				
+			}
+			disconnectionListeners.addElement(listener);
 		}
-		sensorListeners.addElement(listener);
+		
+		
 	}
 
 	/** Remove a listener for Events */
-	synchronized public void removeSensorListener(SensorListener listener)
-	{
-		if (sensorListeners == null)
-			sensorListeners = new Vector<>();
-		sensorListeners.removeElement(listener);
+	synchronized public void removeSensorListener(SensorListener listener, int option)
+	{	
+		if(option == 100)
+		{
+			if (connectionListeners == null)
+			{
+				connectionListeners = new Vector<SensorListener>();
+				
+			}
+			connectionListeners.removeElement(listener);
+		}else if(option == 101) 
+		{
+			if (disconnectionListeners == null)
+			{
+				disconnectionListeners = new Vector<SensorListener>();
+				
+			}
+			disconnectionListeners.removeElement(listener);
+		}
 	}
+		
 
-	private synchronized void fireSensorEvent()
+	private synchronized void fireConnectionEvent()
 	{
 		sensorEvent = new SensorEvent(this, connectionState, sensorPath, nConnectedSensors);
-		if (sensorListeners != null)
+		if (connectionListeners != null)
 		{
-			Iterator<SensorListener> listeners = sensorListeners.iterator();
+			Iterator<SensorListener> listeners = connectionListeners.iterator();
+			while (listeners.hasNext())
+			{
+				listeners.next().sensorConnection(sensorEvent);
+
+			}
+		}
+
+	}
+	
+	private synchronized void fireDisconnectionEvent()
+	{
+		sensorEvent = new SensorEvent(this, connectionState, sensorPath, nConnectedSensors);
+		if (disconnectionListeners != null)
+		{
+			Iterator<SensorListener> listeners = disconnectionListeners.iterator();
 			while (listeners.hasNext())
 			{
 				listeners.next().sensorConnection(sensorEvent);
@@ -86,12 +134,22 @@ public final class ConnectionManager
 	}
 
 	// adds connected sensor path to array
-	protected void addSensorToList(String path) throws IOException
+	protected void addSensorToList(String path) 
 	{
-		sensorPath = path;
-		Sensor sensor = new Sensor(path);
-		sensorList.add(sensor);
-		fireSensorEvent();
+		this.sensorPath = path;
+		Sensor sensor;
+		try
+		{
+			sensor = new Sensor(path);
+			sensorList.add(sensor);
+			fireConnectionEvent();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		
 
 	}
 
@@ -103,7 +161,7 @@ public final class ConnectionManager
 			if (device.getSensorPath().equals(path))
 				sensorList.remove(device);
 		}
-		fireSensorEvent();
+		fireDisconnectionEvent();
 	}
 
 	// starts thread for listening and notifies Manager about any connection

@@ -38,14 +38,23 @@ public class ConfigurationSet
 	}
 	
 	public  boolean isCompatibleWithSensor(String configurationVersion)
-	{
+	{	
+		boolean compatible;
+		if(Double.parseDouble(configurationVersion) >= Double.parseDouble(compatibleConfigurationVersion))
+		{
+			compatible = true;
+		} else if( Double.parseDouble(configurationVersion) < Double.parseDouble(compatibleConfigurationVersion)){
+			compatible =false;
+		} else {
+			compatible =false;
+		}
+				
+		return compatible;			
 		//	configurationVersion	compatibleConfigurationVersion	return
 		//	1.0						1.0								true
 		// 	1.1						1.0								true
 		//	1.0						1.1								false
 		//  2.0						1.1								false
 		// major version difference is always false
-		
-		return true;
 	}
 }

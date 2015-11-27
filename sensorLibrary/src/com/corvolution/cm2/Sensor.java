@@ -149,8 +149,7 @@ public class Sensor
 	public void readMeasurement(String dest)
 		{
 			File destination = new File(dest);
-			// data in constant class define
-			File source = new File(sensorPath + ":/data");
+			File source = new File(sensorPath +":"+File.separator+ Constants.MEASUREMENT_FOLDER);
 			try
 			{
 				FileUtils.copyDirectoryToDirectory(source, destination);
@@ -163,7 +162,6 @@ public class Sensor
 		}
 	public void readEncryptedParameters()
 		{
-			// ecnrypted file in constant class
 			File encryptedCustomFile = new File(this.sensorPath + ":" + File.separator + Constants.CM2_ENCRYPTED_FILE);
 			if (encryptedCustomFile.exists())
 			{

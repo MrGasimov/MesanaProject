@@ -49,7 +49,7 @@ public class ConfigFile extends BinaryFileAdapter
 
 		buffer[BYTE_VERSION_MAJOR] = 0; // TODO parse version number and use getter methods
 		buffer[BYTE_VERSION_MINOR] = 1;// TODO parse version number and use getter methods
-		buffer[BYTE_START_MODE] = sensorConfiguration.getStartMode();
+		buffer[BYTE_START_MODE] = sensorConfiguration.getStartMode().getConfigSetByte();
 		
 		ConfigurationSets configsets= new ConfigurationSets();
 		sensorConfiguration.setConfigurationSet(configsets.getConfigSetList().get(0));

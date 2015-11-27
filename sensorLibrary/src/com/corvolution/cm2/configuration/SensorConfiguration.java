@@ -15,7 +15,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class SensorConfiguration implements ConfigurationInterface
+public class SensorConfiguration implements ConfigurationInterface_v1_0
 {
 	private HashMap<String, String> additionalParameters;
 	private HashMap<String, byte[]> encryptedParameters;
@@ -23,36 +23,39 @@ public class SensorConfiguration implements ConfigurationInterface
 	private int recordingDuration;
 	private int durationMinutes;
 	
-
 	private ConfigurationSet configurationSet;
 	private ConfigurationSets configurationSets;
+	private StartMode startModeObject;
 	private byte startMode;
 	public final static byte START_MODE_IMMEDIATELY = 1;
 	public final static byte START_MODE_AFTER_ATTACHING = 2;
 	public final static byte START_MODE_DEFINED_TIME = 4;
 
 	public SensorConfiguration()
-	{
+	{	
 		additionalParameters = new HashMap<>();
 		encryptedParameters = new HashMap<>();
-
+		configurationSets = new ConfigurationSets();
 	}
 	
 	public int getDurationMinutes()
 	{
 		return durationMinutes;
 	}
-
-	public byte getStartMode()
-	{
-		return startMode;
+	
+	public void setStartMode(byte startModebyte, String name, String description, String compatibleVersion)
+	{	
+		startModeObject = new StartMode(startModebyte, name, description,compatibleVersion);
+		startModeObject.addStartModeToList(startModeObject);
+		this.startMode = startModebyte;
+		
 	}
-
-	public void setStartMode()
+	
+	public StartMode getStartMode()
 	{
-		this.startMode = SensorConfiguration.START_MODE_AFTER_ATTACHING;
+		return startModeObject;
 	}
-
+	
 	public ConfigurationSet getConfigurationSet()
 	{
 		return configurationSet;
@@ -205,6 +208,8 @@ public class SensorConfiguration implements ConfigurationInterface
 		// - valid recordingStartTime
 		// - valid duration
 		// - valid ConfigSet
+		
+		
 	}
 
 }

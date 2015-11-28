@@ -31,25 +31,22 @@ import com.corvolution.mesana.rest.RestApiConnector;
 public class ReaderGui{
 	int destSize, copySize,size;
 	String readOutDest;
-	private String login,password;
+	private static String login=null;
+	private static String password=null;
 	private Display display;
-	private Shell shell;
+	private static Shell shell;
 	private Button button;
 	private static ProgressBar bar;
 	private GridData gridData;
 	private static Text text;
-	PropertyManager pManager;
 	MeasurementCollection mCollect;
 	private String measurementName;
 	RestApiConnector restApi;
 	
-	public ReaderGui(String login,String password){
-		this.login = login;
-		this.password = password;
-		pManager = new PropertyManager();
+	public ReaderGui(){
 		restApi = new RestApiConnector();
 		mCollect = new MeasurementCollection();
-		String url = pManager.getProperty("REST_PATH")+"/measurements?state=SENSOR_READOUT";
+		String url = PropertyManager.getInstance().getProperty("REST_PATH")+"/measurements?state=ANALYZING";
 		mCollect.setList(url);		
 				
 		display = new Display();		
@@ -88,14 +85,14 @@ public class ReaderGui{
 		destSize=(int)FileUtils.sizeOf(new File("Z:/measurementData/"));
 	
 		
-		readOutDest = pManager.getProperty("READOUT_DEST");
+		readOutDest = PropertyManager.getInstance().getProperty("READOUT_DEST");
 		button.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e){
 				text.setText("Reading data from sensors...");
 				if(!ConnectionManager.getInstance().getConnectedSensorsList().isEmpty()){
 					for(Sensor device:ConnectionManager.getInstance().getConnectedSensorsList()){
 						for(Measurement element :mCollect.getList()){						
-							if(element.getLinkId().equals(device.getConfiguration().getParameter("LinkId"))){
+							if(element.getLinkId().equals(device.getReadConfiguration().getParameter("LinkId"))){
 								measurementName = element.getID();
 								restApiUpdate(element.getLinkId(),measurementName);
 							}
@@ -115,7 +112,7 @@ public class ReaderGui{
 		});
 		
 		shell.pack();
-		shell.open();			
+		//shell.open();			
 				
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
@@ -130,10 +127,12 @@ public class ReaderGui{
 			@Override
 			public void run() {
 				String str="";
-				if(e.getNumOfConnectedSensors()==1){					
+				if(e.getState() && e.getNumOfConnectedSensors()==1){
+					operatorDialog();
 					str = "Sensor "+e.getSensorPath()+" has been connected";
 					text.setText(str);
 				}else if(e.getState()&&e.getNumOfConnectedSensors()>=2){
+					
 					for(int i=0; i < e.getNumOfConnectedSensors()-1;i++)
 					text.setText(text.getText()+"\r\n"+"Sensor "+e.getSensorPath()+" has been connected");				
 				}else if(e.getState()&&e.getNumOfConnectedSensors()==0){
@@ -152,7 +151,7 @@ public class ReaderGui{
 		json.put("user", login);
 		json.put("sensorId",deviceNumber);
 		String jsonString = json.toJSONString();		
-		String sURL =pManager.getProperty("REST_PATH")+"measurements/"+mId+"/";			
+		String sURL =PropertyManager.getInstance().getProperty("REST_PATH")+"measurements/"+mId+"/";			
 		try {
 			restApi.putMethod(jsonString,sURL);
 		} catch (Exception e) {
@@ -216,7 +215,17 @@ public class ReaderGui{
 		}
 	}
 	
-	
+	public static void operatorDialog(){
+		boolean check = false;
+		InputDialog opdialog = new InputDialog(shell, SWT.DIALOG_TRIM);
+		while(!check)
+		{	
+			String credential = opdialog.createDialogArea();
+			login = credential.substring(0, credential.indexOf(File.separator));
+			password = credential.substring(credential.indexOf(File.separator));
+			check = true;
+		}
+	}
 	
 	
 	

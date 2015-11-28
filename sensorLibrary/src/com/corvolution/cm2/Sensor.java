@@ -182,7 +182,6 @@ public class Sensor
 					byte[] buffer = new byte[(int) encryptedCustomFile.length()];
 					bis.read(buffer);
 					readSensorConfiguration.addEncryptedParameter("enryptedcustomIO", buffer, "0123456789ABCDEF");
-					System.out.println(readSensorConfiguration.getEncryptedParameter("enryptedcustomIO", "0123456789ABCDEF"));
 					bis.close();
 				}
 				catch (IOException e)
@@ -216,9 +215,13 @@ public class Sensor
 		timeSyncFile.writeBinaryFile();
 	}
 
-	public SensorConfiguration getConfiguration()
+	public SensorConfiguration getWriteConfiguration()
 	{
 		return this.writeSensorConfiguration;
+	}
+	public SensorConfiguration getReadConfiguration()
+	{
+		return this.readSensorConfiguration;
 	}
 
 	public void setSensorConfiguration(SensorConfiguration config)

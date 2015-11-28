@@ -78,7 +78,7 @@ public class Sensor
 
 	public String getFirwareVersion()
 	{
-		return firmwareVersion;
+		return this.firmwareVersion;
 	}
 
 	public String getSensorPath()
@@ -121,6 +121,7 @@ public class Sensor
 		this.serialNumber = this.infoFile.getProperty(InfoFile.SERIAL_NUMBER);
 		this.firmwareVersion = this.infoFile.getProperty(InfoFile.FIRMWARE_VERSION);
 		this.configurationInterfaceVersion = this.infoFile.getProperty(InfoFile.CONFIGURATION_INTERFACE_VERSION);
+		
 		SimpleDateFormat ft = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 		try
 		{
@@ -141,6 +142,7 @@ public class Sensor
 	{
 		this.customFile = new CustomFile(this.sensorPath);
 		readSensorConfiguration.addParameter("LinkId", this.customFile.getProperty(CustomFile.LINK_ID));
+		//for reading additional data from custom file, additional data details must be added to customFile class 
 
 	}
 

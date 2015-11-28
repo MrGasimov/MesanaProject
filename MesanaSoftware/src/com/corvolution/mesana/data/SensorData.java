@@ -21,12 +21,16 @@ public class SensorData extends RestApiConnector
 
 	public String getID()
 	{
-		return id;
+		return this.id;
 	}
 
 	public String getFirmware()
 	{
-		return firmware;
+		return this.firmware;
 	}
 
+	public String getState()
+	{
+		return this.state;
+	}
 }

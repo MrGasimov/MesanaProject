@@ -18,16 +18,17 @@ public class MainClass
 		Thread usbListener = new Thread(new SensorNotifier());
 		usbListener.start();
 		PropertyManager pManager = new PropertyManager();
-		OperatorAccess opAccess = new OperatorAccess();
+		//OperatorAccess opAccess = new OperatorAccess();
 		ConnectionManager.getInstance().addSensorListener(new GuiUpdater(pManager.getProperty(Constants.GUI_MODE)), ConnectionManager.CONNECTION);
 		ConnectionManager.getInstance().addSensorListener(new GuiUpdater(pManager.getProperty(Constants.GUI_MODE)), ConnectionManager.DISCONNECTION);
 		if (pManager.getProperty("GUI_MODE").equals("CONFIGURATOR"))
 		{
-			new MesanaConfigurator(opAccess.getLogin(), opAccess.getPassword());
+			new MesanaConfigurator();
+			//opAccess.getLogin(), opAccess.getPassword()
 		}
 		else
 		{
-			new ReaderGui(opAccess.getLogin(), opAccess.getPassword());
+			//new ReaderGui(opAccess.getLogin(), opAccess.getPassword());
 		}
 
 	}

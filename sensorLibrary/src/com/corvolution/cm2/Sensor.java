@@ -248,7 +248,7 @@ public class Sensor
 
 	public void writeCustomFile()
 	{	
-		 String data = null;
+		String data = null;
 		for (HashMap.Entry<String,String> entry : writeSensorConfiguration.getParametersMap().entrySet()) {
 			 data =data+ entry.getKey()+"="+entry.getValue()+"\r\n";
 			 

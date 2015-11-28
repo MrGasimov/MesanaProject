@@ -161,7 +161,7 @@ public class MesanaConfigurator
 				else if (!e.getState() && shell.isVisible() && e.getNumOfConnectedSensors() == 1)
 				{
 					configButton.setEnabled(true);
-					resetData();
+					resetGuiData();
 					try
 					{
 						setData();
@@ -182,7 +182,7 @@ public class MesanaConfigurator
 				}
 				else
 				{
-					resetData();
+					resetGuiData();
 					configButton.setEnabled(false);
 					statusBar.setText("Sensor " + e.getSensorPath()
 							+ " has been disconnected. Please connect sensor for configuration");
@@ -541,7 +541,7 @@ public class MesanaConfigurator
 		{
 			public void widgetSelected(SelectionEvent e)
 			{
-				resetData();
+				resetGuiData();
 				setCustomerData();
 				try
 				{
@@ -567,13 +567,15 @@ public class MesanaConfigurator
 					messageCode = batteryWarning();
 					if (messageCode == 32)
 					{
-						configurateSensor();						
+						configurateSensor();
+						configButton.setEnabled(false);
 					}
 						
 				}
 				else
 				{
 					configurateSensor();
+					configButton.setEnabled(false);
 					
 				}
 			}
@@ -1001,7 +1003,7 @@ public class MesanaConfigurator
 			shell.open();
 	}
 
-	public static void resetData()
+	public static void resetGuiData()
 	{
 		priorityCombo.select(0);
 		electrodeCombo.select(0);
@@ -1040,10 +1042,6 @@ public class MesanaConfigurator
 
 	}
 
-	public void setOperatorData(String login, String password)
-	{
-		this.login = login;
-		this.password = password;
-	}
+	
 
 }

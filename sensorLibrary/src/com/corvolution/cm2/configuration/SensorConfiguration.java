@@ -173,7 +173,6 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		}
 		catch (InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -187,7 +186,6 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		}
 		catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return para;

@@ -11,7 +11,6 @@ public class LowFilter implements Comparator<Measurement>
 	@Override
 	public int compare(Measurement m1, Measurement m2)
 	{
-		// TODO Auto-generated method stub
 		return highOrder.indexOf(m1.getPriority()) - highOrder.indexOf(m2.getPriority());
 	}
 }

@@ -38,7 +38,6 @@ public class Measurement extends RestApiConnector
 		}
 		catch (ParseException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

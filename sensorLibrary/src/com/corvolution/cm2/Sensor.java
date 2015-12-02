@@ -186,7 +186,6 @@ public class Sensor
 				}
 				catch (IOException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -244,7 +243,6 @@ public class Sensor
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}

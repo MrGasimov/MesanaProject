@@ -2,6 +2,6 @@
 
 public interface SensorListener
 {
-	public void sensorConnection(SensorEvent e);
-
+	public void sensorConnection(ConnectionEvent cEvent);
+	public void sensorDisconnection(DisconnectionEvent dEvent);
 }

@@ -10,7 +10,6 @@ public class TimeSyncFile extends BinaryFileAdapter
 	public TimeSyncFile(String path)
 	{
 		super(path);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void writeBinaryFile(){

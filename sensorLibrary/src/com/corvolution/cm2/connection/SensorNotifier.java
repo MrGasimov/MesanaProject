@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import javax.swing.filechooser.FileSystemView;
 
+import com.corvolution.cm2.Constants;
+
 public class SensorNotifier implements Runnable
 {
 
@@ -49,7 +51,7 @@ public class SensorNotifier implements Runnable
 						FileSystemView view = FileSystemView.getFileSystemView();
 						File dir = new File(letters[i] + ":/");
 						String name = view.getSystemDisplayName(dir);// .substring(0, 5);
-						if (name.equals("STICK" + " (" + letters[i] + ":)")) // TODO use constant
+						if (name.equals(Constants.SENSOR_NAME+ " (" + letters[i] + ":)")) 
 						{
 							nConnectedSensors++;
 							ConnectionManager.getInstance().setConnected(true);

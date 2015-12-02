@@ -12,7 +12,6 @@ public final class ConnectionManager
 {
 	public static final int CONNECTION = 100;
 	public static final int DISCONNECTION = 101;
-	
 	private  Vector<SensorListener> connectionListeners;
 	private  Vector<SensorListener> disconnectionListeners;
 	public  boolean connectionState;
@@ -64,7 +63,7 @@ public final class ConnectionManager
 	/** Remove a listener for Events */
 	synchronized public void removeSensorListener(SensorListener listener, int option)
 	{	
-		if(option == 100)
+		if(option == ConnectionManager.CONNECTION)
 		{
 			if (connectionListeners == null)
 			{
@@ -72,7 +71,7 @@ public final class ConnectionManager
 				
 			}
 			connectionListeners.removeElement(listener);
-		}else if(option == 101) 
+		}else if(option == ConnectionManager.DISCONNECTION) 
 		{
 			if (disconnectionListeners == null)
 			{

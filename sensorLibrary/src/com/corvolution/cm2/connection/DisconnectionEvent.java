@@ -1,5 +1,4 @@
 package com.corvolution.cm2.connection;
-
 import java.util.EventObject;
 
 public class DisconnectionEvent extends EventObject
@@ -15,7 +14,6 @@ public class DisconnectionEvent extends EventObject
 		this.connectionState = state;
 		this.path = path;
 		this.nConnectedSensors = num;
-
 	}
 
 	public boolean getState()

@@ -5,8 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.corvolution.cm2.Logger;
+
 /**
- * This class reads 
+ * This class reads
+ * 
  * @author kirst
  *
  */
@@ -23,11 +26,11 @@ public class TextFileAdapter
 		}
 		catch (FileNotFoundException e)
 		{
-			System.out.println("File " + path + " does not exist.");
+			Logger.getInstance().printLog("File " + path + " does not exist.");
 		}
 		catch (IOException e)
 		{
-			System.out.println("Cannot read " + path + ".");
+			Logger.getInstance().printLog("Cannot read " + path + ".");
 		}
 	}
 

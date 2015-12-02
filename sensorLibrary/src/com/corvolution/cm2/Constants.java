@@ -11,5 +11,7 @@ public class Constants
 	public static final String SIMPLE_DATE_FORMAT ="yyyy-MM-dd'T'HH:mm:ss";
 	public static final String MEASUREMENT_FOLDER ="data";
 	public static final String SENSOR_NAME ="STICK";
-	
+	public static final int SLEEP_TIME=100;
+	public static final String RESTART_COMMAND="restart";
+	public static final String REMOVE_COMMAND="remove";
 }

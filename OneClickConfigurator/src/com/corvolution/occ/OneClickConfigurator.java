@@ -17,7 +17,7 @@ public class OneClickConfigurator
 	{
 		Thread usbListener = new Thread(new SensorNotifier());
 		usbListener.start();
-		ConnectionManager.getInstance().addSensorListener(new MySensorListener());
+		ConnectionManager.getInstance().addSensorListener(new MySensorListener(), ConnectionManager.CONNECTION);
 	}
 
 }

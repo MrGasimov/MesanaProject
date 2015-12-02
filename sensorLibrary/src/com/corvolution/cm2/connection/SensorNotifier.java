@@ -27,9 +27,11 @@ public class SensorNotifier implements Runnable
 		{
 			sensors[i] = new File(letters[i] + ":/");
 
-			isDrive[i] = sensors[i].canRead();
+//			isDrive[i] = sensors[i].canRead();
+			isDrive[i] = false;
 		}
-		// TODO Create Logging Class with output like "2015-11-23 23:00:43 Blah..."
+		// TODO Create Logging Class with output like "2015-11-23 23:00:43 INFO    Blah..."
+		// TODO Create Logging Class with output like "2015-11-23 23:00:43 WARNING Blah..."
 		System.out.println("Find Sensor: waiting for devices...");
 		// loop indefinitely
 
@@ -52,14 +54,7 @@ public class SensorNotifier implements Runnable
 							nConnectedSensors++;
 							ConnectionManager.getInstance().setConnected(true);
 							ConnectionManager.getInstance().setNumberOfConnectedSensors(nConnectedSensors);
-							try
-							{
-								ConnectionManager.getInstance().addSensorToList(letters[i]);
-							}
-							catch (IOException e)
-							{
-								e.printStackTrace();
-							}
+							ConnectionManager.getInstance().addSensorToList(letters[i]);							
 						}
 					}
 					else

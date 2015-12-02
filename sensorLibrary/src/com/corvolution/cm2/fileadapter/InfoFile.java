@@ -16,6 +16,7 @@ public class InfoFile extends TextFileAdapter
 	public static final String SERIAL_NUMBER = "SerialNumber";
 	public static final String FIRMWARE_VERSION = "FirmwareVersion";
 	public static final String FLASH_DATE = "FlashDate";
+	public static final String CONFIGURATION_INTERFACE_VERSION = "configurationInterfaceVersion";
 
 	/**
 	 * Connects a CM2 info file for reading the info properties defined as static final constants.

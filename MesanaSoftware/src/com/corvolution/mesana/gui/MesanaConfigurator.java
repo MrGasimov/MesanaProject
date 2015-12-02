@@ -1,15 +1,18 @@
 package com.corvolution.mesana.gui;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -32,9 +35,15 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.json.simple.JSONObject;
-
+import com.corvolution.cm2.configuration.ConfigurationInterface_v1_0;
+import com.corvolution.cm2.configuration.ConfigurationSet;
+import com.corvolution.cm2.configuration.ConfigurationSets;
+import com.corvolution.cm2.configuration.SensorConfiguration;
+import com.corvolution.cm2.configuration.StartMode;
+import com.corvolution.cm2.configuration.StartModes;
 import com.corvolution.cm2.connection.ConnectionManager;
 import com.corvolution.cm2.connection.SensorEvent;
+import com.corvolution.mesana.configurator.Printer;
 import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.data.AddressData;
 import com.corvolution.mesana.data.Measurement;
@@ -46,8 +55,9 @@ import com.corvolution.mesana.data.TaskCollection;
 public class MesanaConfigurator
 {
 	private int messageCode;
-	private String login, password;
-	private Display display;
+	private static String login;
+	private static String password;
+	private static Display display;
 	private static Shell shell;
 	private Label listLabel, customerLabel, sensorLabel, commentLabel, measLabel, measTaskLabel, sensorTaskLabel;
 	private static StyledText customerText, commentText, measurTaskText, sensorTaskText, sensorText, measureText;
@@ -60,17 +70,14 @@ public class MesanaConfigurator
 	private TaskCollection tCollect;
 	private static Measurement mObject;
 	private static AddressData aData;
-	private PropertyManager pManager;
-	private ConnectionManager cManager;
-	boolean configState = false;
-	boolean shellCheck;
+	public boolean configState = false;
+	public boolean shellCheck;
 
 	// Constructor
-	public MesanaConfigurator(String log, String pass)
-	{
-		pManager = new PropertyManager();
-		cManager = ConnectionManager.getInstance();
-		setOperatorData(log, pass);
+	public MesanaConfigurator()
+	{	//String log, String pass
+		//setOperatorData(log, pass);
+		
 		setGui();
 		if (ConnectionManager.getInstance().connectionState)
 		{
@@ -78,6 +85,7 @@ public class MesanaConfigurator
 			try
 			{
 				setData();
+				statusBar.setText("Sensor "+ConnectionManager.getInstance().currentSensor(0).getSensorPath()+" has been connected successfully!");
 			}
 			catch (IOException e)
 			{
@@ -85,11 +93,11 @@ public class MesanaConfigurator
 			}
 
 		}
-
-		setListeners();
+		setGuiListeners();
 		shell.pack();
-		setShell();
-
+			
+		//setShell();		
+		
 		while (!shell.isDisposed())
 		{
 			if (!display.readAndDispatch())
@@ -108,7 +116,17 @@ public class MesanaConfigurator
 			public void run()
 			{
 				if (e.getState() && !shell.isVisible() && e.getNumOfConnectedSensors() == 1)
-				{
+				{	
+					boolean check = false;
+					InputDialog opdialog = new InputDialog(shell, SWT.DIALOG_TRIM);
+					while(!check)
+					{	
+						String credential = opdialog.createDialogArea();
+						login = credential.substring(0, credential.indexOf(File.separator));
+						password = credential.substring(credential.indexOf(File.separator));
+						check = true;
+					}
+					
 					configButton.setEnabled(true);
 					try
 					{
@@ -119,9 +137,10 @@ public class MesanaConfigurator
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
+					
 					statusBar.setText("Sensor " + e.getSensorPath() + " has been connected Succussfully");
-					setShell();
+					//FIXME
+					//shell.open();
 				}
 				else if (e.getState() && shell.isVisible() && e.getNumOfConnectedSensors() == 1)
 				{
@@ -142,7 +161,7 @@ public class MesanaConfigurator
 				else if (!e.getState() && shell.isVisible() && e.getNumOfConnectedSensors() == 1)
 				{
 					configButton.setEnabled(true);
-					resetData();
+					resetGuiData();
 					try
 					{
 						setData();
@@ -163,7 +182,7 @@ public class MesanaConfigurator
 				}
 				else
 				{
-					resetData();
+					resetGuiData();
 					configButton.setEnabled(false);
 					statusBar.setText("Sensor " + e.getSensorPath()
 							+ " has been disconnected. Please connect sensor for configuration");
@@ -386,9 +405,8 @@ public class MesanaConfigurator
 		return returnCode;
 	}
 
-	public void setListeners()
+	public void setGuiListeners()
 	{
-
 		// register listener for customerList.
 		customerList.addSelectionListener(new SelectionAdapter()
 		{
@@ -409,9 +427,8 @@ public class MesanaConfigurator
 						e.printStackTrace();
 					}
 				}
-
 			}
-
+			
 		});
 
 		// register listener for combo selection
@@ -524,7 +541,7 @@ public class MesanaConfigurator
 		{
 			public void widgetSelected(SelectionEvent e)
 			{
-				resetData();
+				resetGuiData();
 				setCustomerData();
 				try
 				{
@@ -549,12 +566,17 @@ public class MesanaConfigurator
 				{
 					messageCode = batteryWarning();
 					if (messageCode == 32)
-						configurate();
+					{
+						configurateSensor();
+						configButton.setEnabled(false);
+					}
+						
 				}
 				else
 				{
-					configurate();
-					printAddress();
+					configurateSensor();
+					configButton.setEnabled(false);
+					
 				}
 			}
 		});
@@ -563,7 +585,7 @@ public class MesanaConfigurator
 		{
 			public void shellDeactivated(ShellEvent shellEvent)
 			{
-				shellCheck = false;			
+				shellCheck = false;
 				Timer timer = new Timer();
 				timer.schedule(new TimerTask()
 				{
@@ -594,244 +616,231 @@ public class MesanaConfigurator
 			public void shellActivated(ShellEvent arg1)
 			{
 				shellCheck = true;
-				
+
 			}
 		});
 
 	}
 
-	public class InputDialog extends Dialog
-	{
-		private Label userLabel, passwordLabel, msgLabel;
-		private Text userField, passwordField;
-		private String userString, passwordString;
-		private boolean status;
-
-		public InputDialog(Shell arg0, int arg1)
-		{
-
-			super(arg0, arg1);
-			// TODO Auto-generated constructor stub
-		}
-
-		protected boolean createDialogArea()
-		{
-			Shell shell = new Shell(getParent(), getStyle());
-			shell.setText(getText());
-			shell.setLayout(new GridLayout(1, false));
-			shell.setText("Operator credentials");
-
-			Group group = new Group(shell, SWT.SHADOW_OUT);
-			group.setLayout(new GridLayout());
-			group.setText("Operator Access");
-			group.setLayout(new GridLayout(2, false));
-
-			msgLabel = new Label(group, SWT.NONE);
-			msgLabel.setText("Please enter operator credentials!");
-			msgLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-
-			userLabel = new Label(group, SWT.RIGHT);
-			userLabel.setText("Login: ");
-			userField = new Text(group, SWT.SINGLE | SWT.BORDER);
-
-			passwordLabel = new Label(group, SWT.RIGHT);
-			passwordLabel.setText("Password: ");
-			passwordField = new Text(group, SWT.SINGLE | SWT.BORDER | SWT.PASSWORD);
-
-			GridData data = new GridData(SWT.FILL, SWT.CENTER, true, false);
-			userField.setLayoutData(data);
-			passwordField.setLayoutData(data);
-
-			Button okButton = new Button(group, SWT.PUSH);
-			okButton.setText("OK");
-			data = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
-			data.heightHint = 30;
-			data.widthHint = 60;
-			okButton.setLayoutData(data);
-
-			Button cancelButton = new Button(group, SWT.PUSH);
-			cancelButton.setText("Cancel");
-			data = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
-			data.heightHint = 30;
-			data.widthHint = 60;
-			cancelButton.setLayoutData(data);
-
-			okButton.addSelectionListener(new SelectionAdapter()
-			{
-				public void widgetSelected(SelectionEvent event)
-				{
-					userString = userField.getText();
-					passwordString = passwordField.getText();
-					if (userString.equals(login) && passwordString.equals(password))
-					{
-						shell.close();
-					}
-					else
-					{
-						userField.setText("");
-						passwordField.setText("");
-						msgLabel.setText("Login or password is wrong");
-					}
-				}
-			});
-
-			cancelButton.addSelectionListener(new SelectionAdapter()
-			{
-				public void widgetSelected(SelectionEvent event)
-				{
-					System.exit(0);
-					shell.close();
-				}
-			});
-
-			shell.setDefaultButton(okButton);
-
-			shell.pack();
-			shell.open();
-
-			Display display = getParent().getDisplay();
-			while (!shell.isDisposed())
-			{
-				if (!display.readAndDispatch())
-				{
-					display.sleep();
-				}
-			}
-			return status;
-		}
+	public void printLabel(String address, String linkId){
+		Printer.getInstance().addParameter("Address", address);
+		Printer.getInstance().addParameter("LinkId", linkId);
+		Printer.getInstance().print();
+		
 	}
-
 	// para1 is state for measurement update , para2 which method run
 	public void restApiUpdate(String para1, String para2)
-	{
-
-		String mId = measureText.getText().substring(4, 17);
-		if (para2.equals("comment"))
+	{	
+		String state = null;
+		for(SensorData element: sCollect.getList())
 		{
-			JSONObject jsonComment = new JSONObject();
-			jsonComment.put("comment", commentText.getText());
-			jsonComment.put("user", login);
-			jsonComment.put("sensorId", ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
-			String commentJSON = jsonComment.toJSONString();
-			String cURL = pManager.getProperty("REST_PATH") + "measurements/" + mId + "/comments";
-
-			try
+			if(ConnectionManager.getInstance().currentSensor(0).getSerialNumber() == element.getID())
 			{
-				mObject.postMethod(commentJSON, cURL);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
+				state = element.getState();
 			}
 		}
-		else if (para2.equals("electrode"))
-		{
-			JSONObject jsonElectrode = new JSONObject();
-			jsonElectrode.put("comment", para1);
-			jsonElectrode.put("user", login);
-			String electrodeJSON = jsonElectrode.toJSONString();
-			String eURL = pManager.getProperty("REST_PATH") + "measurements/" + mId + "/electrodes";
+		
 
-			try
+			String mId = measureText.getText().substring(4, 17);
+			if (para2.equals("comment"))
 			{
-				mObject.postMethod(electrodeJSON, eURL);
+				JSONObject jsonComment = new JSONObject();
+				jsonComment.put("comment", commentText.getText());
+				jsonComment.put("user", login);
+				jsonComment.put("sensorId", ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
+				String commentJSON = jsonComment.toJSONString();
+				String cURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/comments";
+
+				try
+				{
+					mObject.postMethod(commentJSON, cURL);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
-			catch (Exception e)
+			else if (para2.equals("electrode"))
 			{
-				e.printStackTrace();
+				JSONObject jsonElectrode = new JSONObject();
+				jsonElectrode.put("comment", para1);
+				jsonElectrode.put("user", login);
+				String electrodeJSON = jsonElectrode.toJSONString();
+				String eURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/electrodes";
+
+				try
+				{
+					mObject.postMethod(electrodeJSON, eURL);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
+			else if (para2.equals("firmware"))
+			{
+				JSONObject jsonFirmware = new JSONObject();
+				jsonFirmware.put("firmware", "1.32.4");
+				jsonFirmware.put("user", login);
+				String firmwareJson = jsonFirmware.toJSONString();
+				String fURL = PropertyManager.getInstance().getProperty("REST_PATH") + "sensors/" + para1;
+
+				try
+				{
+					mObject.putMethod(firmwareJson, fURL);
+				}
+				catch (Exception e)
+				{
+
+					e.printStackTrace();
+				}
+
+			}
+			else if (para2.equals("state1"))
+			{
+				JSONObject jsonState = new JSONObject();
+				jsonState.put("state", para1);
+				jsonState.put("user", login);
+				String stateJSON = jsonState.toJSONString();
+				String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/";
+
+				try
+				{
+					mObject.putMethod(stateJSON, sURL);
+				}
+				catch (Exception e)
+				{
+
+					e.printStackTrace();
+				}
+			}
+			else
+			{
+				JSONObject jsonState = new JSONObject();
+				jsonState.put("state", para1);
+				jsonState.put("user", login);
+				jsonState.put("sensorId", ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
+				String stateJSON = jsonState.toJSONString();
+				String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/";
+
+				try
+				{
+					mObject.putMethod(stateJSON, sURL);
+				}
+				catch (Exception e)
+				{
+
+					e.printStackTrace();
+				}
+			
 		}
-		else if (para2.equals("firmware"))
-		{
-			JSONObject jsonFirmware = new JSONObject();
-			jsonFirmware.put("firmware", "1.32.4");
-			jsonFirmware.put("user", login);
-			String firmwareJson = jsonFirmware.toJSONString();
-			String fURL = pManager.getProperty("REST_PATH") + "sensors/" + para1;
-
-			try
-			{
-				mObject.putMethod(firmwareJson, fURL);
-			}
-			catch (Exception e)
-			{
-
-				e.printStackTrace();
-			}
-
-		}
-		else if (para2.equals("state1"))
-		{
-			JSONObject jsonState = new JSONObject();
-			jsonState.put("state", para1);
-			jsonState.put("user", login);
-			String stateJSON = jsonState.toJSONString();
-			String sURL = pManager.getProperty("REST_PATH") + "measurements/" + mId + "/";
-
-			try
-			{
-				mObject.putMethod(stateJSON, sURL);
-			}
-			catch (Exception e)
-			{
-
-				e.printStackTrace();
-			}
-		}
-		else
-		{
-			JSONObject jsonState = new JSONObject();
-			jsonState.put("state", para1);
-			jsonState.put("user", login);
-			jsonState.put("sensorId", cManager.currentSensor(0).getSerialNumber());
-			String stateJSON = jsonState.toJSONString();
-			String sURL = pManager.getProperty("REST_PATH") + "measurements/" + mId + "/";
-
-			try
-			{
-				mObject.putMethod(stateJSON, sURL);
-			}
-			catch (Exception e)
-			{
-
-				e.printStackTrace();
-			}
-		}
+		
 	}
 
-	public void configurate()
+	private void configurateSensor()
 	{
 		// change state of measurement in RestApi
 		restApiUpdate("CONFIGURING", "state1");
 		checkFirmwareVersion();
 		// Write configuration file to sensor
-		// ConnectionManager.currentSensor(0).writeConfigFile();
-
+		 setAndWriteFiles();
+		
 		// push comment to RestApi
 		restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "comment");
 
 		// change state of measurement in RestApi
 		restApiUpdate("SENSOR_OUTBOX", "state2");
+		
 		// print address
+		int index2 = customerList.getSelectionIndex();
+		for(Measurement element:mCollect.getList())
+		{
+			if(mCollect.getList().get(index2).getLinkId() == element.getLinkId())
+			{	
+				aData = new AddressData(element.getID());				
+				printLabel(aData.getCustomerData(),element.getLinkId());
+			}
+				
+		}
+		
+		
+		//set configuration success message 
 		statusBar.setText("Sensor is configurated.Please connect another sensor.");
-
+		
 		// writing date to sensor for synchronization
 		// ConnectionManager.currentSensor(0).synchronize();
 
 		// resetData();
 		// remove sensor
 		// ConnectionManager.currentSensor(0).disconnect("remove");
+		
 	}
 
-	private void printAddress()
-	{
+	private void setAndWriteFiles()
+	{	
+		SensorConfiguration config = new SensorConfiguration();
+		String versionMajor = ConfigurationInterface_v1_0.VERSION.substring(0,ConfigurationInterface_v1_0.VERSION.indexOf('.'));
+		String versionMinor = ConfigurationInterface_v1_0.VERSION.substring(ConfigurationInterface_v1_0.VERSION.indexOf('.')+1);		
+		config.setConfigurationInterfaceVersion(versionMajor, versionMinor);
+		
+		StartModes startModes  = new StartModes();
+		//set startMode for sensorConfiguration
+		for(StartMode element: startModes.getStartModeList())
+		{
+			if(element.getName().equals("DEFINED_TIME"))
+			{
+				config.setStartMode(element);
+			}
+		}
+		
+		ConfigurationSets configSets = new ConfigurationSets();
+		//set configurationSet for sensorConfiguration
+		for(ConfigurationSet element:configSets.getConfigSetList())
+		{
+			if(element.getName().equals("mesana"))
+			{	
+				
+				config.setConfigurationSet(element);
+			}
+		}
+		
+		if(config.getStartMode().getName().equals("DEFINED_TIME"))
+		{
+						
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.DAY_OF_MONTH, 10);
+			calendar.set(Calendar.HOUR_OF_DAY,5);
+			calendar.set(Calendar.MINUTE, 11);
+			Date date = calendar.getTime();			
+			config.setRecordingStartTime(date);
+		}else{
+			config.setRecordingStartTime(null);
+		}
+		
+		config.setRecordingDuration(120000);
+		ConnectionManager.getInstance().currentSensor(0).setSensorConfiguration(config);
+		ConnectionManager.getInstance().currentSensor(0).writeConfigFile();
+		
+		//write Encrypted data to sensor
 		ConnectionManager.getInstance().currentSensor(0).writeEncryptedParameters();
+	 
+	 	int index = customerList.getSelectionIndex();
+		if (index >= 0 && index <= mCollect.getList().size())
+		{
+			String linkId = mCollect.getList().get(index).getLinkId();
+			config.addParameter("LinkId",linkId);
+		}	
+		//write custom data to additional file in sensor		
+		ConnectionManager.getInstance().currentSensor(0).writeCustomFile();
+		
+		
+
 	}
 
 	public void setTrayIcon()
 	{
 		// image for tray icon
-		Image image = new Image(display, "C:/Users/gasimov/Documents/Repo/MesanaSoftware/res/images/bulb.gif");
+		Image image = new Image(display, PropertyManager.getInstance().getProperty("ICON_FOLDER"));
 		final Tray tray = display.getSystemTray();
 
 		if (tray == null)
@@ -841,7 +850,7 @@ public class MesanaConfigurator
 		else
 		{
 			final TrayItem item = new TrayItem(tray, SWT.NONE);
-			item.setToolTipText("Mesana Configurator \r\n Version 1.0.1 \r\n Author Suleyman Gasimov");
+			item.setToolTipText(PropertyManager.getInstance().getProperty("SOFT_INFO"));
 
 			final Menu menu = new Menu(shell, SWT.POP_UP);
 
@@ -870,13 +879,21 @@ public class MesanaConfigurator
 				}
 			});
 
-			mi3.setText("About");
+			mi3.setText("Change Operator");
 			mi3.addListener(SWT.Selection, new Listener()
 			{
 				public void handleEvent(Event event)
-				{
-
-					System.out.println("selection " + event.widget);
+				{	
+					login ="";
+					password="";
+					InputDialog opDialog = new InputDialog(shell, SWT.DIALOG_TRIM);
+					shell.setEnabled(!shell.getEnabled());
+			        shell.setCursor(new Cursor(display, SWT.CURSOR_WAIT));      
+					String credential = opDialog.createDialogArea();
+					login = credential.substring(0, credential.indexOf(File.separator));
+					password = credential.substring(credential.indexOf(File.separator));
+					shell.setEnabled(true);
+			        shell.setCursor(new Cursor(display, SWT.CURSOR_ARROW));      
 				}
 			});
 
@@ -903,9 +920,9 @@ public class MesanaConfigurator
 	}
 
 	public static void setCustomerData()
-	{
-		mCollect = new MeasurementCollection();
-		String sURL = "http://chili/mk/backend.mesana.com/api/v4/measurements?state=WAIT_FOR_CONFIG";
+	{	
+		String sURL =PropertyManager.getInstance().getProperty("REST_PATH")+"measurements?state=WAIT_FOR_CONFIG";
+		mCollect = new MeasurementCollection();		
 		mCollect.setList(sURL);
 
 		for (int i = 0; i < mCollect.getList().size(); i++)
@@ -933,17 +950,19 @@ public class MesanaConfigurator
 	}
 
 	public static void setSensorData() throws IOException
-	{
+	{	
+		String sURL = PropertyManager.getInstance().getProperty("REST_PATH")+"sensors??state=STOCK";
 		sCollect = new SensorCollection();
-		sCollect.setList();
+		sCollect.setList(sURL);
 		for (SensorData sData : sCollect.getList())
 		{
 			if (sData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 			{
 				sensorText.setText(sData.getSensorData() + "\r\n" + "Device: "
 						+ (ConnectionManager.getInstance().currentSensor(0).getDeviceName() + "\r\n" + "Manufacture: "
-								+ ConnectionManager.getInstance().currentSensor(0).getManufacturerName() + "\r\n" + "FlashDate: "
-								+ ConnectionManager.getInstance().currentSensor(0).getFlashDate() + "\r\n" + "Battery: "
+								+ ConnectionManager.getInstance().currentSensor(0).getManufacturerName() + "\r\n"
+								+ "FlashDate: " + ConnectionManager.getInstance().currentSensor(0).getFlashDate()
+								+ "\r\n" + "Battery: "
 								+ ConnectionManager.getInstance().currentSensor(0).getBatteryVoltage()));
 				break;
 			}
@@ -978,13 +997,13 @@ public class MesanaConfigurator
 
 	}
 
-	public static void setShell()
+	public void openShell()
 	{
 		if (ConnectionManager.getInstance().connectionState)
 			shell.open();
 	}
 
-	public static void resetData()
+	public static void resetGuiData()
 	{
 		priorityCombo.select(0);
 		electrodeCombo.select(0);
@@ -1011,7 +1030,8 @@ public class MesanaConfigurator
 		{
 			if (sensorData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 			{
-				if (!ConnectionManager.getInstance().currentSensor(0).getFirwareVersion().equals(sensorData.getFirmware()))
+				if (!ConnectionManager.getInstance().currentSensor(0).getFirwareVersion()
+						.equals(sensorData.getFirmware()))
 				{
 					restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "firmware");
 				}
@@ -1022,10 +1042,6 @@ public class MesanaConfigurator
 
 	}
 
-	public void setOperatorData(String login, String password)
-	{
-		this.login = login;
-		this.password = password;
-	}
+	
 
 }

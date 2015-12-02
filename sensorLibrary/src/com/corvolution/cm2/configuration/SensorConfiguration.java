@@ -15,21 +15,16 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class SensorConfiguration implements ConfigurationInterface
+public class SensorConfiguration implements ConfigurationInterface_v1_0
 {
 	private HashMap<String, String> additionalParameters;
 	private HashMap<String, byte[]> encryptedParameters;
 	private Date recordingStartTime;
 	private int recordingDuration;
-	private int durationMinutes;
-	
-
 	private ConfigurationSet configurationSet;
-	private ConfigurationSets configurationSets;
-	private byte startMode;
-	public final static byte START_MODE_IMMEDIATELY = 1;
-	public final static byte START_MODE_AFTER_ATTACHING = 2;
-	public final static byte START_MODE_DEFINED_TIME = 4;
+	private StartMode startMode;
+	private String configInterfaceVersionMajor;
+	private String configInterfaceVersionMinor;
 
 	public SensorConfiguration()
 	{
@@ -37,20 +32,32 @@ public class SensorConfiguration implements ConfigurationInterface
 		encryptedParameters = new HashMap<>();
 
 	}
+
+	public void setConfigurationInterfaceVersion(String major, String minor)
+	{
+		this.configInterfaceVersionMajor = major;
+		this.configInterfaceVersionMinor = minor;
+	}
+
+	public byte getConfigurationInterfaceVersionMajor()
+	{
+		return  Byte.parseByte(configInterfaceVersionMajor); 
+	}
 	
-	public int getDurationMinutes()
+	public byte getConfigurationInterfaceVersionMinor()
 	{
-		return durationMinutes;
+		return  Byte.parseByte(configInterfaceVersionMinor); 
+	}
+	
+	public void setStartMode(StartMode startMode)
+	{
+		this.startMode = startMode;
+
 	}
 
-	public byte getStartMode()
+	public StartMode getStartMode()
 	{
-		return startMode;
-	}
-
-	public void setStartMode()
-	{
-		this.startMode = SensorConfiguration.START_MODE_AFTER_ATTACHING;
+		return this.startMode;
 	}
 
 	public ConfigurationSet getConfigurationSet()
@@ -205,6 +212,7 @@ public class SensorConfiguration implements ConfigurationInterface
 		// - valid recordingStartTime
 		// - valid duration
 		// - valid ConfigSet
+
 	}
 
 }

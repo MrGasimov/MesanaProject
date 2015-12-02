@@ -26,7 +26,7 @@ public class AddressData extends RestApiConnector
 	private String street = "";
 	private String zip = "";
 	private String country = "";
-	PropertyManager pManager = new PropertyManager();
+	
 
 	public List<AddressData> getList()
 	{
@@ -48,7 +48,7 @@ public class AddressData extends RestApiConnector
 		{
 			salutation = "Frau";
 		}
-		if (country.equalsIgnoreCase(pManager.getProperty(Constants.HOME_COUNTRY)))
+		if (country.equalsIgnoreCase(PropertyManager.getInstance().getProperty(Constants.HOME_COUNTRY)))
 		{
 			country = "";
 			city = city.toUpperCase();
@@ -79,7 +79,7 @@ public class AddressData extends RestApiConnector
 
 	public void setList(String mID)
 	{
-		String addressUrl = pManager.getProperty("REST_PATH") + "measurements/" + mID + "/addresses?type=sensor";
+		String addressUrl = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mID + "/addresses?type=sensor";
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create();
 

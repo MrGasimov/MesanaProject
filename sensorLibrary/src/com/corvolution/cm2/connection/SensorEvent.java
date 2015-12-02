@@ -5,9 +5,6 @@ import java.util.EventObject;
 public class SensorEvent extends EventObject
 {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private boolean connectionState;
 	private String path;

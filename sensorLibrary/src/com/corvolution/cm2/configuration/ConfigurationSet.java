@@ -1,7 +1,5 @@
 package com.corvolution.cm2.configuration;
 
-
-
 public class ConfigurationSet extends AbstractConfigurationElement
 {
 

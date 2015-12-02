@@ -40,7 +40,7 @@ public abstract class AbstractConfigurationElement
 
 	public boolean isCompatibleWithSensor(String configurationVersion)
 	{	
-		//FIXME
+		
 		boolean compatible = false;
 		int configVerMajor = Integer.parseInt(configurationVersion.substring(0, configurationVersion.indexOf('.')));
 		int configVerMinor = Integer.parseInt(configurationVersion.substring(configurationVersion.indexOf('.')+1));

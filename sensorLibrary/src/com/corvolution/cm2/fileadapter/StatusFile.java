@@ -13,7 +13,6 @@ public class StatusFile extends TextFileAdapter
 	public StatusFile(String sensorPath)
 	{
 		super(sensorPath + ":" + File.separator + Constants.CM2_FEEDBACK_FILE);
-		
 	}
 
 }

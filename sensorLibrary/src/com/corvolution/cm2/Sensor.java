@@ -1,25 +1,18 @@
 package com.corvolution.cm2;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.zip.CRC32;
+import java.util.Date;
+import java.util.HashMap;
+
 import org.apache.commons.io.FileUtils;
 
 import com.corvolution.cm2.configuration.SensorConfiguration;
@@ -28,9 +21,6 @@ import com.corvolution.cm2.fileadapter.CustomFile;
 import com.corvolution.cm2.fileadapter.InfoFile;
 import com.corvolution.cm2.fileadapter.StatusFile;
 import com.corvolution.cm2.fileadapter.TimeSyncFile;
-
-import java.util.Date;
-import java.util.HashMap;
 
 public class Sensor
 {
@@ -186,7 +176,6 @@ public class Sensor
 				}
 				catch (IOException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -244,7 +233,6 @@ public class Sensor
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}
@@ -267,6 +255,24 @@ public class Sensor
 		long size = FileUtils.sizeOf(new File(this.sensorPath + ":" + File.separator + Constants.MEASUREMENT_FOLDER)); 
 		return size;
 	}
+	
+	public boolean checkConfiguration()
+	{	
+		//TODO
+		boolean compatible=false;
+		//TODO implement this method
+		// - start mode checking
+		if(writeSensorConfiguration.getStartMode().getCompatibleConfigurationVersion() == configurationInterfaceVersion)
+		{
+			
+		}
+		return compatible;	
+		// - valid recordingStartTime
+		// - valid duration
+		// - valid ConfigSet
+
+	}
+	
 
 	// method for time synchronizing
 	public void synchronize()
@@ -274,7 +280,7 @@ public class Sensor
 		try
 		{
 			writeTimeSyncFile();
-			devcon("restart");
+			devcon(Constants.RESTART_COMMAND);
 		}
 		catch (IOException e)
 		{
@@ -289,7 +295,7 @@ public class Sensor
 		{
 			this.writeConfigFile();
 			this.synchronize();
-			this.devcon("remove");
+			this.devcon(Constants.REMOVE_COMMAND);
 		}
 		catch (IOException e)
 		{
@@ -303,7 +309,6 @@ public class Sensor
 		// remove Sensor
 		String command = "cd \"C:/Users/" + System.getProperty("user.name") + "/Desktop\" && devcon.exe "
 				+ devconCommand + " *" + VID + "*";
-		System.out.println(command);
 		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
 		builder.redirectErrorStream(true);
 		Process p = builder.start();

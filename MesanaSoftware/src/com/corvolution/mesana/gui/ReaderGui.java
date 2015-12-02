@@ -1,4 +1,5 @@
 package com.corvolution.mesana.gui;
+
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.swt.SWT;
@@ -22,17 +23,20 @@ import org.json.simple.JSONObject;
 
 import com.corvolution.cm2.Sensor;
 import com.corvolution.cm2.connection.ConnectionManager;
-import com.corvolution.cm2.connection.SensorEvent;
+import com.corvolution.cm2.connection.DisconnectionEvent;
+import com.corvolution.cm2.connection.ConnectionEvent;
+import com.corvolution.mesana.configurator.Constants;
 import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.data.Measurement;
 import com.corvolution.mesana.data.MeasurementCollection;
 import com.corvolution.mesana.rest.RestApiConnector;
 
-public class ReaderGui{
-	int destSize, copySize,size;
+public class ReaderGui
+{
+	int destSize, copySize, size;
 	String readOutDest;
-	private static String login=null;
-	private static String password=null;
+	private static String login = null;
+	private static String password = null;
 	private Display display;
 	private static Shell shell;
 	private Button button;
@@ -40,16 +44,199 @@ public class ReaderGui{
 	private GridData gridData;
 	private static Text text;
 	MeasurementCollection mCollect;
-	private String measurementName;
+	private String measurementId;
 	RestApiConnector restApi;
-	
-	public ReaderGui(){
+
+	public ReaderGui()
+	{
 		restApi = new RestApiConnector();
 		mCollect = new MeasurementCollection();
-		String url = PropertyManager.getInstance().getProperty("REST_PATH")+"/measurements?state=ANALYZING";
-		mCollect.setList(url);		
-				
-		display = new Display();		
+		String url = PropertyManager.getInstance().getProperty("REST_PATH") + "/measurements?state="
+				+ Constants.MEASUREMENT_STATE_MEASURING;
+		mCollect.setList(url);
+
+		setGui();
+
+		setTrayIcon();
+		if (!ConnectionManager.getInstance().getConnectedSensorsList().isEmpty())
+		{
+			text.setText(ConnectionManager.getInstance().getNumberOfConnectedSensors() + " sensor has been connected");
+		}
+		else
+		{
+			text.setText("Please connect Sensor!");
+		}
+
+		destSize = (int) FileUtils.sizeOf(new File("Z:/measurementData/"));
+		readOutDest = PropertyManager.getInstance().getProperty("READOUT_DEST");
+
+		button.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected(SelectionEvent e)
+			{
+				text.setText("Reading data from sensors...");
+				size = (int) ConnectionManager.getInstance().measurementDataSize("all");
+				if (!ConnectionManager.getInstance().getConnectedSensorsList().isEmpty())
+				{
+					for (Sensor device : ConnectionManager.getInstance().getConnectedSensorsList())
+					{
+						for (Measurement element : mCollect.getList())
+						{
+							if (element.getLinkId().equals(device.getReadConfiguration().getParameter("LinkId")))
+							{
+								measurementId = element.getID();
+								restApiUpdate(device.getSerialNumber(), measurementId);
+							}
+							System.out.println("second for runned");
+						}
+						System.out.println("writing data");
+						device.readMeasurement(readOutDest + measurementId);
+						copySize = (int) FileUtils.sizeOf(new File("Z:/measurementData/"));
+						bar.setSelection(bar.getSelection()
+								+ bar.getMaximum() / ConnectionManager.getInstance().getNumberOfConnectedSensors());
+						System.out.println("data has been written");
+					}
+					System.out.println("quitted aasjdhasjdh");
+				}
+				text.setText("All sensors were read out!");
+				text.setFocus();
+			}
+		});
+
+		shell.pack();
+		operatorDialog();
+
+		while (!shell.isDisposed())
+		{
+			if (!display.readAndDispatch())
+				display.sleep();
+		}
+		display.dispose();
+	}
+
+	public static void connection(ConnectionEvent cEvent)
+	{
+		Display.getDefault().asyncExec(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (cEvent.getState())
+				{
+					text.setText(cEvent.getNumOfConnectedSensors() + " sensor connected");
+					System.out.println("sensor " + cEvent.getSensorPath() + " connected");
+				}
+
+			}
+
+		});
+	}
+
+	public static void disconnection(DisconnectionEvent dEvent)
+	{
+		Display.getDefault().asyncExec(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (!dEvent.getState() && dEvent.getNumOfConnectedSensors() == 0)
+				{
+					text.setText("All sensors have been disconnected");
+				}
+				else if (!dEvent.getState())
+				{
+					text.setText(dEvent.getNumOfConnectedSensors() + " sensors connected");
+				}
+			}
+
+		});
+
+	}
+
+	public void restApiUpdate(String deviceNumber, String mId)
+	{
+		JSONObject json = new JSONObject();
+		json.put("state", Constants.MEASUREMENT_STATE_SENSOR_READOUT);
+		json.put("user", login);
+		json.put("sensorId", deviceNumber);
+		String jsonString = json.toJSONString();
+		String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/";
+		try
+		{
+			restApi.putMethod(jsonString, sURL);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void setTrayIcon()
+	{
+		// image for tray icon
+		Image image = new Image(display, PropertyManager.getInstance().getProperty("ICON_FOLDER"));
+		final Tray tray = display.getSystemTray();
+
+		if (tray == null)
+		{
+			System.out.println("The system tray is not available");
+		}
+		else
+		{
+			final TrayItem item = new TrayItem(tray, SWT.NONE);
+			item.setToolTipText(PropertyManager.getInstance().getProperty("SOFT_INFO"));
+
+			final Menu menu = new Menu(shell, SWT.POP_UP);
+
+			MenuItem mi1 = new MenuItem(menu, SWT.PUSH);
+			MenuItem mi2 = new MenuItem(menu, SWT.PUSH);
+			MenuItem mi4 = new MenuItem(menu, SWT.PUSH);
+
+			mi1.setText("Show");
+			mi1.addListener(SWT.Selection, new Listener()
+			{
+				public void handleEvent(Event event)
+				{
+					shell.setVisible(true);
+					System.out.println("selection " + event.widget);
+				}
+			});
+
+			mi2.setText("Hide");
+			mi2.addListener(SWT.Selection, new Listener()
+			{
+				public void handleEvent(Event event)
+				{
+					shell.setVisible(false);
+					System.out.println("selection " + event.widget);
+				}
+			});
+
+			mi4.setText("Close");
+			mi4.addListener(SWT.Selection, new Listener()
+			{
+				public void handleEvent(Event event)
+				{
+					System.exit(0);
+					System.out.println("selection " + event.widget);
+				}
+			});
+
+			item.addListener(SWT.MenuDetect, new Listener()
+			{
+				public void handleEvent(Event event)
+				{
+					menu.setVisible(true);
+				}
+			});
+
+			item.setImage(image);
+		}
+	}
+
+	public void setGui()
+	{
+		display = new Display();
 		shell = new Shell(display, SWT.CLOSE | SWT.TITLE | SWT.MIN);
 		shell.setText("Mesana CM200 Data Reader");
 		GridLayout layout = new GridLayout(1, false);
@@ -57,17 +244,18 @@ public class ReaderGui{
 		text = new Text(shell, SWT.READ_ONLY | SWT.MULTI | SWT.BORDER);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
-		gridData.verticalAlignment = GridData.FILL;		
+		gridData.verticalAlignment = GridData.FILL;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = false;
-		gridData.heightHint=50;
+		gridData.heightHint = 50;
 		gridData.widthHint = 100;
 		gridData.horizontalSpan = 1;
 		gridData.verticalSpan = 1;
 		text.setLayoutData(gridData);
-		
+
 		bar = new ProgressBar(shell, SWT.SMOOTH);
-		button = new Button(shell,SWT.PUSH);
+		bar.setMaximum(100);
+		button = new Button(shell, SWT.PUSH);
 		button.setText("Readout");
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.CENTER;
@@ -79,157 +267,20 @@ public class ReaderGui{
 		gridData.horizontalSpan = 1;
 		gridData.verticalSpan = 1;
 		button.setLayoutData(gridData);
-		
-		setTrayIcon();
-		text.setText("Please connect Sensor!");
-		destSize=(int)FileUtils.sizeOf(new File("Z:/measurementData/"));
-	
-		
-		readOutDest = PropertyManager.getInstance().getProperty("READOUT_DEST");
-		button.addSelectionListener(new SelectionAdapter(){
-			public void widgetSelected(SelectionEvent e){
-				text.setText("Reading data from sensors...");
-				if(!ConnectionManager.getInstance().getConnectedSensorsList().isEmpty()){
-					for(Sensor device:ConnectionManager.getInstance().getConnectedSensorsList()){
-						for(Measurement element :mCollect.getList()){						
-							if(element.getLinkId().equals(device.getReadConfiguration().getParameter("LinkId"))){
-								measurementName = element.getID();
-								restApiUpdate(element.getLinkId(),measurementName);
-							}
-							
-						}
-						device.readMeasurement(readOutDest+measurementName);		
-						copySize =(int)FileUtils.sizeOf(new File("Z:/measurementData/"));
-						size = (int) ConnectionManager.getInstance().measurementDataSize("all");
-						bar.setSelection((((copySize-destSize)/size)*100));										
-						if(bar.getMaximum()==size)						
-							break;									
-					}
-				}								
-				text.setText("All sensors were read out!");
-				text.setFocus();				
-			}
-		});
-		
-		shell.pack();
-		//shell.open();			
-				
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
-		}
-		display.dispose();
+
 	}
-	
-	public static void update(SensorEvent e)
+
+	public static void operatorDialog()
 	{
-		Display.getDefault().asyncExec(new Runnable(){					
-			@Override
-			public void run() {
-				String str="";
-				if(e.getState() && e.getNumOfConnectedSensors()==1){
-					operatorDialog();
-					str = "Sensor "+e.getSensorPath()+" has been connected";
-					text.setText(str);
-				}else if(e.getState()&&e.getNumOfConnectedSensors()>=2){
-					
-					for(int i=0; i < e.getNumOfConnectedSensors()-1;i++)
-					text.setText(text.getText()+"\r\n"+"Sensor "+e.getSensorPath()+" has been connected");				
-				}else if(e.getState()&&e.getNumOfConnectedSensors()==0){
-					text.setText("All Sensors has been disconnected");
-					bar.setSelection(0);
-				}
-				
-			}
-			
-		});
-	}
-	
-	public void restApiUpdate(String deviceNumber, String mId){
-		JSONObject json = new JSONObject();
-		json.put("state","SENSOR_READOUT");
-		json.put("user", login);
-		json.put("sensorId",deviceNumber);
-		String jsonString = json.toJSONString();		
-		String sURL =PropertyManager.getInstance().getProperty("REST_PATH")+"measurements/"+mId+"/";			
-		try {
-			restApi.putMethod(jsonString,sURL);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-	}
-	
-	public void setTrayIcon() {
-		// image for tray icon
-		Image image = new Image(display, "C:/Users/gasimov/Documents/Repo/MesanaSoftware/res/images/bulb.gif");
-		final Tray tray = display.getSystemTray();
-
-		if (tray == null) {
-			System.out.println("The system tray is not available");
-		} else {
-			final TrayItem item = new TrayItem(tray, SWT.NONE);
-			item.setToolTipText("Mesana Sensor Reader \r\n Version 1.0.1 \r\n Author Suleyman Gasimov");
-			
-
-			final Menu menu = new Menu(shell, SWT.POP_UP);
-
-			MenuItem mi1 = new MenuItem(menu, SWT.PUSH);
-			MenuItem mi2 = new MenuItem(menu, SWT.PUSH);
-			MenuItem mi4 = new MenuItem(menu, SWT.PUSH);
-			
-			mi1.setText("Show");
-			mi1.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event event) {
-					shell.setVisible(true);
-					System.out.println("selection " + event.widget);
-				}
-			});
-
-			mi2.setText("Hide");
-			mi2.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event event) {
-					shell.setVisible(false);
-					System.out.println("selection " + event.widget);
-				}
-			});
-
-						
-			mi4.setText("Close");
-			mi4.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event event) {
-					System.exit(0);
-					System.out.println("selection " + event.widget);
-				}
-			});
-
-			
-
-			item.addListener(SWT.MenuDetect, new Listener() {
-				public void handleEvent(Event event) {
-					menu.setVisible(true);
-				}
-			});
-
-			item.setImage(image);
-		}
-	}
-	
-	public static void operatorDialog(){
 		boolean check = false;
 		InputDialog opdialog = new InputDialog(shell, SWT.DIALOG_TRIM);
-		while(!check)
-		{	
+		while (!check)
+		{
 			String credential = opdialog.createDialogArea();
 			login = credential.substring(0, credential.indexOf(File.separator));
 			password = credential.substring(credential.indexOf(File.separator));
 			check = true;
 		}
 	}
-	
-	
-	
-	
-	
 
 }

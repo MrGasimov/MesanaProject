@@ -5,26 +5,20 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 import com.corvolution.cm2.Constants;
+import com.corvolution.cm2.Logger;
 
 public class CustomFile extends TextFileAdapter
 {
 	public static final String LINK_ID = "LinkId";
 
-
-	/**
-	 * Connects a CM2 info file for reading the info properties defined as static final constants.
-	 * @param sensorPath Path to sensor
-	 */
-	
 	public CustomFile(String sensorPath)
 	{
 		super(sensorPath + ":" + File.separator + Constants.CM2_CUSTOM_FILE);
-		
 	}
-	
-	public void writeCustomData(String data, String sensorPath){
+
+	public void writeCustomData(String data, String sensorPath)
+	{
 		File destination = new File(sensorPath + ":" + File.separator + Constants.CM2_CUSTOM_FILE);
-		
 		try
 		{
 			PrintWriter out = new PrintWriter(destination);
@@ -32,11 +26,11 @@ public class CustomFile extends TextFileAdapter
 			out.close();
 		}
 		catch (FileNotFoundException e)
-		{
-			System.out.println("The requesting file was not found!");
+		{	
+			Logger.getInstance().printLog("The requesting file was not found!");
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.corvolution.cm2.fileadapter;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -10,7 +8,6 @@ public class TimeSyncFile extends BinaryFileAdapter
 	public TimeSyncFile(String path)
 	{
 		super(path);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void writeBinaryFile(){
@@ -25,7 +22,6 @@ public class TimeSyncFile extends BinaryFileAdapter
 		byte minute = (byte) cal.get(Calendar.MINUTE);
 		byte second = (byte) cal.get(Calendar.SECOND);
 		byte[] buffer = {year, month, day, hour, minute, second};
-		
 		super.writeBinaryFile(buffer);
 		
 	}

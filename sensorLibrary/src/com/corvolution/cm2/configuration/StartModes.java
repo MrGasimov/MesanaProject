@@ -1,5 +1,4 @@
 package com.corvolution.cm2.configuration;
-
 import java.util.ArrayList;
 
 public class StartModes

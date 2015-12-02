@@ -28,11 +28,9 @@ public class BinaryFileAdapter
 			
 		}catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -50,8 +48,6 @@ public class BinaryFileAdapter
 			while ((nRead = bufferedOutStream.read(buffer)) != -1)
 			{
 				total += nRead;
-				System.out.println(nRead);
-				System.out.println(total);
 			}
 			myCRC.update(buffer, 0, 31);
 			inputStream.close();

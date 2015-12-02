@@ -7,4 +7,6 @@ public class Constants
 	public static final String HOME_COUNTRY = "HOME_COUNTRY";
 	public static final String LABEL_WRITER_BIN = "LABEL_WRITER_BIN";
 	public static final String LABEL_TEMPLATE = "LABEL_TEMPLATE";
+	public static final String MEASUREMENT_STATE_SENSOR_READOUT ="SENSOR_READOUT";
+	public static final String MEASUREMENT_STATE_MEASURING ="MEASURING";
 }

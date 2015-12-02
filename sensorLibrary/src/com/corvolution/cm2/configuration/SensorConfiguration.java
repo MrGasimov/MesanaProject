@@ -5,7 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import javax.crypto.BadPaddingException;
@@ -30,7 +29,6 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 	{
 		additionalParameters = new HashMap<>();
 		encryptedParameters = new HashMap<>();
-
 	}
 
 	public void setConfigurationInterfaceVersion(String major, String minor)
@@ -173,7 +171,6 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		}
 		catch (InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -187,7 +184,6 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		}
 		catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return para;
@@ -205,14 +201,6 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		return encryptedParameters;
 	}
 
-	private void checkConfiguration()
-	{
-		// Checks
-		// - start mode
-		// - valid recordingStartTime
-		// - valid duration
-		// - valid ConfigSet
-
-	}
+	
 
 }

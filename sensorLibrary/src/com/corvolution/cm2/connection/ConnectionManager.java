@@ -12,12 +12,12 @@ public final class ConnectionManager
 {
 	public static final int CONNECTION = 100;
 	public static final int DISCONNECTION = 101;
-	
 	private  Vector<SensorListener> connectionListeners;
 	private  Vector<SensorListener> disconnectionListeners;
 	public  boolean connectionState;
 	private  String sensorPath;
-	private SensorEvent sensorEvent;
+	private ConnectionEvent connectionEvent;
+	private DisconnectionEvent disconnectionEvent;
 	public  int nConnectedSensors;
 	private  List<Sensor> sensorList = new CopyOnWriteArrayList<>();
 	private static ConnectionManager instance = null;
@@ -39,7 +39,7 @@ public final class ConnectionManager
 	/** Register a listener for Events */
 	synchronized public void addSensorListener(SensorListener listener, int option)
 	{	
-		if(option == 100)
+		if(option == ConnectionManager.CONNECTION)
 		{
 			if (connectionListeners == null)
 			{
@@ -47,7 +47,7 @@ public final class ConnectionManager
 				
 			}
 			connectionListeners.addElement(listener);
-		}else if(option == 101) 
+		}else if(option == ConnectionManager.DISCONNECTION) 
 		{
 			if (disconnectionListeners == null)
 			{
@@ -63,7 +63,7 @@ public final class ConnectionManager
 	/** Remove a listener for Events */
 	synchronized public void removeSensorListener(SensorListener listener, int option)
 	{	
-		if(option == 100)
+		if(option == ConnectionManager.CONNECTION)
 		{
 			if (connectionListeners == null)
 			{
@@ -71,7 +71,7 @@ public final class ConnectionManager
 				
 			}
 			connectionListeners.removeElement(listener);
-		}else if(option == 101) 
+		}else if(option == ConnectionManager.DISCONNECTION) 
 		{
 			if (disconnectionListeners == null)
 			{
@@ -85,13 +85,13 @@ public final class ConnectionManager
 
 	private synchronized void fireConnectionEvent()
 	{
-		sensorEvent = new SensorEvent(this, connectionState, sensorPath, nConnectedSensors);
+		connectionEvent = new ConnectionEvent(this, connectionState, sensorPath, nConnectedSensors);
 		if (connectionListeners != null)
 		{
 			Iterator<SensorListener> listeners = connectionListeners.iterator();
 			while (listeners.hasNext())
 			{
-				listeners.next().sensorConnection(sensorEvent);
+				listeners.next().sensorConnection(connectionEvent);
 
 			}
 		}
@@ -100,13 +100,13 @@ public final class ConnectionManager
 	
 	private synchronized void fireDisconnectionEvent()
 	{
-		sensorEvent = new SensorEvent(this, connectionState, sensorPath, nConnectedSensors);
+		disconnectionEvent = new DisconnectionEvent(this, connectionState, sensorPath, nConnectedSensors);
 		if (disconnectionListeners != null)
 		{
 			Iterator<SensorListener> listeners = disconnectionListeners.iterator();
 			while (listeners.hasNext())
 			{
-				listeners.next().sensorConnection(sensorEvent);
+				listeners.next().sensorDisconnection(disconnectionEvent);
 
 			}
 		}

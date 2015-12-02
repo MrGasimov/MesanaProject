@@ -1,13 +1,12 @@
 package com.corvolution.cm2.connection;
 
 import java.io.File;
-import java.io.IOException;
-
 import javax.swing.filechooser.FileSystemView;
+import com.corvolution.cm2.Constants;
+import com.corvolution.cm2.Logger;
 
 public class SensorNotifier implements Runnable
 {
-
 	public void run()
 	{
 		sensorListener();
@@ -29,11 +28,9 @@ public class SensorNotifier implements Runnable
 			// isDrive[i] = sensors[i].canRead();
 			isDrive[i] = false;
 		}
-		// TODO Create Logging Class with output like "2015-11-23 23:00:43 INFO Blah..."
-		// TODO Create Logging Class with output like "2015-11-23 23:00:43 WARNING Blah..."
-		System.out.println("Find Sensor: waiting for devices...");
+		Logger.getInstance().printLog("Find Sensor: waiting for devices...");
+		
 		// loop indefinitely
-
 		while (true)
 		{
 			// check each drive
@@ -48,7 +45,7 @@ public class SensorNotifier implements Runnable
 						FileSystemView view = FileSystemView.getFileSystemView();
 						File dir = new File(letters[i] + ":/");
 						String name = view.getSystemDisplayName(dir);// .substring(0, 5);
-						if (name.equals("STICK" + " (" + letters[i] + ":)")) // TODO use constant
+						if (name.equals(Constants.SENSOR_NAME+ " (" + letters[i] + ":)")) 
 						{
 							nConnectedSensors++;
 							ConnectionManager.getInstance().setConnected(true);
@@ -73,12 +70,11 @@ public class SensorNotifier implements Runnable
 			// wait before looping
 			try
 			{
-				// sleep time make constant
-				Thread.sleep(100);
+				Thread.sleep(Constants.SLEEP_TIME);
 			}
 			catch (InterruptedException e)
 			{
-				/* do nothing */ }
+			}
 
 		}
 	}

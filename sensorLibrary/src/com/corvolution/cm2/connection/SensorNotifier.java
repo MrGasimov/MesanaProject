@@ -16,9 +16,8 @@ public class SensorNotifier implements Runnable
 	public void sensorListener()
 	{
 		int nConnectedSensors = 0;
-		// String letters = "ABCDEFGH";
-		String[] letters = new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P",
-				"Y"};
+		String[] letters = new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P", "Q",
+				"R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 		File[] sensors = new File[letters.length];
 		boolean[] isDrive = new boolean[letters.length];
 
@@ -27,10 +26,10 @@ public class SensorNotifier implements Runnable
 		{
 			sensors[i] = new File(letters[i] + ":/");
 
-//			isDrive[i] = sensors[i].canRead();
+			// isDrive[i] = sensors[i].canRead();
 			isDrive[i] = false;
 		}
-		// TODO Create Logging Class with output like "2015-11-23 23:00:43 INFO    Blah..."
+		// TODO Create Logging Class with output like "2015-11-23 23:00:43 INFO Blah..."
 		// TODO Create Logging Class with output like "2015-11-23 23:00:43 WARNING Blah..."
 		System.out.println("Find Sensor: waiting for devices...");
 		// loop indefinitely
@@ -54,7 +53,7 @@ public class SensorNotifier implements Runnable
 							nConnectedSensors++;
 							ConnectionManager.getInstance().setConnected(true);
 							ConnectionManager.getInstance().setNumberOfConnectedSensors(nConnectedSensors);
-							ConnectionManager.getInstance().addSensorToList(letters[i]);							
+							ConnectionManager.getInstance().addSensorToList(letters[i]);
 						}
 					}
 					else

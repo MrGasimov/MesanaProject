@@ -165,7 +165,31 @@ public class MesanaConfigurator
 					statusBar.setText("Sensor " + e.getSensorPath() + " has been connected Succussfully");
 					configButton.setEnabled(true);
 				}
-				else if (!e.getState() && shell.isVisible() && e.getNumOfConnectedSensors() == 1)
+				else if (e.getNumOfConnectedSensors() >= 2)
+				{
+					configButton.setEnabled(false);
+					statusBar.setText("Multiple Sensors connected.Please remove all except one sensor");
+				}
+				
+
+			}
+
+		});
+	}
+
+	public static void disconnection(DisconnectionEvent e)
+	{
+		Display.getDefault().asyncExec(new Runnable(){
+
+			@Override
+			public void run()
+			{
+				if(!e.getState() && e.getNumOfConnectedSensors()==0)
+				{
+					resetGuiData();
+					configButton.setEnabled(false);
+					statusBar.setText("Sensor " + e.getSensorPath() + " has been disconnected. Please connect sensor for configuration");
+				} else if (!e.getState() && shell.isVisible() && e.getNumOfConnectedSensors() == 1)
 				{
 					configButton.setEnabled(true);
 					resetGuiData();
@@ -181,28 +205,14 @@ public class MesanaConfigurator
 					}
 					statusBar.setText("Only Sensor " + ConnectionManager.getInstance().currentSensor(0).getSensorPath()
 							+ " has been connected");
-				}
-				else if (e.getNumOfConnectedSensors() >= 2)
+				} else if (e.getState())
 				{
-					configButton.setEnabled(false);
-					statusBar.setText("Multiple Sensors connected.Please remove all except one sensor");
-				}
-				else
-				{
+					statusBar.setText("Please connect any sensor for configuration!");
 					resetGuiData();
-					configButton.setEnabled(false);
-					statusBar.setText("Sensor " + e.getSensorPath()
-							+ " has been disconnected. Please connect sensor for configuration");
 				}
-
 			}
-
+			
 		});
-	}
-
-	public static void disconnection(DisconnectionEvent dEvent)
-	{
-
 	}
 
 	public void setGui()
@@ -407,11 +417,9 @@ public class MesanaConfigurator
 
 	public int batteryWarning()
 	{
-		// create a dialog with ok and cancel buttons and a question icon
 		MessageBox dialog = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
 		dialog.setText("Battery status");
 		dialog.setMessage("Sensor battery is below minimum. Do you want proceed configuration?");
-		// open dialog and await user selection
 		int returnCode = dialog.open();
 		System.out.println(returnCode);
 		return returnCode;
@@ -419,7 +427,6 @@ public class MesanaConfigurator
 
 	public void setGuiListeners()
 	{
-		// register listener for customerList.
 		customerList.addSelectionListener(new SelectionAdapter()
 		{
 			public void widgetSelected(SelectionEvent event)
@@ -443,7 +450,6 @@ public class MesanaConfigurator
 
 		});
 
-		// register listener for combo selection
 		priorityCombo.addSelectionListener(new SelectionAdapter()
 		{
 			public void widgetSelected(SelectionEvent e)
@@ -780,11 +786,10 @@ public class MesanaConfigurator
 		statusBar.setText("Sensor is configurated.Please connect another sensor.");
 
 		// writing date to sensor for synchronization
-		// ConnectionManager.currentSensor(0).synchronize();
+		 ConnectionManager.getInstance().currentSensor(0).synchronize();
 
 		// resetData();
-		// remove sensor
-		// ConnectionManager.currentSensor(0).disconnect("remove");
+		 ConnectionManager.getInstance().currentSensor(0).disconnect();
 
 	}
 
@@ -832,8 +837,9 @@ public class MesanaConfigurator
 		{
 			config.setRecordingStartTime(null);
 		}
-
-		config.setRecordingDuration(120000);
+		
+		config.setRecordingDuration(12000);
+		
 		ConnectionManager.getInstance().currentSensor(0).setSensorConfiguration(config);
 		ConnectionManager.getInstance().currentSensor(0).writeConfigFile();
 

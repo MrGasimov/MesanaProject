@@ -99,7 +99,7 @@ public class ReaderGui
 									
 									try
 									{
-										Thread.sleep(1000);
+										Thread.sleep(1500);
 									}
 									catch (InterruptedException e)
 									{
@@ -324,7 +324,6 @@ public class ReaderGui
 								restApiUpdate(device.getSerialNumber(), measurementId);
 							}
 						}
-						System.out.println("writing data");
 						try
 						{
 							device.readMeasurement(readOutDest + measurementId);

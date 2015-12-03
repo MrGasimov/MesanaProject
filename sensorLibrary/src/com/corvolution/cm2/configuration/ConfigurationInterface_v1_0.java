@@ -1,7 +1,6 @@
 package com.corvolution.cm2.configuration;
 
 import java.util.Date;
-import java.util.HashMap;
 
 public interface ConfigurationInterface_v1_0
 {

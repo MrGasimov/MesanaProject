@@ -1,24 +1,19 @@
 package com.corvolution.cm2;
 
-public final class Logger
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+public  class Logger
 {
 	public static String log=null;
-	private static Logger instance = null;
 	
-	public void printLog(String msg)
+	public static void printLog(String msg)
 	{
 		Logger.log = msg;
-		System.out.println(log);
-	}
-	
-	public static Logger getInstance()
-	{
-		if(instance==null)
-		{
-			instance = new Logger();
-		}
-		return instance;
-	}
-	
-	
+		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");	
+		Calendar calendar = Calendar.getInstance();
+        Date date =  calendar.getTime();
+		System.out.println(log +" "+sdf.format(date));
+	}	
 }

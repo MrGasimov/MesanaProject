@@ -41,6 +41,7 @@ import com.corvolution.cm2.configuration.StartModes;
 import com.corvolution.cm2.connection.ConnectionEvent;
 import com.corvolution.cm2.connection.ConnectionManager;
 import com.corvolution.cm2.connection.DisconnectionEvent;
+import com.corvolution.mesana.configurator.Constants;
 import com.corvolution.mesana.configurator.Printer;
 import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.data.AddressData;
@@ -73,9 +74,7 @@ public class MesanaConfigurator
 
 	// Constructor
 	public MesanaConfigurator()
-	{ // String log, String pass
-		// setOperatorData(log, pass);
-
+	{ 
 		setGui();
 		if (ConnectionManager.getInstance().connectionState)
 		{
@@ -90,12 +89,24 @@ public class MesanaConfigurator
 			{
 				e.printStackTrace();
 			}
-
+			
+			for(SensorData element :sCollect.getList())
+			{	
+				System.out.println("for ok");
+				if(element.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
+						{
+					System.out.println("first if ok");
+							if(!element.getState().equals(Constants.SENSOR_STATE_STOCK))
+							{
+								System.out.println("second if ok");
+								configButton.setEnabled(false);
+							}
+									
+						}
+			}
 		}
 		setGuiListeners();
 		shell.pack();
-
-		// setShell();
 
 		while (!shell.isDisposed())
 		{
@@ -125,7 +136,7 @@ public class MesanaConfigurator
 						password = credential.substring(credential.indexOf(File.separator));
 						check = true;
 					}
-
+					
 					configButton.setEnabled(true);
 					try
 					{
@@ -954,7 +965,7 @@ public class MesanaConfigurator
 
 	public static void setSensorData() throws IOException
 	{
-		String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "sensors??state=STOCK";
+		String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "sensors??state="+Constants.SENSOR_STATE_STOCK;
 		sCollect = new SensorCollection();
 		sCollect.setList(sURL);
 		for (SensorData sData : sCollect.getList())

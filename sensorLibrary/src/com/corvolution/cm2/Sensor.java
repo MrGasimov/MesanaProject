@@ -145,7 +145,7 @@ public class Sensor
 
 	}	
 	// read measurement data from sensor
-	public void readMeasurement(String dest)
+	public void readMeasurement(String dest) throws IOException
 		{
 			File destination = new File(dest);
 			File source = new File(sensorPath +":"+File.separator+ Constants.MEASUREMENT_FOLDER);
@@ -258,7 +258,6 @@ public class Sensor
 	
 	public boolean checkConfiguration()
 	{	
-		//TODO
 		boolean compatible=false;
 		//TODO implement this method
 		// - start mode checking

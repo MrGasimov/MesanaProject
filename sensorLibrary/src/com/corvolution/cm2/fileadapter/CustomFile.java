@@ -27,7 +27,7 @@ public class CustomFile extends TextFileAdapter
 		}
 		catch (FileNotFoundException e)
 		{	
-			Logger.getInstance().printLog("The requesting file was not found!");
+			Logger.printLog("The requesting file was not found!");
 			e.printStackTrace();
 		}
 

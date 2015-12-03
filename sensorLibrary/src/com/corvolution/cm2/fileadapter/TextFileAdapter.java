@@ -26,11 +26,11 @@ public class TextFileAdapter
 		}
 		catch (FileNotFoundException e)
 		{
-			Logger.getInstance().printLog("File " + path + " does not exist.");
+			Logger.printLog("File " + path + " does not exist.");
 		}
 		catch (IOException e)
 		{
-			Logger.getInstance().printLog("Cannot read " + path + ".");
+			Logger.printLog("Cannot read " + path + ".");
 		}
 	}
 

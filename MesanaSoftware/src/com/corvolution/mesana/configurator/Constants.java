@@ -9,4 +9,5 @@ public class Constants
 	public static final String LABEL_TEMPLATE = "LABEL_TEMPLATE";
 	public static final String MEASUREMENT_STATE_SENSOR_READOUT ="SENSOR_READOUT";
 	public static final String MEASUREMENT_STATE_MEASURING ="MEASURING";
+	public static final String SENSOR_STATE_STOCK ="STOCK";
 }

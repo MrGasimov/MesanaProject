@@ -28,7 +28,7 @@ public class SensorNotifier implements Runnable
 			// isDrive[i] = sensors[i].canRead();
 			isDrive[i] = false;
 		}
-		Logger.getInstance().printLog("Find Sensor: waiting for devices...");
+		Logger.printLog("Find Sensor: waiting for devices...");
 		
 		// loop indefinitely
 		while (true)
@@ -44,7 +44,7 @@ public class SensorNotifier implements Runnable
 					{
 						FileSystemView view = FileSystemView.getFileSystemView();
 						File dir = new File(letters[i] + ":/");
-						String name = view.getSystemDisplayName(dir);// .substring(0, 5);
+						String name = view.getSystemDisplayName(dir);
 						if (name.equals(Constants.SENSOR_NAME+ " (" + letters[i] + ":)")) 
 						{
 							nConnectedSensors++;

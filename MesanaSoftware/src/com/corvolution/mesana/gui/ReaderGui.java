@@ -1,6 +1,8 @@
 package com.corvolution.mesana.gui;
 
 import java.io.File;
+import java.io.IOException;
+
 import org.apache.commons.io.FileUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,13 +35,13 @@ import com.corvolution.mesana.rest.RestApiConnector;
 
 public class ReaderGui
 {
-	int destSize, copySize, size;
+	double copySize, size;
 	String readOutDest;
 	private static String login = null;
 	private static String password = null;
 	private Display display;
 	private static Shell shell;
-	private Button button;
+	private static Button button;
 	private static ProgressBar bar;
 	private GridData gridData;
 	private static Text text;
@@ -67,7 +69,7 @@ public class ReaderGui
 			text.setText("Please connect Sensor!");
 		}
 
-		destSize = (int) FileUtils.sizeOf(new File("Z:/measurementData/"));
+		
 		readOutDest = PropertyManager.getInstance().getProperty("READOUT_DEST");
 
 		button.addSelectionListener(new SelectionAdapter()
@@ -76,30 +78,45 @@ public class ReaderGui
 			{
 				text.setText("Reading data from sensors...");
 				size = (int) ConnectionManager.getInstance().measurementDataSize("all");
-				if (!ConnectionManager.getInstance().getConnectedSensorsList().isEmpty())
+				readData();
+				
+				new Thread()
 				{
-					for (Sensor device : ConnectionManager.getInstance().getConnectedSensorsList())
-					{
-						for (Measurement element : mCollect.getList())
-						{
-							if (element.getLinkId().equals(device.getReadConfiguration().getParameter("LinkId")))
-							{
-								measurementId = element.getID();
-								restApiUpdate(device.getSerialNumber(), measurementId);
+					public void run()
+					{ 
+						
+						display.asyncExec(new Runnable(){
+							public void run()
+							{ 	
+								boolean state = true;
+								while(state)
+								{	
+									copySize = (double) FileUtils.sizeOf(new File("Z:/measurementData/"));
+									System.out.println("copySize "+copySize);
+									int i =  (int) ((copySize*100)/size);
+									System.out.println("progressbar "+i);
+									bar.setSelection(i);
+									
+									try
+									{
+										Thread.sleep(1000);
+									}
+									catch (InterruptedException e)
+									{
+										e.printStackTrace();
+									}
+									
+									if(copySize == size)
+									{	
+										state = false;
+										text.setText("All sensors have been readout");
+										button.setEnabled(false);
+									}
+								}
 							}
-							System.out.println("second for runned");
-						}
-						System.out.println("writing data");
-						device.readMeasurement(readOutDest + measurementId);
-						copySize = (int) FileUtils.sizeOf(new File("Z:/measurementData/"));
-						bar.setSelection(bar.getSelection()
-								+ bar.getMaximum() / ConnectionManager.getInstance().getNumberOfConnectedSensors());
-						System.out.println("data has been written");
+						});
 					}
-					System.out.println("quitted aasjdhasjdh");
-				}
-				text.setText("All sensors were read out!");
-				text.setFocus();
+				}.start();
 			}
 		});
 
@@ -122,8 +139,9 @@ public class ReaderGui
 			public void run()
 			{
 				if (cEvent.getState())
-				{
-					text.setText(cEvent.getNumOfConnectedSensors() + " sensor connected");
+				{	
+					button.setEnabled(true);
+					text.setText(cEvent.getNumOfConnectedSensors() + " sensors connected");
 					System.out.println("sensor " + cEvent.getSensorPath() + " connected");
 				}
 
@@ -141,11 +159,16 @@ public class ReaderGui
 			{
 				if (!dEvent.getState() && dEvent.getNumOfConnectedSensors() == 0)
 				{
+					button.setEnabled(false);
 					text.setText("All sensors have been disconnected");
+					bar.setSelection(0);
+					
 				}
 				else if (!dEvent.getState())
 				{
 					text.setText(dEvent.getNumOfConnectedSensors() + " sensors connected");
+					bar.setSelection(0);
+					System.out.println("sensor " + dEvent.getSensorPath() + " disconnected");
 				}
 			}
 
@@ -282,5 +305,39 @@ public class ReaderGui
 			check = true;
 		}
 	}
-
+	
+	public void readData()
+	{
+		Thread thread = new Thread (new Runnable(){
+			@Override
+			public void run()
+			{
+				if (!ConnectionManager.getInstance().getConnectedSensorsList().isEmpty())
+				{
+					for (Sensor device : ConnectionManager.getInstance().getConnectedSensorsList())
+					{
+						for (Measurement element : mCollect.getList())
+						{
+							if (element.getLinkId().equals(device.getReadConfiguration().getParameter("LinkId")))
+							{
+								measurementId = element.getID();
+								restApiUpdate(device.getSerialNumber(), measurementId);
+							}
+						}
+						System.out.println("writing data");
+						try
+						{
+							device.readMeasurement(readOutDest + measurementId);
+						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		thread.start();
+	
+	}
 }

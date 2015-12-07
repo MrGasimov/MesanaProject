@@ -14,4 +14,7 @@ public class Constants
 	public static final int SLEEP_TIME=100;
 	public static final String RESTART_COMMAND="restart";
 	public static final String REMOVE_COMMAND="remove";
+	public static final String TIME_FORMAT = "dd MMM yyyy HH:mm:ss";
+	static final String VID = "VID_05E3";
+	static final String PID = "PID_01B1";
 }

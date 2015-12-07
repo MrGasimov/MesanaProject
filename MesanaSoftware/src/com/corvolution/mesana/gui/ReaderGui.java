@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.TrayItem;
 import org.json.simple.JSONObject;
 
 import com.corvolution.cm2.Sensor;
+import com.corvolution.cm2.SensorNotFoundException;
 import com.corvolution.cm2.connection.ConnectionManager;
 import com.corvolution.cm2.connection.DisconnectionEvent;
 import com.corvolution.cm2.connection.ConnectionEvent;
@@ -324,14 +325,14 @@ public class ReaderGui
 								restApiUpdate(device.getSerialNumber(), measurementId);
 							}
 						}
-						try
-						{
-							device.readMeasurement(readOutDest + measurementId);
-						}
-						catch (IOException e)
-						{
-							e.printStackTrace();
-						}
+							try
+							{
+								device.readMeasurement(readOutDest + measurementId);
+							}
+							catch (SensorNotFoundException e)
+							{
+								e.printStackTrace();
+							}
 					}
 				}
 			}

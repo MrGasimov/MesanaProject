@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.CRC32;
 
+import com.corvolution.cm2.SensorNotFoundException;
+
 public class BinaryFileAdapter
 {	
 	String path;
@@ -16,27 +18,28 @@ public class BinaryFileAdapter
 		this.path = path;
 	}
 	
-	public void writeBinaryFile( byte[] buffer){
+	public void writeBinaryFile( byte[] buffer)throws SensorNotFoundException{
 		
-		try
-		{
-			FileOutputStream outputStream = new FileOutputStream(path);
-			BufferedOutputStream out = new BufferedOutputStream(outputStream);
-			outputStream.write(buffer);
-			out.flush();
-			outputStream.close();		
+			FileOutputStream outputStream;
+			try
+			{
+				outputStream = new FileOutputStream(path);
+				BufferedOutputStream out = new BufferedOutputStream(outputStream);
+				outputStream.write(buffer);
+				out.flush();
+				outputStream.close();		
+			}
+			catch (IOException e)
+			{
+				throw new SensorNotFoundException("Sensor not found!");
+			}
 			
-		}catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+			
+		
 		
 	}
 	
-	public byte[] readBinaryFile(){
+	public byte[] readBinaryFile()throws SensorNotFoundException{
 		byte[] buffer = new byte[33];
 		try
 		{			
@@ -48,13 +51,9 @@ public class BinaryFileAdapter
 			myCRC.update(buffer, 0, 31);
 			inputStream.close();
 		}
-		catch (FileNotFoundException ex)
-		{
-			ex.printStackTrace();
-		}
 		catch (IOException ex)
 		{
-			ex.printStackTrace();
+			throw new SensorNotFoundException("Sensor not found!");
 		}
 		return buffer;
 	}

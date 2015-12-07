@@ -67,7 +67,6 @@ public class SensorNotifier implements Runnable
 					isDrive[i] = pluggedIn;
 				}
 			}
-			// wait before looping
 			try
 			{
 				Thread.sleep(Constants.SLEEP_TIME);

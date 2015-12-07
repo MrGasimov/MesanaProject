@@ -3,6 +3,8 @@ package com.corvolution.cm2.fileadapter;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.corvolution.cm2.SensorNotFoundException;
+
 public class TimeSyncFile extends BinaryFileAdapter
 {
 	public TimeSyncFile(String path)
@@ -10,7 +12,7 @@ public class TimeSyncFile extends BinaryFileAdapter
 		super(path);
 	}
 
-	public void writeBinaryFile(){
+	public void writeBinaryFile() throws SensorNotFoundException{
 		Date date = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);				 

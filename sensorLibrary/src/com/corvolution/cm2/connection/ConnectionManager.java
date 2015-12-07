@@ -1,17 +1,15 @@
 package com.corvolution.cm2.connection;
-
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import com.corvolution.cm2.Sensor;
+import com.corvolution.cm2.SensorNotFoundException;
 
 public final class ConnectionManager
 {
-	public static final int CONNECTION = 100;
-	public static final int DISCONNECTION = 101;
+	
 	private  Vector<SensorListener> connectionListeners;
 	private  Vector<SensorListener> disconnectionListeners;
 	public  boolean connectionState;
@@ -19,6 +17,8 @@ public final class ConnectionManager
 	private ConnectionEvent connectionEvent;
 	private DisconnectionEvent disconnectionEvent;
 	public  int nConnectedSensors;
+	public static final int CONNECTION = 100;
+	public static final int DISCONNECTION = 101;
 	private  List<Sensor> sensorList = new CopyOnWriteArrayList<>();
 	private static ConnectionManager instance = null;
 
@@ -36,7 +36,6 @@ public final class ConnectionManager
 		return instance;
 	}
 
-	/** Register a listener for Events */
 	synchronized public void addSensorListener(SensorListener listener, int option)
 	{	
 		if(option == ConnectionManager.CONNECTION)
@@ -60,7 +59,6 @@ public final class ConnectionManager
 		
 	}
 
-	/** Remove a listener for Events */
 	synchronized public void removeSensorListener(SensorListener listener, int option)
 	{	
 		if(option == ConnectionManager.CONNECTION)
@@ -133,27 +131,22 @@ public final class ConnectionManager
 		return nConnectedSensors;
 	}
 
-	// adds connected sensor path to array
 	protected void addSensorToList(String path) 
 	{
 		this.sensorPath = path;
-		Sensor sensor;
+		Sensor sensor = null;
 		try
 		{
 			sensor = new Sensor(path);
-			sensorList.add(sensor);
-			fireConnectionEvent();
 		}
-		catch (IOException e)
+		catch (SensorNotFoundException e)
 		{
-			e.printStackTrace();
+			e.getStackTrace();
 		}
-		
-		
-
+		sensorList.add(sensor);
+		fireConnectionEvent();
 	}
 
-	// deletes disconnected sensor from array
 	protected void removeSensorFromList(String path)
 	{
 		for (Sensor device : sensorList)
@@ -164,26 +157,26 @@ public final class ConnectionManager
 		fireDisconnectionEvent();
 	}
 
-	// starts thread for listening and notifies Manager about any connection
 	public void startListener()
 	{
 		Thread sensorListener = new Thread(new SensorNotifier());
 		sensorListener.start();
 	}
 
-	// returns list of connected sensors
 	public List<Sensor> getConnectedSensorsList()
 	{
 		return sensorList;
 	}
 
-	public Sensor currentSensor(int i)
+	public Sensor currentSensor(int i) throws SensorNotFoundException
 	{
-
+		if(sensorList.isEmpty())
+		{
+			throw new SensorNotFoundException("Sensor not found!");
+		}
 		return sensorList.get(i);
 	}
 
-	// sum of all connected sensors mearuementData
 	public long measurementDataSize(String option)
 	{
 		long dataSize = 0;

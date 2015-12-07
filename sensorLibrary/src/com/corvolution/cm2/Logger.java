@@ -11,7 +11,7 @@ public  class Logger
 	public static void printLog(String msg)
 	{
 		Logger.log = msg;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");	
+		SimpleDateFormat sdf = new SimpleDateFormat(Constants.TIME_FORMAT);	
 		Calendar calendar = Calendar.getInstance();
         Date date =  calendar.getTime();
 		System.out.println(log +" "+sdf.format(date));

@@ -32,6 +32,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.json.simple.JSONObject;
+
+import com.corvolution.cm2.SensorNotFoundException;
 import com.corvolution.cm2.configuration.ConfigurationInterface_v1_0;
 import com.corvolution.cm2.configuration.ConfigurationSet;
 import com.corvolution.cm2.configuration.ConfigurationSets;
@@ -84,27 +86,27 @@ public class MesanaConfigurator
 				setData();
 				statusBar.setText("Sensor " + ConnectionManager.getInstance().currentSensor(0).getSensorPath()
 						+ " has been connected successfully!");
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-			
-			for(SensorData element :sCollect.getList())
-			{	
-				System.out.println("for ok");
-				if(element.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
-						{
-					System.out.println("first if ok");
-							if(!element.getState().equals(Constants.SENSOR_STATE_STOCK))
+				for(SensorData element :sCollect.getList())
+				{	
+					System.out.println("for ok");
+					if(element.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 							{
-								System.out.println("second if ok");
-								configButton.setEnabled(false);
+						System.out.println("first if ok");
+								if(!element.getState().equals(Constants.SENSOR_STATE_STOCK))
+								{
+									System.out.println("second if ok");
+									configButton.setEnabled(false);
+								}
+										
 							}
-									
-						}
+				}
+			}
+			catch (IOException | SensorNotFoundException e)
+			{
+				statusBar.setText(e.getMessage());
 			}
 		}
+		
 		setGuiListeners();
 		shell.pack();
 
@@ -196,15 +198,14 @@ public class MesanaConfigurator
 					try
 					{
 						setData();
-
+						statusBar.setText("Only Sensor " + ConnectionManager.getInstance().currentSensor(0).getSensorPath()
+								+ " has been connected");
 					}
-					catch (IOException e)
+					catch (IOException | SensorNotFoundException e)
 					{
-
-						e.printStackTrace();
+						statusBar.setText(e.getMessage());
 					}
-					statusBar.setText("Only Sensor " + ConnectionManager.getInstance().currentSensor(0).getSensorPath()
-							+ " has been connected");
+					
 				} else if (e.getState())
 				{
 					statusBar.setText("Please connect any sensor for configuration!");
@@ -579,21 +580,28 @@ public class MesanaConfigurator
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				if (ConnectionManager.getInstance().currentSensor(0).getBatteryVoltage() < 3.8)
+				try
 				{
-					messageCode = batteryWarning();
-					if (messageCode == 32)
+					if (ConnectionManager.getInstance().currentSensor(0).getBatteryVoltage() < 3.8)
+					{
+						messageCode = batteryWarning();
+						if (messageCode == 32)
+						{
+							configurateSensor();
+							configButton.setEnabled(false);
+						}
+
+					}
+					else
 					{
 						configurateSensor();
 						configButton.setEnabled(false);
+
 					}
-
 				}
-				else
+				catch (SensorNotFoundException e1)
 				{
-					configurateSensor();
-					configButton.setEnabled(false);
-
+					statusBar.setText(e1.getMessage());
 				}
 			}
 		});
@@ -653,29 +661,35 @@ public class MesanaConfigurator
 		String state = null;
 		for (SensorData element : sCollect.getList())
 		{
-			if (ConnectionManager.getInstance().currentSensor(0).getSerialNumber() == element.getID())
+			try
 			{
-				state = element.getState();
+				if (ConnectionManager.getInstance().currentSensor(0).getSerialNumber() == element.getID())
+				{
+					state = element.getState();
+				}
+			}
+			catch (SensorNotFoundException e)
+			{
+				statusBar.setText(e.getMessage());
 			}
 		}
 
 		String mId = measureText.getText().substring(4, 17);
 		if (para2.equals("comment"))
 		{
-			JSONObject jsonComment = new JSONObject();
-			jsonComment.put("comment", commentText.getText());
-			jsonComment.put("user", login);
-			jsonComment.put("sensorId", ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
-			String commentJSON = jsonComment.toJSONString();
-			String cURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/comments";
-
 			try
-			{
+			{	
+				JSONObject jsonComment = new JSONObject();
+				jsonComment.put("comment", commentText.getText());
+				jsonComment.put("user", login);
+				jsonComment.put("sensorId", ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
+				String commentJSON = jsonComment.toJSONString();
+				String cURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/comments";
 				mObject.postMethod(commentJSON, cURL);
 			}
 			catch (Exception e)
-			{
-				e.printStackTrace();
+			{	
+				statusBar.setText(e.getMessage());
 			}
 		}
 		else if (para2.equals("electrode"))
@@ -735,25 +749,21 @@ public class MesanaConfigurator
 		}
 		else
 		{
-			JSONObject jsonState = new JSONObject();
-			jsonState.put("state", para1);
-			jsonState.put("user", login);
-			jsonState.put("sensorId", ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
-			String stateJSON = jsonState.toJSONString();
-			String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/";
-
 			try
-			{
+			{	
+				JSONObject jsonState = new JSONObject();
+				jsonState.put("state", para1);
+				jsonState.put("user", login);
+				jsonState.put("sensorId", ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
+				String stateJSON = jsonState.toJSONString();
+				String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mId + "/";
 				mObject.putMethod(stateJSON, sURL);
 			}
 			catch (Exception e)
 			{
-
-				e.printStackTrace();
+				statusBar.setText(e.getMessage());
 			}
-
 		}
-
 	}
 
 	private void configurateSensor()
@@ -765,7 +775,14 @@ public class MesanaConfigurator
 		setAndWriteFiles();
 
 		// push comment to RestApi
-		restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "comment");
+		try
+		{
+			restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "comment");
+		}
+		catch (SensorNotFoundException e)
+		{
+			statusBar.setText(e.getMessage());
+		}
 
 		// change state of measurement in RestApi
 		restApiUpdate("SENSOR_OUTBOX", "state2");
@@ -786,10 +803,24 @@ public class MesanaConfigurator
 		statusBar.setText("Sensor is configurated.Please connect another sensor.");
 
 		// writing date to sensor for synchronization
-		 ConnectionManager.getInstance().currentSensor(0).synchronize();
+		 try
+		{
+			ConnectionManager.getInstance().currentSensor(0).synchronize();
+		}
+		catch (SensorNotFoundException e)
+		{
+			statusBar.setText(e.getMessage());
+		}
 
 		// resetData();
-		 ConnectionManager.getInstance().currentSensor(0).disconnect();
+		 try
+		{
+			ConnectionManager.getInstance().currentSensor(0).disconnect();
+		}
+		catch (SensorNotFoundException e)
+		{
+			statusBar.setText(e.getMessage());
+		}
 
 	}
 
@@ -840,21 +871,28 @@ public class MesanaConfigurator
 		
 		config.setRecordingDuration(12000);
 		
-		ConnectionManager.getInstance().currentSensor(0).setSensorConfiguration(config);
-		ConnectionManager.getInstance().currentSensor(0).writeConfigFile();
-
-		// write Encrypted data to sensor
-		ConnectionManager.getInstance().currentSensor(0).writeEncryptedParameters();
-
-		int index = customerList.getSelectionIndex();
-		if (index >= 0 && index <= mCollect.getList().size())
+		try
 		{
-			String linkId = mCollect.getList().get(index).getLinkId();
-			config.addParameter("LinkId", linkId);
+			ConnectionManager.getInstance().currentSensor(0).setSensorConfiguration(config);
+			
+			ConnectionManager.getInstance().currentSensor(0).writeConfigFile();
+			
+			// write Encrypted data to sensor
+			ConnectionManager.getInstance().currentSensor(0).writeEncryptedParameters();
+			
+			int index = customerList.getSelectionIndex();
+			if (index >= 0 && index <= mCollect.getList().size())
+			{
+				String linkId = mCollect.getList().get(index).getLinkId();
+				config.addParameter("LinkId", linkId);
+			}
+			// write custom data to additional file in sensor
+			ConnectionManager.getInstance().currentSensor(0).writeCustomFile();
 		}
-		// write custom data to additional file in sensor
-		ConnectionManager.getInstance().currentSensor(0).writeCustomFile();
-
+		catch (SensorNotFoundException e)
+		{
+			statusBar.setText(e.getMessage());
+		}
 	}
 
 	public void setTrayIcon()
@@ -971,20 +1009,27 @@ public class MesanaConfigurator
 
 	public static void setSensorData() throws IOException
 	{
-		String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "sensors??state="+Constants.SENSOR_STATE_STOCK;
+		String sURL = PropertyManager.getInstance().getProperty("REST_PATH") +"sensors??state="+Constants.SENSOR_STATE_STOCK;
 		sCollect = new SensorCollection();
 		sCollect.setList(sURL);
 		for (SensorData sData : sCollect.getList())
 		{
-			if (sData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
+			try
 			{
-				sensorText.setText(sData.getSensorData() + "\r\n" + "Device: "
-						+ (ConnectionManager.getInstance().currentSensor(0).getDeviceName() + "\r\n" + "Manufacture: "
-								+ ConnectionManager.getInstance().currentSensor(0).getManufacturerName() + "\r\n"
-								+ "FlashDate: " + ConnectionManager.getInstance().currentSensor(0).getFlashDate()
-								+ "\r\n" + "Battery: "
-								+ ConnectionManager.getInstance().currentSensor(0).getBatteryVoltage()));
-				break;
+				if (sData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
+				{
+					sensorText.setText(sData.getSensorData() + "\r\n" + "Device: "
+							+ (ConnectionManager.getInstance().currentSensor(0).getDeviceName() + "\r\n" + "Manufacture: "
+									+ ConnectionManager.getInstance().currentSensor(0).getManufacturerName() + "\r\n"
+									+ "FlashDate: " + ConnectionManager.getInstance().currentSensor(0).getFlashDate()
+									+ "\r\n" + "Battery: "
+									+ ConnectionManager.getInstance().currentSensor(0).getBatteryVoltage()));
+					break;
+				}
+			}
+			catch (SensorNotFoundException e)
+			{
+				statusBar.setText(e.getMessage());
 			}
 
 		}
@@ -993,28 +1038,37 @@ public class MesanaConfigurator
 
 	public void setTaskData(String mID) throws IOException
 	{
-		tCollect = new TaskCollection(mID, ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
-		if (tCollect.getMeasTask().isEmpty())
+		try
 		{
-			measurTaskText.setText(" ");
-		}
-		else
-		{
-			for (int i = 0; i < tCollect.getMeasTask().size(); i++)
+			tCollect = new TaskCollection(mID, ConnectionManager.getInstance().currentSensor(0).getSerialNumber());
+			
+			if (tCollect.getMeasTask().isEmpty())
 			{
-				measurTaskText.setText(tCollect.getMeasTask().get(i).getTaskDetails());
+				measurTaskText.setText(" ");
 			}
-
-		}
-		// if sensor task is set skip
-		if (!sensorTaskText.equals(""))
-		{
-			for (int i = 0; i < tCollect.getSensorTask().size(); i++)
+			else
 			{
-				sensorTaskText.setText(tCollect.getSensorTask().get(i).getTaskDetails());
+				for (int i = 0; i < tCollect.getMeasTask().size(); i++)
+				{
+					measurTaskText.setText(tCollect.getMeasTask().get(i).getTaskDetails());
+				}
+
+			}
+			
+			// if sensor task is set skip
+			if (!sensorTaskText.equals(""))
+			{
+				for (int i = 0; i < tCollect.getSensorTask().size(); i++)
+				{
+					sensorTaskText.setText(tCollect.getSensorTask().get(i).getTaskDetails());
+				}
 			}
 		}
-
+		catch (SensorNotFoundException e)
+		{
+			statusBar.setText(e.getMessage());
+		}
+		
 	}
 
 	public void openShell()
@@ -1046,19 +1100,25 @@ public class MesanaConfigurator
 
 	public void checkFirmwareVersion()
 	{
-		for (SensorData sensorData : sCollect.getList())
+		try
 		{
-			if (sensorData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
+			for (SensorData sensorData : sCollect.getList())
 			{
-				if (!ConnectionManager.getInstance().currentSensor(0).getFirwareVersion()
-						.equals(sensorData.getFirmware()))
+				if (sensorData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 				{
-					restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "firmware");
+					if (!ConnectionManager.getInstance().currentSensor(0).getFirwareVersion()
+							.equals(sensorData.getFirmware()))
+					{
+						restApiUpdate(ConnectionManager.getInstance().currentSensor(0).getSerialNumber(), "firmware");
+					}
+					break;
 				}
-				break;
-			}
 
+			}
+		}catch (SensorNotFoundException e){
+			statusBar.setText(e.getMessage());
 		}
+		
 
 	}
 

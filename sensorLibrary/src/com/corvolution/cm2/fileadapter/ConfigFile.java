@@ -2,6 +2,8 @@ package com.corvolution.cm2.fileadapter;
 import java.io.File;
 import java.util.Calendar;
 import java.util.zip.CRC32;
+
+import com.corvolution.cm2.SensorNotFoundException;
 import com.corvolution.cm2.configuration.SensorConfiguration;
 
 public class ConfigFile extends BinaryFileAdapter
@@ -19,20 +21,16 @@ public class ConfigFile extends BinaryFileAdapter
 	private final static int CONFIG_FILE_LENGTH = 33;
 	public 	byte[] buffer = new byte[CONFIG_FILE_LENGTH];
 
-	public ConfigFile(String absolutePath)
+	public ConfigFile(String absolutePath) throws SensorNotFoundException
 	{
 		super(absolutePath);
-		if (new File(absolutePath).exists())
-		{
-			super.readBinaryFile();
-		}
-		else
-		{
-			System.out.println("Configuration File does not exist!");
-		}
+		
+		super.readBinaryFile();
+		
+		
 	}
 
-	public void writeBinaryFile(SensorConfiguration sensorConfiguration)
+	public void writeBinaryFile(SensorConfiguration sensorConfiguration) throws SensorNotFoundException
 	{
 		// Initialize buffer with zeros
 		for (int i = 0; i < CONFIG_FILE_LENGTH; i++)
@@ -63,6 +61,7 @@ public class ConfigFile extends BinaryFileAdapter
 		myCRC.update(buffer);
 
 		super.writeBinaryFile(buffer);
+		
 	}
 
 }

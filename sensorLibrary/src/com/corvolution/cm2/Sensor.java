@@ -1,5 +1,4 @@
 package com.corvolution.cm2;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,10 +19,20 @@ import com.corvolution.cm2.fileadapter.CustomFile;
 import com.corvolution.cm2.fileadapter.InfoFile;
 import com.corvolution.cm2.fileadapter.StatusFile;
 import com.corvolution.cm2.fileadapter.TimeSyncFile;
-
+/**
+* 
+* 
+* Sensor library
+* This class represents single connected sensor
+* and provides appropriate methods for retrieving, setting and configuring sensor.
+*
+* @author  Suleyman Gasimov 
+* @version 1.0
+* @since   03.12.2015 
+* 
+*/
 public class Sensor
 {
-
 	private String sensorPath;
 	private String deviceName;
 	private String manufacturerName;
@@ -34,8 +43,6 @@ public class Sensor
 	private String batteryVoltage;
 	private String currentState;
 	private String sensorSystemTime;
-	private final static String VID = "VID_05E3";
-	private final static String PID = "01B1";
 	private SensorConfiguration writeSensorConfiguration;
 	private SensorConfiguration readSensorConfiguration;
 	private InfoFile infoFile;
@@ -43,10 +50,15 @@ public class Sensor
 	private CustomFile customFile;
 	private ConfigFile configFile;
 	private TimeSyncFile timeSyncFile;
-
-	// construct sensor object
-	public Sensor(String path) throws IOException
-	{
+	
+	/**
+	   * Only constructor for constructing sensor object when it is connected over usb port.
+	   * This constructor reads info, config, feedback and encrypted files to initialize sensor 
+	   * @param String path as path to connected sensor.
+	 * @throws SensorNotFoundException 
+	   */
+	public Sensor(String path) throws SensorNotFoundException
+	{	
 		readSensorConfiguration = new SensorConfiguration();
 		this.sensorPath = path;
 		readSensorInfo();
@@ -56,55 +68,86 @@ public class Sensor
 		}
 		readCustomFile();
 		readFeedBackFile();
-		readEncryptedParameters();
 	}
-
+	
+	/**This method returns Battery Voltage of the connected sensor as a double primitive type
+	 * @return double
+	 */
 	public double getBatteryVoltage()
-	{
+	{	
+		
 		double voltage = Double.parseDouble(batteryVoltage);
 		return voltage;
 	}
 
+	/**This method returns firmware version of the connected sensor 
+	 * @return String
+	 */
 	public String getFirwareVersion()
 	{
 		return this.firmwareVersion;
 	}
 
+	/**This method returns path to the connected sensor 
+	 * @return String
+	 */
 	public String getSensorPath()
 	{
 		return this.sensorPath;
 	}
 
+	/**This method returns device name of the connected sensor
+	 * @return String
+	 */
 	public String getDeviceName()
 	{
 		return this.deviceName;
 	}
 
+	/**This method returns Manufacture name of the connected sensor
+	 * @return String
+	 */
 	public String getManufacturerName()
 	{
 		return this.manufacturerName;
 	}
-
+	
+	/**This method returns serial number of the connected sensor
+	 * @return String
+	 */
 	public String getSerialNumber()
 	{
 
 		return this.serialNumber;
 	}
-
+	
+	/**This method returns last flash date of the connected sensor
+	 * @return String
+	 */
 	public Date getFlashDate()
 	{
 
 		return this.flashDate;
 	}
-
+	/**This method returns configuration interface version of the connected sensor, which defines compatibility of the sensor with the configuration set
+	 * @return String
+	 */
 	public String getConfigurationInterfaceVersion()
 	{
 		return configurationInterfaceVersion;
 	}
-
-	private void readSensorInfo() throws IOException
-	{
+	
+	/**This method reads info file from sensor to initialize sensor details 
+	 * @throws ParseException 
+	 * @throws IOException if file not found or file could be opened, ParseException 
+	 */
+	private void readSensorInfo() throws SensorNotFoundException
+	{	
 		this.infoFile = new InfoFile(this.sensorPath);
+		if(infoFile.equals(null))
+		{
+			throw new SensorNotFoundException("Sensor not found!");
+		}
 		this.deviceName = this.infoFile.getProperty(InfoFile.DEVICE_NAME);
 		this.manufacturerName = this.infoFile.getProperty(InfoFile.MANUFACTURER_NAME);
 		this.serialNumber = this.infoFile.getProperty(InfoFile.SERIAL_NUMBER);
@@ -118,34 +161,47 @@ public class Sensor
 		}
 		catch (ParseException e)
 		{
-			System.err.println("Flash date has wrong format.");
-			this.flashDate = null;
+			e.printStackTrace();
 		}
-		catch (Exception e)
-		{
-			this.flashDate = null;
-		}
+		
 	}
 
-	private void readCustomFile() throws IOException
+	/**This method reads custom text file from sensor to retrieve link id 
+	 * @throws IOException
+	 */
+	private void readCustomFile() throws SensorNotFoundException 
 	{
 		this.customFile = new CustomFile(this.sensorPath);
+		if(customFile.equals(null))
+		{
+			throw new SensorNotFoundException("Sensor not found!");
+		}
 		readSensorConfiguration.addParameter("LinkId", this.customFile.getProperty(CustomFile.LINK_ID));
 		// for reading additional data from custom file, additional data details must be added to customFile class
 
 	}
 
-	private void readFeedBackFile() throws IOException
+	/**This method reads feedback text file from sensor to initialize sensor state information
+	 * @throws SensorNotFoundException
+	 */
+	private void readFeedBackFile() throws SensorNotFoundException
 	{
 		this.statusFile = new StatusFile(this.sensorPath);
+		if(statusFile.equals(null))
+		{
+			throw new SensorNotFoundException("Sensor not Found");
+		}
 		this.batteryVoltage = this.statusFile.getProperty(StatusFile.BATTERY_VOLTAGE);
 		this.currentState = this.statusFile.getProperty(StatusFile.CURRENT_STATE);
 		this.sensorSystemTime = this.statusFile.getProperty(StatusFile.SYSTEM_TIME);
 
 	}
 
-	// read measurement data from sensor
-	public void readMeasurement(String dest) throws IOException
+	/**This method copies measurement data from sensor to specified destination directory
+	 * @param String destination, where data would be copied
+	 * @throws SensorNotFoundException
+	 */
+	public void readMeasurement(String dest) throws SensorNotFoundException
 	{
 		File destination = new File(dest);
 		File source = new File(sensorPath + ":" + File.separator + Constants.MEASUREMENT_FOLDER);
@@ -155,12 +211,15 @@ public class Sensor
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			throw new SensorNotFoundException("Sensor not found!");
 		}
-
 	}
 
-	public void readEncryptedParameters()
+	/**This method reads encrypted data from sensor with given password
+	 * @param String password
+	 * @throws SensorNotFoundException 
+	 */
+	public void readEncryptedParameters(String password) throws SensorNotFoundException
 	{
 		File encryptedCustomFile = new File(this.sensorPath + ":" + File.separator + Constants.CM2_ENCRYPTED_FILE);
 		if (encryptedCustomFile.exists())
@@ -171,55 +230,88 @@ public class Sensor
 				BufferedInputStream bis = new BufferedInputStream(ois);
 				byte[] buffer = new byte[(int) encryptedCustomFile.length()];
 				bis.read(buffer);
-				readSensorConfiguration.addEncryptedParameter("enryptedcustomIO", buffer, "0123456789ABCDEF");
+				readSensorConfiguration.addEncryptedParameter(password, buffer, "0123456789ABCDEF");
 				bis.close();
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace();
+				throw new SensorNotFoundException("Sensor not found!");
 			}
 		}
 
 	}
-
-	// read configuration file from sensor
-	public void readConfigFile()
+	
+	
+	
+	/**This method reads config binary file from the connected sensor
+	 * 
+	 */
+	public void readConfigFile()  throws SensorNotFoundException
 	{
 		String absolutePath = sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
 		this.configFile = new ConfigFile(absolutePath);
+		if(configFile.equals(null))
+		{
+			throw new SensorNotFoundException("Sensor not found!");
+		}
 	}
 
-	// write configuration file to sensor
-	public void writeConfigFile()
+	/**This method writes configuration file to the connected sensor.Before calling this method configuration must be set
+	 * @throws SensorNotFoundException
+	 */
+	public void writeConfigFile()throws SensorNotFoundException
 	{
 		String absolutePath = sensorPath + ":" + File.separator + Constants.CM2_CONFIG_FILE;
 		this.configFile = new ConfigFile(absolutePath);
+		if(configFile.equals(null))
+		{
+			throw new SensorNotFoundException("Sensor not found");
+		}
 		this.configFile.writeBinaryFile(this.writeSensorConfiguration);
 	}
 
-	public void writeTimeSyncFile() throws IOException
+	
+	/**This method writes time synchronization binary file to the connected sensor, so sensor could synchronize itself after detaching
+	 * @throws SensorNotFoundException
+	 */
+	public void writeTimeSyncFile() throws SensorNotFoundException
 	{
 		String absolutePath = this.sensorPath + ":" + File.separator + Constants.CM2_TIMESYNC_FILE;
 		this.timeSyncFile = new TimeSyncFile(absolutePath);
+		if(timeSyncFile.equals(null))
+		{
+			throw new SensorNotFoundException("Sensor not found!");
+		}
 		timeSyncFile.writeBinaryFile();
 	}
 
+	
+	
+	/**This method retrieves SensorConfiguration object for writing configuration File to the sensor 
+	 * @return SensorConfiguration writeSensorConfiguration
+	 */
 	public SensorConfiguration getWriteConfiguration()
 	{
 		return this.writeSensorConfiguration;
 	}
 
+	/**This method also returns SensorConfiguration object, but for reading configuration File from sensor
+	 * @return SensorConfiguration readSensorConfiguration
+	 */
 	public SensorConfiguration getReadConfiguration()
 	{
 		return this.readSensorConfiguration;
 	}
 
+	/**This method sets SensorConfiguration config object  by  application
+	 * @param SensorConfiguration config
+	 */
 	public void setSensorConfiguration(SensorConfiguration config)
 	{
 		this.writeSensorConfiguration = config;
 	}
 
-	public void writeEncryptedParameters()
+	public void writeEncryptedParameters()throws SensorNotFoundException
 	{
 		// key and inital vector must be at least 16 bytes--1st and 3rd arguments
 		String text = "some text for encryption";
@@ -235,13 +327,12 @@ public class Sensor
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
-
+			throw new SensorNotFoundException("Sensor not found!");
 		}
 
 	}
 
-	public void writeCustomFile()
+	public void writeCustomFile() throws SensorNotFoundException
 	{
 		String data = null;
 		for (HashMap.Entry<String, String> entry : writeSensorConfiguration.getParametersMap().entrySet())
@@ -250,6 +341,10 @@ public class Sensor
 
 		}
 		this.customFile = new CustomFile(sensorPath);
+		if(customFile.equals(null))
+		{
+			throw new SensorNotFoundException("Sensor not found!");
+		}
 		customFile.writeCustomData(data, sensorPath);
 	}
 
@@ -280,7 +375,7 @@ public class Sensor
 		return compatible;
 	}
 	// method for time synchronizing
-	public void synchronize()
+	public void synchronize() throws SensorNotFoundException
 	{
 		try
 		{
@@ -289,22 +384,21 @@ public class Sensor
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			throw new SensorNotFoundException("Sensor not found!");
 		}
 
 	}
 
-	public void disconnect()
+	public void disconnect() throws SensorNotFoundException
 	{
 		try
 		{
-			this.writeConfigFile();
 			this.synchronize();
 			this.devcon(Constants.REMOVE_COMMAND);
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			throw new SensorNotFoundException("Sensor not found!");
 		}
 	}
 
@@ -314,7 +408,7 @@ public class Sensor
 	{
 		// remove Sensor
 		String command = "cd \"C:/Users/" + System.getProperty("user.name") + "/Desktop\" && devcon.exe "
-				+ devconCommand + " *" + VID + "*";
+				+ devconCommand + " *" + Constants.VID + "*";
 		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
 		builder.redirectErrorStream(true);
 		Process p = builder.start();

@@ -857,7 +857,7 @@ public class MesanaConfigurator
 			ConnectionManager.getInstance().currentSensor(0).writeConfigFile();
 			
 			// write Encrypted data to sensor
-			ConnectionManager.getInstance().currentSensor(0).writeEncryptedParameters();
+			ConnectionManager.getInstance().currentSensor(0).writeEncryptedParameters("123456789abcd12");
 			
 			int index = customerList.getSelectionIndex();
 			if (index >= 0 && index <= mCollect.getList().size())

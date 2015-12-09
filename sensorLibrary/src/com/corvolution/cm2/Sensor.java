@@ -42,6 +42,18 @@ public class Sensor
 	private String configurationInterfaceVersion;
 	private String batteryVoltage;
 	private String currentState;
+	
+	public String getCurrentState()
+	{
+		return this.currentState;
+	}
+
+	public String getSensorSystemTime()
+	{
+		return this.sensorSystemTime;
+	}
+
+
 	private String sensorSystemTime;
 	private SensorConfiguration writeSensorConfiguration;
 	private SensorConfiguration readSensorConfiguration;
@@ -311,14 +323,18 @@ public class Sensor
 		this.writeSensorConfiguration = config;
 	}
 
-	public void writeEncryptedParameters()throws SensorNotFoundException
+	/**This method writes encypted parameters to sensor by application. 
+	 *@param String password
+	 *@throws SensorNotFoundException if writing data was not successfull or sensor is disconnected
+	 */
+	public void writeEncryptedParameters(String password)throws SensorNotFoundException
 	{
-		// key and inital vector must be at least 16 bytes--1st and 3rd arguments
-		String text = "some text for encryption";
+		// key and initialization vector must be at least 16 bytes--1st and 3rd arguments
+		String text = writeSensorConfiguration.getParameter("encrypted");
 
 		try
 		{
-			writeSensorConfiguration.addEncryptedParameter("enryptedcustomIO", text.getBytes("UTF8"),
+			writeSensorConfiguration.addEncryptedParameter(password, text.getBytes("UTF8"),
 					"0123456789ABCDEF");
 			File encryptedCustomFile = new File(this.sensorPath + ":" + File.separator + Constants.CM2_ENCRYPTED_FILE);
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(encryptedCustomFile));
@@ -329,9 +345,11 @@ public class Sensor
 		{
 			throw new SensorNotFoundException("Sensor not found!");
 		}
-
 	}
 
+	/**This method writes parameters to custom file for sensor configuration set by application, for example LinkId of a given measurement.
+	 * @throws SensorNotFoundException if writing data was not successfull or sensor is disconnected
+	 */
 	public void writeCustomFile() throws SensorNotFoundException
 	{
 		String data = null;
@@ -348,12 +366,18 @@ public class Sensor
 		customFile.writeCustomData(data, sensorPath);
 	}
 
+	/**This method retrieves size of measurement data from sensor
+	 * @return long. size of measurement data
+	 */
 	public long getDataSize()
 	{
 		long size = FileUtils.sizeOf(new File(this.sensorPath + ":" + File.separator + Constants.MEASUREMENT_FOLDER));
 		return size;
 	}
 
+	/**This method allows application to check correctness of configuration before configuring sensor
+	 * @return true if configuration is compatible with a connected sensor otherwise false
+	 */
 	public boolean checkConfiguration()
 	{
 		boolean compatible = false;
@@ -374,7 +398,10 @@ public class Sensor
 		}
 		return compatible;
 	}
-	// method for time synchronizing
+	
+	/**This method writes current system time to sensor for synchronizing
+	 * @throws SensorNotFoundException
+	 */
 	public void synchronize() throws SensorNotFoundException
 	{
 		try
@@ -389,6 +416,10 @@ public class Sensor
 
 	}
 
+	
+	/**This method writes current system time and remove sensor from system
+	 * @throws SensorNotFoundException if synchronizing  or removing sensor failed
+	 */
 	public void disconnect() throws SensorNotFoundException
 	{
 		try
@@ -402,8 +433,7 @@ public class Sensor
 		}
 	}
 
-	// removing or restarting sensor
-
+	
 	private void devcon(String devconCommand) throws IOException
 	{
 		// remove Sensor
@@ -421,7 +451,6 @@ public class Sensor
 			{
 				break;
 			}
-			System.out.println(line);
 		}
 	}
 

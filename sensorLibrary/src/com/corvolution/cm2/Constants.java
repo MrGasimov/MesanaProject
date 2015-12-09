@@ -1,5 +1,9 @@
 package com.corvolution.cm2;
 
+/**This class holds constants used by library
+ * @author Suleyman Gasimov
+ *
+ */
 public class Constants
 {
 	public static final String CM2_INFO_FILE = "info.txt";

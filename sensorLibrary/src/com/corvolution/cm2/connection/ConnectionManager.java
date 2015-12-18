@@ -1,15 +1,18 @@
 package com.corvolution.cm2.connection;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import com.corvolution.cm2.Sensor;
 import com.corvolution.cm2.SensorNotFoundException;
 
+/**This class manages all sensor connection, holding connected and disconnected sensor objects, sensor state, adding and removing listeners, event source for firing events. Singleton pattern applied for this class. Instance of this class cannot be created. Instead specific method returns reference to this class  
+ * @author Suleyman Gasimov
+ *
+ */
 public final class ConnectionManager
 {
-	
 	private  Vector<SensorListener> connectionListeners;
 	private  Vector<SensorListener> disconnectionListeners;
 	public  boolean connectionState;
@@ -19,14 +22,21 @@ public final class ConnectionManager
 	public  int nConnectedSensors;
 	public static final int CONNECTION = 100;
 	public static final int DISCONNECTION = 101;
+	public static final int SINGLE_SENSOR = 102;
+	public static final int ALL_SENSORS = 103;
 	private  List<Sensor> sensorList = new CopyOnWriteArrayList<>();
 	private static ConnectionManager instance = null;
 
+	/**Constructor for defending single instance.
+	 * 
+	 */
 	private ConnectionManager()
 	{
-		// only for defending single instance
 	}
 
+	/**This method returns single and only instance of this class. If instance is null, this method creates instance.
+	 * @return ConnectionManager instance
+	 */
 	public static ConnectionManager getInstance()
 	{
 		if (instance == null)
@@ -36,6 +46,10 @@ public final class ConnectionManager
 		return instance;
 	}
 
+	/**This method adds listeners to list.Only listeners implemented SensorListener interface is allowed.Second argument option is for defining which kind listener is added by application.
+	 * @param listener, this listener must implement SensorListener interface
+	 * @param int - two options, CONNECTION, DISCONNECTION
+	 */
 	synchronized public void addSensorListener(SensorListener listener, int option)
 	{	
 		if(option == ConnectionManager.CONNECTION)
@@ -59,6 +73,10 @@ public final class ConnectionManager
 		
 	}
 
+	/**Same as addSensorListener, except instead of adding it removes listeners from list
+	 * @param listener
+	 * @param option
+	 */
 	synchronized public void removeSensorListener(SensorListener listener, int option)
 	{	
 		if(option == ConnectionManager.CONNECTION)
@@ -111,11 +129,15 @@ public final class ConnectionManager
 
 	}
 
+
 	protected void setConnected(boolean status)
 	{
 		connectionState = status;
 	}
 
+	/**This method returns true if sensor is connected
+	 * @return boolean
+	 */
 	public boolean isConnected()
 	{
 		return connectionState;
@@ -126,6 +148,9 @@ public final class ConnectionManager
 		nConnectedSensors = count;
 	}
 
+	/**This method returns number of connected sensors
+	 * @return int
+	 */
 	public int getNumberOfConnectedSensors()
 	{
 		return nConnectedSensors;
@@ -157,17 +182,28 @@ public final class ConnectionManager
 		fireDisconnectionEvent();
 	}
 
+	/**This method starts specific thread. That thread listens connection state of sensors. If any sensor connected it fires event with specific information about connection. Before sensor  configuration  application this method must be called.
+	 * 
+	 */
 	public void startListener()
 	{
 		Thread sensorListener = new Thread(new SensorNotifier());
 		sensorListener.start();
 	}
 
+	/**This method returns list of connected sensors. This list holds only sensor objects which states are true.
+	 * @return List<sensor>
+	 */
 	public List<Sensor> getConnectedSensorsList()
 	{
 		return sensorList;
 	}
 
+	/**This method returns single sensor object from list. if three sensors are connected, for retrieving first one must pass 0 (int) as argument, for second 1 (int) as argument,  for third one 2 (int) as argument.
+	 * @param int 
+	 * @return sensor
+	 * @throws SensorNotFoundException
+	 */
 	public Sensor currentSensor(int i) throws SensorNotFoundException
 	{
 		if(sensorList.isEmpty())
@@ -177,17 +213,21 @@ public final class ConnectionManager
 		return sensorList.get(i);
 	}
 
-	public long measurementDataSize(String option)
+	/**This method returns single sensor's or all sensor's measurement data size
+	 * @param int, option as static field of this class- SINGLE_SENSOR  or ALL_SENSORS
+	 * @return long 
+	 */
+	public long measurementDataSize(int option)
 	{
 		long dataSize = 0;
-		if (option.equalsIgnoreCase("all"))
+		if (option == ConnectionManager.SINGLE_SENSOR)
 		{
 			for (Sensor device : sensorList)
 			{
 				dataSize += device.getDataSize();
 			}
 		}
-		else if (option.equalsIgnoreCase("single"))
+		else if (option== ConnectionManager.ALL_SENSORS)
 		{
 			dataSize += sensorList.get(0).getDataSize();
 		}

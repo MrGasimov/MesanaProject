@@ -1,18 +1,23 @@
 package com.corvolution.cm2.fileadapter;
-
 import java.util.Calendar;
 import java.util.Date;
-
 import com.corvolution.cm2.SensorNotFoundException;
 
+/**This class represents timeSync file of sensor.
+ * @author Suleyman Gasimov
+ */
 public class TimeSyncFile extends BinaryFileAdapter
-{
+{	
+	/**Constructs object for connected sensor
+	 * @param String absolutePath
+	 */
 	public TimeSyncFile(String path)
 	{
 		super(path);
 	}
-
-	public void writeBinaryFile() throws SensorNotFoundException{
+	
+	public void writeBinaryFile() throws SensorNotFoundException
+	{
 		Date date = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);				 

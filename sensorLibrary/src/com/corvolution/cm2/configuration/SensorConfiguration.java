@@ -14,6 +14,11 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * This class represents configuration object for sensor. For configuring sensor  instance of this class must be initialized. 
+ * @author Suleyman Gasimov
+ *
+ */
 public class SensorConfiguration implements ConfigurationInterface_v1_0
 {
 	private HashMap<String, String> additionalParameters;
@@ -25,75 +30,128 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 	private String configInterfaceVersionMajor;
 	private String configInterfaceVersionMinor;
 
+	/**Default constructor.
+	 * 
+	 */
 	public SensorConfiguration()
 	{
 		additionalParameters = new HashMap<>();
 		encryptedParameters = new HashMap<>();
 	}
 
+	/**Method for setting version  of Configuration Interface  for sensor configuration
+	 * @param String major part of Configuration Interface version
+	 * @param String minor part of Configuration Interface version
+	 */
 	public void setConfigurationInterfaceVersion(String major, String minor)
 	{
 		this.configInterfaceVersionMajor = major;
 		this.configInterfaceVersionMinor = minor;
 	}
 
+	/**This method returns major part of configuration interface version as a byte
+	 * @return byte
+	 */
 	public byte getConfigurationInterfaceVersionMajor()
 	{
 		return  Byte.parseByte(configInterfaceVersionMajor); 
 	}
 	
+	/**This method returns minor part of configuration interface version as a byte
+	 * @return byte
+	 */
 	public byte getConfigurationInterfaceVersionMinor()
 	{
 		return  Byte.parseByte(configInterfaceVersionMinor); 
 	}
 	
+	/**This method sets startMode of configuration given by application
+	 * 
+	 */
 	public void setStartMode(StartMode startMode)
 	{
 		this.startMode = startMode;
 
 	}
 
+	/**This method returns startMode set by application for configuring sensor
+	 * @return StartMode
+	 */
 	public StartMode getStartMode()
 	{
 		return this.startMode;
 	}
-
+	
+	/**This method returns startMode set by application for configuring sensor
+	 * @return StartMode
+	 */
 	public ConfigurationSet getConfigurationSet()
 	{
 		return configurationSet;
 	}
-
+	
+	/**
+	 * This method sets configurationSet given by application
+	 *
+	 */
 	public void setConfigurationSet(ConfigurationSet configurationSet)
 	{
 
 		this.configurationSet = configurationSet;
 	}
 
+	/**
+	 * This method sets recording start time. Parameter is given by application
+	 *
+	 */
 	public void setRecordingStartTime(Date date)
 	{
 		this.recordingStartTime = date;
 	}
-
+	
+	/**
+	 * This method returns recording start time of the sensor  which set by application
+	 *@return Date
+	 */
 	public Date getRecordingStartTime()
 	{
 		return this.recordingStartTime;
 	}
-
+	
+	/**
+	 * This method sets recording duration for the sensor.Parameter is given by application
+	 *
+	 */
 	public void setRecordingDuration(int duration)
 	{
 		this.recordingDuration = duration;
 	}
-
+	
+	/**
+	 * This method returns recording duration of the sensor set by application
+	 *@return int recording duration
+	 */
 	public int getRecordingDuration()
 	{
 
 		return this.recordingDuration;
 	}
-
+	
+	
+	/**This method encrypts data which is given as byte array.For encryption password and initialization vector must be passed to method. Password and initialization vector must be at least 16 bytes. 
+	 * @param skey password is given by application 
+	 * @param byte[] message data to be encrypted 
+	 * @param ivx initialization vector
+	 * @return byte[] encrypted data as byte array
+	 * @throws UnsupportedEncodingException
+	 * @throws IllegalBlockSizeException
+	 * @throws BadPaddingException
+	 * @throws InvalidKeyException
+	 */
 	private static byte[] encrypt(String skey, byte[] message, String ivx)
 			throws UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException
 	{
-
+		
 		SecretKeySpec keySpec = new SecretKeySpec(skey.getBytes(), "AES");
 		IvParameterSpec ivSpec = new IvParameterSpec(ivx.getBytes());
 
@@ -105,6 +163,16 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		return raw;
 	}
 
+	/**This method decrypts data which is given as byte array.For decryption password and initialization vector must be passed to method. Password and initialization vector must be same when used for encryption and length at least 16 bytes. 
+	 * @param encrypted
+	 * @param skey
+	 * @param ivx
+	 * @return String data- decrypted
+	 * @throws InvalidKeyException
+	 * @throws IOException
+	 * @throws IllegalBlockSizeException
+	 * @throws BadPaddingException
+	 */
 	public static String decrypt(byte[] encrypted, String skey, String ivx)
 			throws InvalidKeyException, IOException, IllegalBlockSizeException, BadPaddingException
 	{
@@ -118,13 +186,13 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		byte[] stringBytes = cipher.doFinal(encrypted);
 
 		// converts the decoded message to a String
-		String clear = new String(stringBytes, "UTF8");
+		String data = new String(stringBytes, "UTF8");
 
-		return clear;
+		return data;
 	}
 
-	public static Cipher getCypher(SecretKeySpec keySpec, IvParameterSpec ivSpec, int mode) throws InvalidKeyException
-	{
+	private static Cipher getCypher(SecretKeySpec keySpec, IvParameterSpec ivSpec, int mode) throws InvalidKeyException
+	{ 
 		// Get a cipher object.
 		Cipher cipher;
 		try
@@ -151,18 +219,30 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		return cipher;
 	}
 
-	// add parameter to parameter hashmap
+	/**This method adds any given parameter by application to hash map 
+	 * @param key
+	 * @param value
+	 */
 	public void addParameter(String key, String value)
 	{
 		this.additionalParameters.put(key, value);
 	}
 
+	/**This method returns parameter value given with key from hash map. Parameter added by application
+	 * @param String key
+	 * @return String parameter from hashMap 
+	 */
 	public String getParameter(String key)
 	{
 		return additionalParameters.get(key);
 	}
-
-	// set linkId for configuration file
+	
+	
+	/**This method adds encrypted parameters to hash map password and initialization vector as a key argument
+	 * @param key
+	 * @param value
+	 * @param password
+	 */
 	public void addEncryptedParameter(String key, byte[] value, String password)
 	{
 		try
@@ -175,6 +255,11 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		}
 	}
 
+	/**This method returns encrypted parameter from hash map added by application. For getting parameter password and initialization vector (key) arguments must be passed to method.
+	 * @param key
+	 * @param password
+	 * @return String encrypted parameter
+	 */
 	public String getEncryptedParameter(String key, String password)
 	{
 		String para = null;
@@ -189,13 +274,17 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 		return para;
 	}
 
-	// returns map of parameters
+	/**This method returns hash map of parameters added by application
+	 * @return HashMap of parameters 
+	 */
 	public HashMap<String, String> getParametersMap()
 	{
 		return additionalParameters;
 	}
 
-	// returns map of encrypted parameters
+	/**This method returns hash map of encrypted parameters added by application
+	 * @return HashMap of encrypted parameters
+	 */
 	public HashMap<String, byte[]> getEncrypetdParameters()
 	{
 		return encryptedParameters;

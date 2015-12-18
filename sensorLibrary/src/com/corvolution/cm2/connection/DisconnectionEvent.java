@@ -1,6 +1,10 @@
 package com.corvolution.cm2.connection;
 import java.util.EventObject;
 
+/**This class represents disconnection event object for sensor listener
+ * @author Suleyman Gasimov
+ *
+ */
 public class DisconnectionEvent extends EventObject
 {
 	private static final long serialVersionUID = 1L;
@@ -8,24 +12,39 @@ public class DisconnectionEvent extends EventObject
 	private String path;
 	private int nConnectedSensors;
 
+	/**Disconnection event object created with a source, state and number of connected sensors arguments
+	 * @param source
+	 * @param state
+	 * @param path
+	 * @param num
+	 */
 	public DisconnectionEvent(Object source, boolean state, String path, int num)
-	{
+	{ 
 		super(source);
 		this.connectionState = state;
 		this.path = path;
 		this.nConnectedSensors = num;
 	}
-
+	
+	/**This method returns disconnection state of a sensor
+	 * @return boolean
+	 */
 	public boolean getState()
 	{
 		return connectionState;
 	}
-
+	
+	/**This method returns letter assigned to  sensor by system 
+	 * @return String
+	 */
 	public String getSensorPath()
 	{
 		return path;
 	}
-
+		
+	/**This method returns number of connected sensor
+	 * @return int
+	 */
 	public int getNumOfConnectedSensors()
 	{
 		return nConnectedSensors;

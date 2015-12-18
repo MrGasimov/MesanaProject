@@ -1,22 +1,23 @@
 package com.corvolution.cm2.fileadapter;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
-
 import com.corvolution.cm2.Logger;
 
 /**
- * This class reads
+ * This class represents adapter for text files.Classes extending this class must call parent constructor with a path to text file for creating their instances.
  * 
- * @author kirst
+ * @author Kirst Malte
  *
  */
 public class TextFileAdapter
 {
 	private Properties prop;
 
+	/**Creates instance of this class for a given File. 
+	 * @param String path to text file
+	 */
 	public TextFileAdapter(String path)
 	{
 		try
@@ -34,6 +35,10 @@ public class TextFileAdapter
 		}
 	}
 
+	/**This method returns property value from file
+	 * @param Strin property
+	 * @return String
+	 */
 	public String getProperty(String property)
 	{
 		return prop.getProperty(property);

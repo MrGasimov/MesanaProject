@@ -5,6 +5,10 @@ import javax.swing.filechooser.FileSystemView;
 import com.corvolution.cm2.Constants;
 import com.corvolution.cm2.Logger;
 
+/**This class represents notification for connection status of sensor(s). A thread starts this runnable object. If connection status changes it fires event.The event object is a ConnectionManager itself.
+ * @author Suleyman Gasimov
+ *
+ */
 public class SensorNotifier implements Runnable
 {
 	public void run()
@@ -12,6 +16,9 @@ public class SensorNotifier implements Runnable
 		sensorListener();
 	}
 
+	/**This method checks connection status of USB ports with specific device names. If connection state changes it fires event. Fired events are handled by listeners.
+	 * 
+	 */
 	public void sensorListener()
 	{
 		int nConnectedSensors = 0;

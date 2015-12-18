@@ -78,7 +78,7 @@ public class ReaderGui
 			public void widgetSelected(SelectionEvent e)
 			{
 				text.setText("Reading data from sensors...");
-				size = (int) ConnectionManager.getInstance().measurementDataSize("all");
+				size = (int) ConnectionManager.getInstance().measurementDataSize(ConnectionManager.ALL_SENSORS);
 				readData();
 				
 				new Thread()

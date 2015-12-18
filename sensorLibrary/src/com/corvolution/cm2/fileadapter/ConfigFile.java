@@ -4,6 +4,10 @@ import java.util.zip.CRC32;
 import com.corvolution.cm2.SensorNotFoundException;
 import com.corvolution.cm2.configuration.SensorConfiguration;
 
+/**This class represents configuration file of sensor.When sensor connected instance of this class is created and initialized.
+ * @author Suleyman Gasimov
+ *
+ */
 public class ConfigFile extends BinaryFileAdapter
 {
 	private static int BYTE_VERSION_MAJOR = 0;
@@ -19,18 +23,22 @@ public class ConfigFile extends BinaryFileAdapter
 	private final static int CONFIG_FILE_LENGTH = 33;
 	public 	byte[] buffer = new byte[CONFIG_FILE_LENGTH];
 
+	/**Constructs object for connected sensor
+	 * @param String absolutePath
+	 * @throws SensorNotFoundException
+	 */
 	public ConfigFile(String absolutePath) throws SensorNotFoundException
 	{
 		super(absolutePath);
-		
 		super.readBinaryFile();
-		
-		
 	}
 
+	/**This method writes binary data to a sensor for a given configuration.Sensor Configuration must be passed to configure sensor.
+	 * @param sensorConfiguration
+	 * @throws SensorNotFoundException
+	 */
 	public void writeBinaryFile(SensorConfiguration sensorConfiguration) throws SensorNotFoundException
 	{
-		// Initialize buffer with zeros
 		for (int i = 0; i < CONFIG_FILE_LENGTH; i++)
 		{
 			buffer[i] = 0;

@@ -12,28 +12,39 @@ public class SensorNotFoundException extends Exception
 	 */
 	private static final long serialVersionUID = -3666409772339775926L;
 	
-	public SensorNotFoundException()
-	{
 		
-	}
-	
+	/**This constructor constructs object with a given String parameter as information about exception
+	 * @param String message
+	 */
 	public SensorNotFoundException(String message)
 	{
 		super(message);
 		this.message = message;
 	}
 	
+	/**Second constructor constructs object with given Throwable parameter 
+	 * @param Throwable cause
+	 */
 	public SensorNotFoundException(Throwable cause)
 	{
 		super(cause);
 	}
 	
+	/**Third constructor constructs object with several parameters as a alternate option.
+	 * @param message
+	 * @param cause
+	 * @param enableSuppression
+	 * @param writableStackTrace
+	 */
 	public SensorNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)
 	{
 		super(message,cause,enableSuppression,writableStackTrace);
 		this.message = message;
 	}
 	
+	/**This method retrieves message holding information about exception.
+	 * @return String message
+	 */
 	public String getMessage()
 	{
 		return message;

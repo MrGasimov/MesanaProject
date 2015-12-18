@@ -1,8 +1,6 @@
 package com.corvolution.cm2.fileadapter;
-import java.io.File;
 import java.util.Calendar;
 import java.util.zip.CRC32;
-
 import com.corvolution.cm2.SensorNotFoundException;
 import com.corvolution.cm2.configuration.SensorConfiguration;
 

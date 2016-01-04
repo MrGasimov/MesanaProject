@@ -18,15 +18,32 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 
+/**
+ * The Class OperatorAccess.
+ */
 public class OperatorAccess {
 	
+	/** The display. */
 	Display display;
+	
+	/** The shell. */
 	Shell shell;
+	
+	/** The password label. */
 	Label userLabel, passwordLabel;
+	
+	/** The error text. */
 	Text loginText, passwordText, errorText;
+	
+	/** The cancel button. */
 	Button okButton, cancelButton;
+	
+	/** The password. */
 	private String login, password;
 	
+	/**
+	 * Instantiates a new operator access.
+	 */
 	public OperatorAccess(){
 		display = new Display();
         shell = new Shell(display,SWT.CLOSE | SWT.TITLE|SWT.MIN);
@@ -163,6 +180,9 @@ public class OperatorAccess {
 	}
 	
 	
+	/**
+	 * Check credits.
+	 */
 	public void checkCredits() {
 		login = loginText.getText();
 		password = passwordText.getText();
@@ -179,11 +199,21 @@ public class OperatorAccess {
 	}
 	
 
+	/**
+	 * Gets the login.
+	 *
+	 * @return the login
+	 */
 	public String getLogin(){
 		return login;
 	}
 	
 	
+	/**
+	 * Gets the password.
+	 *
+	 * @return the password
+	 */
 	public String getPassword(){
 		return password;
 	}

@@ -15,15 +15,36 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**InputDialog - This class creates dialog for user input.It is used for security checking and access control.
+ * @author Suleyman Gasimov
+ */
 public class InputDialog extends Dialog
 {
+	
+	/** The msg label. */
 	private Label userLabel, passwordLabel, msgLabel;
+	
+	/** The password field. */
 	private Text userField, passwordField;
+	
+	/** The password string. */
 	private String userString, passwordString;
+	
+	/** The status. */
 	private boolean status;
+	
+	/** The parent shell. */
 	private Shell parentShell;
+	
+	/** The arg. */
 	private int arg;
 
+	/**
+	 * Constructor for Initialization of the dialog.
+	 *
+	 * @param shell the shell
+	 * @param arg the arg
+	 */
 	public InputDialog(Shell shell, int arg)
 	{
 		super(shell,arg);
@@ -32,6 +53,11 @@ public class InputDialog extends Dialog
 		
 	}
 
+	/**
+	 * createDialogArea() - This method creates dialog area.
+	 *
+	 * @return String, user input
+	 */
 	protected String createDialogArea()
 	{
 		Shell shell = new Shell(this.parentShell, arg);

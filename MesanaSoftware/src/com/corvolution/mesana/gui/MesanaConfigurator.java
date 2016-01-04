@@ -53,8 +53,13 @@ import com.corvolution.mesana.data.SensorCollection;
 import com.corvolution.mesana.data.SensorData;
 import com.corvolution.mesana.data.TaskCollection;
 
+/**MesanaConfigurator - This class is a user interface for sensor configuration operated by user.
+ * @author Suleyman Gasimov
+ *
+ */
 public class MesanaConfigurator
 {
+	
 	private int messageCode;
 	private static String login;
 	private static String password;
@@ -74,7 +79,9 @@ public class MesanaConfigurator
 	public boolean configState = false;
 	public boolean shellCheck;
 
-	// Constructor
+	/**Custom constructor for GUI initialization.
+	 * 
+	 */
 	public MesanaConfigurator()
 	{ 
 		setGui();
@@ -88,7 +95,7 @@ public class MesanaConfigurator
 						+ " has been connected successfully!");
 				for(SensorData element :sCollect.getList())
 				{	
-					if(element.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
+					if(element.getId().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 							{
 								if(!element.getState().equals(Constants.SENSOR_STATE_STOCK))
 								{
@@ -116,7 +123,11 @@ public class MesanaConfigurator
 
 	}
 
-	// Method for updating gui depending on connection state
+	/**
+	 * connection(ConnectionEvent e) - This method updates GUI, when sensor is connected.
+	 *
+	 * @param e the e
+	 */
 	public static void connection(ConnectionEvent e)
 	{
 		Display.getDefault().asyncExec(new Runnable()
@@ -165,7 +176,12 @@ public class MesanaConfigurator
 			}
 		});
 	}
-
+	
+	/**
+	 * disconnection(DisconnectionEvent e) - This method updates GUI, when sensor is disconnected.
+	 *
+	 * @param e the e
+	 */
 	public static void disconnection(DisconnectionEvent e)
 	{
 		Display.getDefault().asyncExec(new Runnable(){
@@ -203,6 +219,9 @@ public class MesanaConfigurator
 		});
 	}
 
+	/**setGui() - This method sets all GUI dependent components to be ready.
+	 * 
+	 */
 	public void setGui()
 	{
 		display = new Display();
@@ -403,6 +422,9 @@ public class MesanaConfigurator
 
 	}
 
+	/**batteryWarning() -This method opens Battery warning dialog to warn about low battery state. 
+	 * @return int, specific value depended on user reply.
+	 */
 	public int batteryWarning()
 	{
 		MessageBox dialog = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
@@ -413,6 +435,9 @@ public class MesanaConfigurator
 		return returnCode;
 	}
 
+	/**This method registers all needed GUI listeners.
+	 * 
+	 */
 	public void setGuiListeners()
 	{
 		customerList.addSelectionListener(new SelectionAdapter()
@@ -449,7 +474,7 @@ public class MesanaConfigurator
 					mCollect.highPriorityfilter();
 					for (Measurement mObject : mCollect.getList())
 					{
-						aData = new AddressData(mObject.getID());
+						aData = new AddressData(mObject.getId());
 						if (mObject.getPriority().equals("HIGH"))
 						{
 							customerList.add("+ " + aData.guiAddressData());
@@ -473,7 +498,7 @@ public class MesanaConfigurator
 					mCollect.mediumPriorityfilter();
 					for (Measurement mObject : mCollect.getList())
 					{
-						aData = new AddressData(mObject.getID());
+						aData = new AddressData(mObject.getId());
 						if (mObject.getPriority().equals("HIGH"))
 						{
 							customerList.add("+ " + aData.guiAddressData());
@@ -497,7 +522,7 @@ public class MesanaConfigurator
 					mCollect.lowPriorityfilter();
 					for (Measurement mObject : mCollect.getList())
 					{
-						aData = new AddressData(mObject.getID());
+						aData = new AddressData(mObject.getId());
 						if (mObject.getPriority().equals("HIGH"))
 						{
 							customerList.add("+ " + aData.guiAddressData());
@@ -626,6 +651,12 @@ public class MesanaConfigurator
 
 	}
 
+	/**
+	 * printLabel(String address, String linkId) - This method executes system commands for printing label.
+	 *
+	 * @param address the address
+	 * @param linkId the link id
+	 */
 	public void printLabel(String address, String linkId)
 	{
 		Printer.getInstance().addParameter("Address", address);
@@ -635,6 +666,12 @@ public class MesanaConfigurator
 	}
 
 	// para1 is state for measurement update , para2 which method run
+	/**
+	 * This method depending on arguments updates measurement state, sensor state, sends user entered comments and selected electrode numbers to server.
+	 *
+	 * @param para1 the para1
+	 * @param para2 the para2
+	 */
 	public void restApiUpdate(String para1, String para2)
 	{
 		String state = null;
@@ -642,7 +679,7 @@ public class MesanaConfigurator
 		{
 			try
 			{
-				if (ConnectionManager.getInstance().currentSensor(0).getSerialNumber() == element.getID())
+				if (ConnectionManager.getInstance().currentSensor(0).getSerialNumber() == element.getId())
 				{
 					state = element.getState();
 				}
@@ -745,6 +782,8 @@ public class MesanaConfigurator
 		}
 	}
 
+	/**configurateSensor() - when this method is called sensor configuration starts.
+	 */
 	private void configurateSensor()
 	{
 		// change state of measurement in RestApi
@@ -772,7 +811,7 @@ public class MesanaConfigurator
 		{
 			if (mCollect.getList().get(index2).getLinkId() == element.getLinkId())
 			{
-				aData = new AddressData(element.getID());
+				aData = new AddressData(element.getId());
 				printLabel(aData.getCustomerData(), element.getLinkId());
 			}
 
@@ -803,6 +842,9 @@ public class MesanaConfigurator
 
 	}
 
+	/**setAndWriteFiles() - This method constructs sensor configuration object before sensor configuration done.
+	 * 
+	 */
 	private void setAndWriteFiles()
 	{
 		SensorConfiguration config = new SensorConfiguration();
@@ -874,9 +916,11 @@ public class MesanaConfigurator
 		}
 	}
 
+	/**
+	 * setTrayIcon() - This method sets tray icon for MesanaConfigurator GUI.
+	 */
 	public void setTrayIcon()
 	{
-		// image for tray icon
 		Image image = new Image(display, PropertyManager.getInstance().getProperty("ICON_FOLDER"));
 		final Tray tray = display.getSystemTray();
 
@@ -956,6 +1000,9 @@ public class MesanaConfigurator
 		}
 	}
 
+	/**
+	 * setCustomerData() - This method retrieves customer Data from server, initializes and updates GUI.
+	 */
 	public static void setCustomerData()
 	{
 		String sURL = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements?state=WAIT_FOR_CONFIG";
@@ -965,7 +1012,7 @@ public class MesanaConfigurator
 		for (int i = 0; i < mCollect.getList().size(); i++)
 		{
 			mObject = mCollect.getList().get(i);
-			String mID = mObject.getID();
+			String mID = mObject.getId();
 			aData = new AddressData(mID);
 			if (mObject.getPriority().equals("HIGH"))
 			{
@@ -986,6 +1033,11 @@ public class MesanaConfigurator
 
 	}
 
+	/**
+	 * setSensorData() - This method retrieves sensor Data from server, initializes and updates GUI.
+	 *
+	 * @throws SensorNotFoundException if sensor is disconnected.
+	 */
 	public static void setSensorData() throws SensorNotFoundException
 	{
 		String sURL = PropertyManager.getInstance().getProperty("REST_PATH") +"sensors/?state="+Constants.SENSOR_STATE_STOCK;
@@ -994,7 +1046,7 @@ public class MesanaConfigurator
 			
 		for (SensorData sData : sCollect.getList())
 		{
-			if (sData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
+			if (sData.getId().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 			{
 				sensorText.setText(sData.getSensorData() + "\r\n" + "Device: "
 					+ (ConnectionManager.getInstance().currentSensor(0).getDeviceName() + "\r\n" + "Manufacture: "
@@ -1008,6 +1060,12 @@ public class MesanaConfigurator
 		
 	}
 
+	/**
+	 * setTaskData(String mID) - This method retrieves tasks from server, initializes and updates GUI .
+	 *
+	 * @param mID the new task data
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void setTaskData(String mID) throws IOException
 	{
 		try
@@ -1026,7 +1084,6 @@ public class MesanaConfigurator
 				}
 
 			}
-			// if sensor task is set skip
 			if (!sensorTaskText.equals(""))
 			{
 				for (int i = 0; i < tCollect.getSensorTask().size(); i++)
@@ -1041,12 +1098,18 @@ public class MesanaConfigurator
 		}
 	}
 
+	/**openShell() - This method opens GUI if sensor is connected. 
+	 * 
+	 */
 	public void openShell()
 	{
 		if (ConnectionManager.getInstance().connectionState)
 			shell.open();
 	}
 
+	/**resetGuiData() - This method resets MesanaConfigurator GUI.
+	 * 
+	 */
 	public static void resetGuiData()
 	{
 		priorityCombo.select(0);
@@ -1061,6 +1124,9 @@ public class MesanaConfigurator
 
 	}
 
+	/**setData() - This method sets all data to MesanaConfigurator GUI.
+	 * 
+	 */
 	public static void setData() 
 	{
 		setCustomerData();
@@ -1075,6 +1141,10 @@ public class MesanaConfigurator
 
 	}
 	
+	/**checkSensorState() - This method checks sensor state.
+	 *
+	 * @return true, if successful
+	 */
 	public static boolean checkSensorState()
 	{
 		boolean state = false;
@@ -1082,7 +1152,7 @@ public class MesanaConfigurator
 		{	
 				for (SensorData sData : sCollect.getList())
 				{
-					if (sData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
+					if (sData.getId().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 					{
 						if(sData.getState().equals(Constants.SENSOR_STATE_STOCK))
 						{
@@ -1098,13 +1168,15 @@ public class MesanaConfigurator
 		return state;
 	}
 	
+	/**checkFirmwareVersion() - This method checks firmware version.
+	 */
 	public void checkFirmwareVersion()
 	{
 		try
 		{
 			for (SensorData sensorData : sCollect.getList())
 			{
-				if (sensorData.getID().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
+				if (sensorData.getId().equals(ConnectionManager.getInstance().currentSensor(0).getSerialNumber()))
 				{
 					if (!ConnectionManager.getInstance().currentSensor(0).getFirwareVersion()
 							.equals(sensorData.getFirmware()))

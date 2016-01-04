@@ -34,7 +34,10 @@ import com.corvolution.mesana.data.Measurement;
 import com.corvolution.mesana.data.MeasurementCollection;
 import com.corvolution.mesana.rest.RestApiConnector;
 
-public class ReaderGui
+/**
+ * The Class MesanaReader.
+ */
+public class MesanaReader
 {
 	double copySize, size;
 	String readOutDest;
@@ -50,7 +53,10 @@ public class ReaderGui
 	private String measurementId;
 	RestApiConnector restApi;
 
-	public ReaderGui()
+	/**
+	 * Instantiates a new MesanaReader.
+	 */
+	public MesanaReader()
 	{
 		restApi = new RestApiConnector();
 		mCollect = new MeasurementCollection();
@@ -132,6 +138,9 @@ public class ReaderGui
 		display.dispose();
 	}
 
+	/**connection(ConnectionEvent cEvent) -  This method is called when sensor is connected.
+	 * @param cEvent , fired when sensor is connected
+	 */
 	public static void connection(ConnectionEvent cEvent)
 	{
 		Display.getDefault().asyncExec(new Runnable()
@@ -151,6 +160,9 @@ public class ReaderGui
 		});
 	}
 
+	/**disconnection(DisconnectionEvent cEvent) -  This method is called when sensor is disconnected.
+	 * @param dEvent , fired when sensor is disconnected
+	 */
 	public static void disconnection(DisconnectionEvent dEvent)
 	{
 		Display.getDefault().asyncExec(new Runnable()
@@ -177,6 +189,12 @@ public class ReaderGui
 
 	}
 
+	
+	/**restApiUpdate(String deviceNumber, String mId) - This method updates measurement state on the server.
+	 *
+	 * @param deviceNumber, sensor device number
+	 * @param mId, measurement Id
+	 */
 	public void restApiUpdate(String deviceNumber, String mId)
 	{
 		JSONObject json = new JSONObject();
@@ -195,6 +213,8 @@ public class ReaderGui
 		}
 	}
 
+	/**setTrayIcon() - This method sets the tray icon for MesanaReader GUI.
+	 */
 	public void setTrayIcon()
 	{
 		// image for tray icon
@@ -258,6 +278,9 @@ public class ReaderGui
 		}
 	}
 
+	/**
+	 * Sets the gui components.
+	 */
 	public void setGui()
 	{
 		display = new Display();
@@ -294,6 +317,9 @@ public class ReaderGui
 
 	}
 
+	/**
+	 * Operator dialog for security checking.
+	 */
 	public static void operatorDialog()
 	{
 		boolean check = false;
@@ -307,6 +333,9 @@ public class ReaderGui
 		}
 	}
 	
+	/**ReadData() - This method reads measurement data from sensor and stores them specific folder for each sensor.
+	 * Read data.
+	 */
 	public void readData()
 	{
 		Thread thread = new Thread (new Runnable(){
@@ -321,7 +350,7 @@ public class ReaderGui
 						{
 							if (element.getLinkId().equals(device.getReadConfiguration().getParameter("LinkId")))
 							{
-								measurementId = element.getID();
+								measurementId = element.getId();
 								restApiUpdate(device.getSerialNumber(), measurementId);
 							}
 						}

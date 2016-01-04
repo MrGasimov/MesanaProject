@@ -1,16 +1,22 @@
 package com.corvolution.mesana.configurator;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import com.corvolution.cm2.connection.ConnectionManager;
-
+/**PropertyManager - provides managing ability for properties of Mesana Software (e.g MesanaConfigurator)
+ * @author Suleyman Gasimov
+ */
 public class PropertyManager
 {
+	
+	/** The prop. */
 	private static Properties prop;
+	
+	/** The instance. */
 	private static PropertyManager instance;
 
+	/**The constructor for creating property instance and loading properties from file.
+	 */
 	public PropertyManager()
 	{
 		try
@@ -25,10 +31,22 @@ public class PropertyManager
 		}
 	}
 
+	/**
+	 * getProperty - This method returns string value of a given property.
+	 *
+	 * @param property the property
+	 * @return String - value of property
+	 */
 	public String getProperty(String property)
 	{
 		return prop.getProperty(property);
 	}
+	
+	/**
+	 * getInstance - This method returns instance of this class.
+	 *
+	 * @return single instance of PropertyManager
+	 */
 	public static PropertyManager getInstance()
 	{
 		if (instance == null)

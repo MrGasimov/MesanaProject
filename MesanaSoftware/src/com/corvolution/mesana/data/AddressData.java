@@ -12,32 +12,66 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+/** This class represents address data of customer.
+ * @author Suleyman Gasimov
+ *
+ */
 public class AddressData extends RestApiConnector
 {
 
+	/** The address list. */
 	private List<AddressData> addressList;
+	
+	/** The token. */
 	TypeToken<List<AddressData>> token = new TypeToken<List<AddressData>>()
 	{
 	};
+	
+	/** The salutation. */
 	private String salutation = "";
+	
+	/** The first name. */
 	private String firstName = "";
+	
+	/** The last name. */
 	private String lastName = "";
+	
+	/** The city. */
 	private String city = "";
+	
+	/** The street. */
 	private String street = "";
+	
+	/** The zip. */
 	private String zip = "";
+	
+	/** The country. */
 	private String country = "";
 	
-
-	public List<AddressData> getList()
-	{
-		return addressList;
-	}
-
+	/**
+	 * Initialization of a object given by measurement id.
+	 *
+	 * @param id the id
+	 */
 	public AddressData(String id)
 	{
 		setList(id);
 	}
-
+	
+	/**
+	 * getList - Returns the list holding instances of this class.
+	 *
+	 * @return List - holds objects of this class
+	 * @para none
+	 */
+	public List<AddressData> getList()
+	{
+		return addressList;
+	}
+	
+	/**getCustomerData - returns customer information as String. 
+	 * @return String
+	 */
 	public String getCustomerData()
 	{
 		if (salutation.equals("m"))
@@ -65,6 +99,9 @@ public class AddressData extends RestApiConnector
 				+ country;
 	}
 
+	/**guiAddressData - This method only returns important informations for displaying to user.
+	 * @return String
+	 */
 	public String guiAddressData()
 	{
 		String limiter = null;
@@ -77,6 +114,11 @@ public class AddressData extends RestApiConnector
 
 	}
 
+	/**
+	 * setList - This method initializes all class fields and adds instance to the list.
+	 *
+	 * @param mID the new list
+	 */
 	public void setList(String mID)
 	{
 		String addressUrl = PropertyManager.getInstance().getProperty("REST_PATH") + "measurements/" + mID + "/addresses?type=sensor";

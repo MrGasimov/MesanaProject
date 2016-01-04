@@ -4,11 +4,37 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+/**Printer - This class represents printer manager for setting template, adding parameters as link id, address and executing printing.
+ * @author Suleyman Gasimov
+ *
+ */
 public final class Printer
 {
+	
+	/** The instance. */
 	private static Printer instance = null;
 	
-	public static Printer getInstance(){
+	/** The print list. */
+	public List<String> printList;
+	
+	/** The hmap. */
+	public HashMap<String, String> hmap = new HashMap<String, String>();
+	
+	/** The label. */
+	String label;
+	
+	/**
+	 * Instantiates a new printer.
+	 */
+	private Printer()
+	{
+	}
+	
+	/**getInstance - This method creates instance of this class and returns it. 
+	 * @return Printer - instance of this class
+	 */
+	public static Printer getInstance()
+	{
 		if(instance == null)
 		{
 			instance = new Printer();
@@ -16,22 +42,31 @@ public final class Printer
 		return instance;
 	}
 	
-	public List<String> printList;
-
-	public HashMap<String, String> hmap = new HashMap<String, String>();
-
+	/**setTemplate - This method sets template path to a class field for sending command to printer.
+	 * @param labelTemplate - path to template used by printer for printing.
+	 * @return void
+	 */
 	public void setTemplate(String labelTemplate)
 	{
-
-		String label;
+		label = labelTemplate ;
 	}
 
 	// adding parameters to map e.g linkId and address
+	/**addParameter - This method adds keys and their values to HashMap for sending commands to printer.
+	 * @param key - for example link id or address
+	 * @param value - value of a key 
+	 * @return void
+	 */
 	public void addParameter(String key, String value)
 	{
 		hmap.put(key, value);
 	}
 
+	/**
+	 * print - This method executes commands for printing. Must be called after necessary fields are initialized (template, link id or address)
+	 *
+	 * @return void
+	 */
 	public void print()
 	{
 		String command;

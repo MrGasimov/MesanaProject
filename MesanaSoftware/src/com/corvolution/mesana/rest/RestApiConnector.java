@@ -20,12 +20,24 @@ import org.apache.http.impl.client.HttpClients;
 import com.corvolution.mesana.configurator.PropertyManager;
 
 
+/**
+ * The Class RestApiConnector.
+ */
 public class RestApiConnector {
 		
+	/** The httpclient. */
 	CloseableHttpClient httpclient = HttpClients.createDefault();	
+	
+	/** The conf. */
 	PropertyManager conf = new PropertyManager();
 	
 	
+	/**
+	 * Gets the method.
+	 *
+	 * @param URL the url
+	 * @return the method
+	 */
 	public String getMethod(String URL){
 		CloseableHttpResponse response;
 		HttpGet httpGet = new HttpGet(URL);
@@ -54,6 +66,13 @@ public class RestApiConnector {
 		
 	}
 		
+	/**
+	 * Post method.
+	 *
+	 * @param json the json
+	 * @param url the url
+	 * @throws Exception the exception
+	 */
 	public void postMethod(String json, String url) throws Exception {		
 		
 		HttpPost httpPost = new HttpPost(url);
@@ -72,6 +91,13 @@ public class RestApiConnector {
 		response.close();
 	}
 	
+	/**
+	 * Put method.
+	 *
+	 * @param json the json
+	 * @param url the url
+	 * @throws Exception the exception
+	 */
 	public void putMethod(String json, String url) throws Exception {		
 		CloseableHttpResponse response ;
 		HttpPut httpPut = new HttpPut(url);

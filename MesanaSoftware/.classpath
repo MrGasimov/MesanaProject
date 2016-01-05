@@ -9,7 +9,7 @@
 	<classpathentry kind="lib" path="RefLib/httpcore-4.4.2.jar"/>
 	<classpathentry kind="lib" path="RefLib/swt.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sensorLibrary"/>
-	<classpathentry kind="lib" path="C:/Users/gasimov/Documents/Repo/MesanaSoftware/RefLib/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/gasimov/Documents/Repo/MesanaSoftware/RefLib/commons-httpclient-2.0.2.jar"/>
+	<classpathentry kind="lib" path="RefLib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="RefLib/commons-httpclient-2.0.2.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

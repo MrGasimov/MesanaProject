@@ -8,21 +8,21 @@ import com.corvolution.mesana.rest.RestApiConnector;
  */
 public class SensorData extends RestApiConnector
 {
-
-	/** The id. */
+	/** Part of the sensor properties. */
 	private String id = "";
 	
-	/** The state. */
+	/** Part of the sensor properties. */
 	private String state = "";
 	
-	/** The firmware. */
+	/** Part of the sensor properties. */
 	private String firmware = "";
 	
-	/** The name. */
+	/** Part of the sensor properties. */
 	private String name = "";
 	
-	/** The type. */
+	/** Part of the sensor properties. */
 	private String type = "";
+
 
 	/**getSensorData() - returns information  of a given sensor.
 	 * @return String information about sensor (e.g sensor state).

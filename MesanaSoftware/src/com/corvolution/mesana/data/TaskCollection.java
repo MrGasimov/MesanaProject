@@ -58,10 +58,10 @@ public class TaskCollection extends RestApiConnector
 	}
 
 	/**
-	 * setList(String mID, String sID) - This method initializes measurement task instances, sensor task instances and stores them appropriate lists.  
+	 * This method initializes measurement task instances, sensor task instances and stores them appropriate lists.  
 	 *
-	 * @param mID the m id
-	 * @param sID the s id
+	 * @param mID the measurement id
+	 * @param sID the sensor id
 	 */
 	public void setList(String mID, String sID)
 	{

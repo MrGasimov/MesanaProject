@@ -30,7 +30,6 @@ public class MesanaListener implements SensorListener
 	 * This method is run when connection event occurs. 
 	 *
 	 * @param cEvent the c event
-	 * @return void
 	 */
 	@Override
 	public void sensorConnection(ConnectionEvent cEvent)
@@ -50,7 +49,6 @@ public class MesanaListener implements SensorListener
 	 * This method is run when disconnection event occurs. 
 	 *
 	 * @param dEvent the d event
-	 * @return void
 	 */
 	@Override
 	public void sensorDisconnection(DisconnectionEvent dEvent)

@@ -2,8 +2,8 @@ package com.corvolution.mesana.data;
 
 import java.util.List;
 
-import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.rest.RestApiConnector;
+import com.corvolution.mesana.utility.PropertyManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

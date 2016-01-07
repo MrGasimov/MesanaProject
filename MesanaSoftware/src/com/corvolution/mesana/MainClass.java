@@ -1,9 +1,12 @@
-package com.corvolution.mesana.configurator;
+package com.corvolution.mesana;
 
 import com.corvolution.cm2.connection.ConnectionManager;
 import com.corvolution.cm2.connection.SensorNotifier;
 import com.corvolution.mesana.gui.MesanaConfigurator;
 import com.corvolution.mesana.gui.MesanaReader;
+import com.corvolution.mesana.utility.Constants;
+import com.corvolution.mesana.utility.MesanaListener;
+import com.corvolution.mesana.utility.PropertyManager;
 
 /**
  * This is a main class.Entry for the application

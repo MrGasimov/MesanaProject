@@ -1,4 +1,4 @@
-package com.corvolution.mesana.configurator;
+package com.corvolution.mesana.utility;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;

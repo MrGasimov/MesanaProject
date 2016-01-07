@@ -26,11 +26,11 @@ import com.corvolution.cm2.SensorNotFoundException;
 import com.corvolution.cm2.connection.ConnectionManager;
 import com.corvolution.cm2.connection.DisconnectionEvent;
 import com.corvolution.cm2.connection.ConnectionEvent;
-import com.corvolution.mesana.configurator.Constants;
-import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.data.Measurement;
 import com.corvolution.mesana.data.MeasurementCollection;
 import com.corvolution.mesana.rest.RestApiConnector;
+import com.corvolution.mesana.utility.Constants;
+import com.corvolution.mesana.utility.PropertyManager;
 
 /**
  * This class represents GUI for reading measurement data from sensor operated by user.
@@ -193,6 +193,7 @@ public class MesanaReader
 	 * @param deviceNumber, sensor device number
 	 * @param mId, measurement Id
 	 */
+	@SuppressWarnings("unchecked")
 	public void restApiUpdate(String deviceNumber, String mId)
 	{
 		JSONObject json = new JSONObject();

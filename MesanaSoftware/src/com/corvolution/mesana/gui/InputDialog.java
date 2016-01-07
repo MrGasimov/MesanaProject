@@ -23,7 +23,6 @@ public class InputDialog extends Dialog
 	private Label userLabel, passwordLabel, msgLabel;
 	private Text userField, passwordField;
 	private String userString, passwordString;
-	private boolean status;
 	private Shell parentShell;
 	private int arg;
 

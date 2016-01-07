@@ -14,7 +14,6 @@ import com.corvolution.mesana.rest.RestApiConnector;
 public class Measurement extends RestApiConnector
 {
 	private String id = "";
-	private String state = "";
 	private String stateChange = "";
 	private String linkId = "";
 	private String deliveryDate = "";

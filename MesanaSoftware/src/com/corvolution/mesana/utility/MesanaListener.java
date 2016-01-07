@@ -1,4 +1,4 @@
-package com.corvolution.mesana.configurator;
+package com.corvolution.mesana.utility;
 import com.corvolution.cm2.connection.ConnectionEvent;
 import com.corvolution.cm2.connection.DisconnectionEvent;
 import com.corvolution.cm2.connection.SensorListener;

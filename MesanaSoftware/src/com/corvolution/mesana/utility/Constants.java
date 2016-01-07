@@ -1,4 +1,4 @@
-package com.corvolution.mesana.configurator;
+package com.corvolution.mesana.utility;
 
 /**This class holds all constants used by Mesana software.
  * @author Suleyman Gasimov

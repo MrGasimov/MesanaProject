@@ -43,15 +43,15 @@ import com.corvolution.cm2.configuration.StartModes;
 import com.corvolution.cm2.connection.ConnectionEvent;
 import com.corvolution.cm2.connection.ConnectionManager;
 import com.corvolution.cm2.connection.DisconnectionEvent;
-import com.corvolution.mesana.configurator.Constants;
-import com.corvolution.mesana.configurator.Printer;
-import com.corvolution.mesana.configurator.PropertyManager;
 import com.corvolution.mesana.data.AddressData;
 import com.corvolution.mesana.data.Measurement;
 import com.corvolution.mesana.data.MeasurementCollection;
 import com.corvolution.mesana.data.SensorCollection;
 import com.corvolution.mesana.data.SensorData;
 import com.corvolution.mesana.data.TaskCollection;
+import com.corvolution.mesana.utility.Constants;
+import com.corvolution.mesana.utility.Printer;
+import com.corvolution.mesana.utility.PropertyManager;
 
 /**This class is a user interface for sensor configuration operated by user.
  * @author Suleyman Gasimov
@@ -671,24 +671,24 @@ public class MesanaConfigurator
 	 * @param para1 the para1
 	 * @param para2 the para2
 	 */
+	@SuppressWarnings("unchecked")
 	public void restApiUpdate(String para1, String para2)
 	{	
 		// para1 is state for measurement update , para2 which method run
-		String state = null;
-		for (SensorData element : sCollect.getList())
-		{
-			try
-			{
-				if (ConnectionManager.getInstance().currentSensor(0).getSerialNumber() == element.getId())
-				{
-					state = element.getState();
-				}
-			}
-			catch (SensorNotFoundException e)
-			{
-				statusBar.setText(e.getMessage());
-			}
-		}
+//		for (SensorData element : sCollect.getList())
+//		{
+//			try
+//			{
+//				if (ConnectionManager.getInstance().currentSensor(0).getSerialNumber() == element.getId())
+//				{
+//					String state = element.getState();
+//				}
+//			}
+//			catch (SensorNotFoundException e)
+//			{
+//				statusBar.setText(e.getMessage());
+//			}
+//		}
 
 		String mId = measureText.getText().substring(4, 17);
 		if (para2.equals("comment"))

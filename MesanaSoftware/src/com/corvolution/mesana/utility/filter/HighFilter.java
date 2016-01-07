@@ -1,4 +1,4 @@
-package com.corvolution.mesana.configurator;
+package com.corvolution.mesana.utility.filter;
 
 import java.util.Comparator;
 

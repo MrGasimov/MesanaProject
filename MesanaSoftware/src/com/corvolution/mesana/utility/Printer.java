@@ -1,4 +1,4 @@
-package com.corvolution.mesana.configurator;
+package com.corvolution.mesana.utility;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,7 +17,6 @@ public final class Printer
 	private static Printer instance = null;
 	public List<String> printList;
 	public HashMap<String, String> hmap = new HashMap<String, String>();
-	private String path_label;
 
 	/**
 	 * Instantiates a new printer.
@@ -40,16 +39,6 @@ public final class Printer
 		return instance;
 	}
 
-	/**
-	 * This method sets template path to a class field for sending command to printer.
-	 * 
-	 * @param labelTemplate
-	 *            - path to template used by printer for printing.
-	 */
-	public void setTemplate(String labelTemplate)
-	{
-		path_label = labelTemplate;
-	}
 
 	/**
 	 * This method adds keys and their values to HashMap for sending commands to printer.
@@ -79,7 +68,7 @@ public final class Printer
 		try
 		{
 			pr = Runtime.getRuntime().exec(command);
-			int exitCode = pr.waitFor();
+			pr.waitFor();
 		}
 		catch (IOException e)
 		{

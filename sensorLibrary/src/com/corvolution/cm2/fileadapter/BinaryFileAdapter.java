@@ -53,9 +53,8 @@ public class BinaryFileAdapter
 		{			
 			FileInputStream inputStream = new FileInputStream(path);
 			BufferedInputStream bufferedOutStream = new BufferedInputStream(inputStream);
-			int nRead = 0;
 			CRC32 myCRC = new CRC32();
-			while ((nRead = bufferedOutStream.read(buffer)) != -1)
+			while ((bufferedOutStream.read(buffer)) != -1)
 			myCRC.update(buffer, 0, 31);
 			inputStream.close();
 		}

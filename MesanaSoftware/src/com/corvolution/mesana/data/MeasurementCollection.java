@@ -1,11 +1,12 @@
 package com.corvolution.mesana.data;
 import java.util.Collections;
 import java.util.List;
-import com.corvolution.mesana.configurator.CustomComparator;
-import com.corvolution.mesana.configurator.HighFilter;
-import com.corvolution.mesana.configurator.LowFilter;
-import com.corvolution.mesana.configurator.MediumFilter;
+
 import com.corvolution.mesana.rest.RestApiConnector;
+import com.corvolution.mesana.utility.filter.CustomComparator;
+import com.corvolution.mesana.utility.filter.HighFilter;
+import com.corvolution.mesana.utility.filter.LowFilter;
+import com.corvolution.mesana.utility.filter.MediumFilter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

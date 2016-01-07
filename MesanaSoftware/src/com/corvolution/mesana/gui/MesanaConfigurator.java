@@ -53,7 +53,7 @@ import com.corvolution.mesana.data.SensorCollection;
 import com.corvolution.mesana.data.SensorData;
 import com.corvolution.mesana.data.TaskCollection;
 
-/**MesanaConfigurator - This class is a user interface for sensor configuration operated by user.
+/**This class is a user interface for sensor configuration operated by user.
  * @author Suleyman Gasimov
  *
  */
@@ -126,7 +126,7 @@ public class MesanaConfigurator
 	/**
 	 * This method updates GUI, when sensor is connected.
 	 *
-	 * @param e the e
+	 * @param e - is a connection event
 	 */
 	public static void connection(ConnectionEvent e)
 	{
@@ -180,7 +180,7 @@ public class MesanaConfigurator
 	/**
 	 * This method updates GUI, when sensor is disconnected.
 	 *
-	 * @param e the e
+	 * @param e - is a disconnection event
 	 */
 	public static void disconnection(DisconnectionEvent e)
 	{

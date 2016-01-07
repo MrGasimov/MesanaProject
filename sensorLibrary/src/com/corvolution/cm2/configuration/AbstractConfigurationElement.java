@@ -91,11 +91,5 @@ public abstract class AbstractConfigurationElement
 		}
 
 		return compatible;
-		// configurationVersion compatibleConfigurationVersion return
-		// 1.0 1.0 true
-		// 1.1 1.0 true
-		// 1.0 1.1 false
-		// 2.0 1.1 false
-		// major version difference is always false
 	}
 }

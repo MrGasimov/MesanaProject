@@ -3,7 +3,7 @@ package com.corvolution.cm2.configuration;
 import java.util.Date;
 
 /**This interface is implemented by sensor configuration and represents interface of API, more specifically sensor configuration with sensor  
- * @author gasimov
+ * @author Suleyman Gasimov
  *
  */
 public interface ConfigurationInterface_v1_0

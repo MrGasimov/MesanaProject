@@ -11,6 +11,9 @@ public  class Logger
 {
 	public static String log=null;
 	
+	/**This method prints out  given string in a specific format. 
+	 * @param msg, message that going to print out
+	 */
 	public static void printLog(String msg)
 	{
 		Logger.log = msg;

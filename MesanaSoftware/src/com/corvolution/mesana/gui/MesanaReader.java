@@ -35,12 +35,12 @@ import com.corvolution.mesana.data.MeasurementCollection;
 import com.corvolution.mesana.rest.RestApiConnector;
 
 /**
- * The Class MesanaReader.
+ * MesanaReader - This class represents GUI for reading measurement data from sensor operated by user.
  */
 public class MesanaReader
 {
 	double copySize, size;
-	String readOutDest;
+	private String readOutDest;
 	private static String login = null;
 	private static String password = null;
 	private Display display;
@@ -138,7 +138,7 @@ public class MesanaReader
 		display.dispose();
 	}
 
-	/**connection(ConnectionEvent cEvent) -  This method is called when sensor is connected.
+	/**This method is called when sensor is connected.
 	 * @param cEvent , fired when sensor is connected
 	 */
 	public static void connection(ConnectionEvent cEvent)
@@ -160,7 +160,7 @@ public class MesanaReader
 		});
 	}
 
-	/**disconnection(DisconnectionEvent cEvent) -  This method is called when sensor is disconnected.
+	/**This method is called when sensor is disconnected.
 	 * @param dEvent , fired when sensor is disconnected
 	 */
 	public static void disconnection(DisconnectionEvent dEvent)
@@ -190,7 +190,7 @@ public class MesanaReader
 	}
 
 	
-	/**restApiUpdate(String deviceNumber, String mId) - This method updates measurement state on the server.
+	/**This method updates measurement state on the server.
 	 *
 	 * @param deviceNumber, sensor device number
 	 * @param mId, measurement Id
@@ -213,7 +213,7 @@ public class MesanaReader
 		}
 	}
 
-	/**setTrayIcon() - This method sets the tray icon for MesanaReader GUI.
+	/**This method sets the tray icon for MesanaReader GUI.
 	 */
 	public void setTrayIcon()
 	{
@@ -333,8 +333,8 @@ public class MesanaReader
 		}
 	}
 	
-	/**ReadData() - This method reads measurement data from sensor and stores them specific folder for each sensor.
-	 * Read data.
+	/**This method reads measurement data from sensor and stores them  at specific folder for each sensor.
+	 * 
 	 */
 	public void readData()
 	{

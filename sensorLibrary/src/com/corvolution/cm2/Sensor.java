@@ -42,18 +42,6 @@ public class Sensor
 	private String configurationInterfaceVersion;
 	private String batteryVoltage;
 	private String currentState;
-	
-	public String getCurrentState()
-	{
-		return this.currentState;
-	}
-
-	public String getSensorSystemTime()
-	{
-		return this.sensorSystemTime;
-	}
-
-
 	private String sensorSystemTime;
 	private SensorConfiguration writeSensorConfiguration;
 	private SensorConfiguration readSensorConfiguration;
@@ -80,6 +68,23 @@ public class Sensor
 		}
 		readCustomFile();
 		readFeedBackFile();
+	}
+	
+	
+	/**This method returns current state of sensor.
+	 * @return state as string
+	 */
+	public String getCurrentState()
+	{
+		return this.currentState;
+	}
+
+	/**This method returns system time of the sensor
+	 * @return time as string
+	 */
+	public String getSensorSystemTime()
+	{
+		return this.sensorSystemTime;
 	}
 	
 	/**This method returns Battery Voltage of the connected sensor as a double primitive type
@@ -150,7 +155,7 @@ public class Sensor
 	}
 	
 	/**This method reads info file from sensor to initialize sensor details 
-	 * @throws ParseException 
+	 * @throws ParseException, if parsing time format was not successful. 
 	 * @throws IOException if file not found or file could be opened, ParseException 
 	 */
 	private void readSensorInfo() throws SensorNotFoundException
@@ -178,8 +183,8 @@ public class Sensor
 		
 	}
 
-	/**This method reads custom text file from sensor to retrieve link id 
-	 * @throws IOException
+	/**This method reads custom text file from sensor to retrieve link id.For reading additional data from custom file, additional data details must be added to customFile class 
+	 * @throws SensorNotFoundException, if sensor connection failed or  sensor is disconnected.
 	 */
 	private void readCustomFile() throws SensorNotFoundException 
 	{
@@ -189,12 +194,12 @@ public class Sensor
 			throw new SensorNotFoundException("Sensor not found!");
 		}
 		readSensorConfiguration.addParameter("LinkId", this.customFile.getProperty(CustomFile.LINK_ID));
-		// for reading additional data from custom file, additional data details must be added to customFile class
+		
 
 	}
 
 	/**This method reads feedback text file from sensor to initialize sensor state information
-	 * @throws SensorNotFoundException
+	 * @throws SensorNotFoundException , if sensor connection failed or  sensor is disconnected.
 	 */
 	private void readFeedBackFile() throws SensorNotFoundException
 	{
@@ -211,7 +216,7 @@ public class Sensor
 
 	/**This method copies measurement data from sensor to specified destination directory
 	 * @param String destination, where data would be copied
-	 * @throws SensorNotFoundException
+	 * @throws SensorNotFoundException, if sensor connection failed or  sensor is disconnected.
 	 */
 	public void readMeasurement(String dest) throws SensorNotFoundException
 	{
@@ -229,7 +234,7 @@ public class Sensor
 
 	/**This method reads encrypted data from sensor with given password
 	 * @param String password
-	 * @throws SensorNotFoundException 
+	 * @throws SensorNotFoundException, if sensor connection failed or  sensor is disconnected. 
 	 */
 	public void readEncryptedParameters(String password) throws SensorNotFoundException
 	{
@@ -255,8 +260,8 @@ public class Sensor
 	
 	
 	
-	/**This method reads config binary file from the connected sensor
-	 * 
+	/**This method reads config binary file from the connected sensor.
+	 * @throws SensorNotFoundException, if sensor connection failed or  sensor is disconnected.
 	 */
 	public void readConfigFile()  throws SensorNotFoundException
 	{
@@ -269,7 +274,7 @@ public class Sensor
 	}
 
 	/**This method writes configuration file to the connected sensor.Before calling this method configuration must be set
-	 * @throws SensorNotFoundException
+	 * @throws SensorNotFoundException, if sensor connection failed or  sensor is disconnected.
 	 */
 	public void writeConfigFile()throws SensorNotFoundException
 	{

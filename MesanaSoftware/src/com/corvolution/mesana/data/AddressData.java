@@ -34,7 +34,7 @@ public class AddressData extends RestApiConnector
 	/**
 	 * Initialization of a object given by measurement id.
 	 *
-	 * @param id the id
+	 * @param id of the given measurement
 	 */
 	public AddressData(String id)
 	{
@@ -45,7 +45,7 @@ public class AddressData extends RestApiConnector
 	 * Returns the list holding instances of this class.
 	 *
 	 * @return List - holds objects of this class
-	 * @para none
+	 * 
 	 */
 	public List<AddressData> getList()
 	{

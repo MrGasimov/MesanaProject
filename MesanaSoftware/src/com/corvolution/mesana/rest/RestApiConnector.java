@@ -21,28 +21,22 @@ import com.corvolution.mesana.configurator.PropertyManager;
 
 
 /**
- * The Class RestApiConnector.
+ *RestApiConnector - This class represents manager for getting, sending data and pushing changes to server.
  */
 public class RestApiConnector {
 		
-	/** The httpclient. */
 	CloseableHttpClient httpclient = HttpClients.createDefault();	
-	
-	/** The conf. */
 	PropertyManager conf = new PropertyManager();
-	
-	
 	/**
-	 * Gets the method.
+	 * This method gets data from server.
 	 *
-	 * @param URL the url
-	 * @return the method
+	 * @param URL - to get data from.
+	 * @return data as string from server 
 	 */
 	public String getMethod(String URL){
 		CloseableHttpResponse response;
 		HttpGet httpGet = new HttpGet(URL);
 		
-		//httpGet.setConfig(params);
 		String json=null;
 		try {
 
@@ -67,11 +61,11 @@ public class RestApiConnector {
 	}
 		
 	/**
-	 * Post method.
+	 * This method pushes changes to server.
 	 *
-	 * @param json the json
-	 * @param url the url
-	 * @throws Exception the exception
+	 * @param json - string argument to push to server.
+	 * @param url - to server that data would be pushed.
+	 * @throws Exception , if connection to server failed or server could not response.
 	 */
 	public void postMethod(String json, String url) throws Exception {		
 		
@@ -92,11 +86,11 @@ public class RestApiConnector {
 	}
 	
 	/**
-	 * Put method.
+	 * This method sends data to server.
 	 *
-	 * @param json the json
-	 * @param url the url
-	 * @throws Exception the exception
+	 * @param json , data as string to send to server
+	 * @param url, path to server that data would be sent
+	 * @throws Exception, if connection to server failed or server could not response.
 	 */
 	public void putMethod(String json, String url) throws Exception {		
 		CloseableHttpResponse response ;

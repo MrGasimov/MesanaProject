@@ -48,8 +48,8 @@ public final class ConnectionManager
 	}
 
 	/**This method adds listeners to list.Only listeners implemented SensorListener interface is allowed.Second argument option is for defining which kind listener is added by application.
-	 * @param listener, this listener must implement SensorListener interface
-	 * @param int - two options, CONNECTION, DISCONNECTION
+	 * @param listener implemented SensorListener interface
+	 * @param option - CONNECTION, DISCONNECTION constants
 	 */
 	synchronized public void addSensorListener(SensorListener listener, int option)
 	{	
@@ -75,8 +75,8 @@ public final class ConnectionManager
 	}
 
 	/**Same as addSensorListener, except instead of adding it removes listeners from list
-	 * @param listener
-	 * @param option
+	 * @param listener implementing sensorListener interface
+	 * @param option - CONNECTION, DISCONNECTION constants
 	 */
 	synchronized public void removeSensorListener(SensorListener listener, int option)
 	{	
@@ -193,7 +193,7 @@ public final class ConnectionManager
 	}
 
 	/**This method returns list of connected sensors. This list holds only sensor objects which states are true.
-	 * @return List<sensor>
+	 * @return List holding sensor instances.
 	 */
 	public List<Sensor> getConnectedSensorsList()
 	{
@@ -201,9 +201,9 @@ public final class ConnectionManager
 	}
 
 	/**This method returns single sensor object from list. if three sensors are connected, for retrieving first one must pass 0 (int) as argument, for second 1 (int) as argument,  for third one 2 (int) as argument.
-	 * @param int 
-	 * @return sensor
-	 * @throws SensorNotFoundException
+	 * @param i index number of sensor in a list 
+	 * @return sensor, instance
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public Sensor currentSensor(int i) throws SensorNotFoundException
 	{
@@ -215,7 +215,7 @@ public final class ConnectionManager
 	}
 
 	/**This method returns single sensor's or all sensor's measurement data size
-	 * @param int, option as static field of this class- SINGLE_SENSOR  or ALL_SENSORS
+	 * @param option as static fields of this class- SINGLE_SENSOR  or ALL_SENSORS
 	 * @return long 
 	 */
 	public long measurementDataSize(int option)

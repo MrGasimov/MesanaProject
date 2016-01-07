@@ -6,7 +6,7 @@ import com.corvolution.mesana.gui.MesanaConfigurator;
 import com.corvolution.mesana.gui.MesanaReader;
 
 /**
- * This is a main class.
+ * This is a main class.Entry for the application
  */
 public class MainClass
 {

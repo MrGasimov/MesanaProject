@@ -34,7 +34,7 @@ public class TaskCollection extends RestApiConnector
 	/**
 	 * Returns list holding measurement tasks.
 	 *
-	 * @return List<Task>
+	 * @return List
 	 */
 	public List<Task> getMeasTask()
 	{
@@ -44,7 +44,7 @@ public class TaskCollection extends RestApiConnector
 	/**
 	 * Returns list holding sensor tasks.
 	 *
-	 * @return List<Task>
+	 * @return List
 	 */
 	public List<Task> getSensorTask()
 	{

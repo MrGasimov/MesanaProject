@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-/**MeasurementCollection - This class represents object holding measurement services needed for sensor configuration.
+/**This class represents object holding measurement services needed for sensor configuration.
  * @author Suleyman Gasimov
  *
  */
@@ -34,7 +34,6 @@ public class MeasurementCollection extends RestApiConnector
 	/**
 	 * This method sorts list which holds measurement objects according to customer comparator.
 	 *
-	 * @return void
 	 */
 	public void sortListbyDate()
 	{
@@ -45,7 +44,6 @@ public class MeasurementCollection extends RestApiConnector
 	/**
 	 * This method sorts list which holds measurement objects according to high filter comparator.
 	 *
-	 * @return void
 	 */
 	public void highPriorityfilter()
 	{
@@ -55,7 +53,6 @@ public class MeasurementCollection extends RestApiConnector
 	/**
 	 * This method sorts list which holds measurement objects according to medium filter comparator.
 	 *
-	 * @return void
 	 */
 	public void mediumPriorityfilter()
 	{
@@ -65,7 +62,6 @@ public class MeasurementCollection extends RestApiConnector
 	/**
 	 * This method sorts list which holds measurement objects according to low filter comparator.
 	 *
-	 * @return void
 	 */
 	public void lowPriorityfilter()
 	{
@@ -84,9 +80,7 @@ public class MeasurementCollection extends RestApiConnector
 
 	/**
 	 * This method initializes all measurement objects and stores them in the list.
-	 *
 	 * @param url the new list
-	 * @return void
 	 */
 	public void setList(String url)
 	{

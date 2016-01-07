@@ -81,7 +81,11 @@ public final class Printer
 			pr = Runtime.getRuntime().exec(command);
 			int exitCode = pr.waitFor();
 		}
-		catch (IOException | InterruptedException e)
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InterruptedException e)
 		{
 			e.printStackTrace();
 		}

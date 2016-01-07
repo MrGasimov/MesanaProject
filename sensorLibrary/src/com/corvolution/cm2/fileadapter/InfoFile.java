@@ -16,11 +16,11 @@ public class InfoFile extends TextFileAdapter
 	public static final String CONFIGURATION_INTERFACE_VERSION = "configurationInterfaceVersion";
 	
 	/**Constructs this class object with a path to info file of sensor
-	 * @param sensorPath
+	 * @param path to currently connected sensor
 	 */
-	public InfoFile(String sensorPath)
+	public InfoFile(String path)
 	{
-		super(sensorPath + ":" + File.separator + Constants.CM2_INFO_FILE);
+		super(path + ":" + File.separator + Constants.CM2_INFO_FILE);
 	}
 
 }

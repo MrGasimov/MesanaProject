@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-/**SensorCollection - This class represents object, holding SensorData instances.
+/**This class represents object, holding SensorData instances.
  * @author Suleyman Gasimov
  *
  */

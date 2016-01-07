@@ -1,0 +1,8 @@
+com.corvolution.cm2
+com.corvolution.cm2.configuration
+com.corvolution.cm2.connection
+com.corvolution.cm2.fileadapter
+com.corvolution.mesana.configurator
+com.corvolution.mesana.data
+com.corvolution.mesana.gui
+com.corvolution.mesana.rest

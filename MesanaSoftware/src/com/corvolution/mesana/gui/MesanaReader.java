@@ -1,8 +1,6 @@
 package com.corvolution.mesana.gui;
 
 import java.io.File;
-import java.io.IOException;
-
 import org.apache.commons.io.FileUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -35,7 +33,7 @@ import com.corvolution.mesana.data.MeasurementCollection;
 import com.corvolution.mesana.rest.RestApiConnector;
 
 /**
- * MesanaReader - This class represents GUI for reading measurement data from sensor operated by user.
+ * This class represents GUI for reading measurement data from sensor operated by user.
  */
 public class MesanaReader
 {

@@ -40,8 +40,8 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 	}
 
 	/**Method for setting version  of Configuration Interface  for sensor configuration
-	 * @param String major part of Configuration Interface version
-	 * @param String minor part of Configuration Interface version
+	 * @param major part of Configuration Interface version
+	 * @param minor part of Configuration Interface version
 	 */
 	public void setConfigurationInterfaceVersion(String major, String minor)
 	{
@@ -164,14 +164,14 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 	}
 
 	/**This method decrypts data which is given as byte array.For decryption password and initialization vector must be passed to method. Password and initialization vector must be same when used for encryption and length at least 16 bytes. 
-	 * @param encrypted
-	 * @param skey
-	 * @param ivx
-	 * @return String data- decrypted
-	 * @throws InvalidKeyException
-	 * @throws IOException
-	 * @throws IllegalBlockSizeException
-	 * @throws BadPaddingException
+	 * @param encrypted data to be decrypted
+	 * @param skey password for decryption.Same used for encryption
+	 * @param ivx initialization vector 
+	 * @return String decrypted data
+	 * @throws InvalidKeyException This is the exception for invalid Keys (invalid encoding, wrong length, uninitialized, etc).
+	 * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of exceptions produced by failed or interrupted I/O operations.
+	 * @throws IllegalBlockSizeException This exception is thrown when the length of data provided to a block cipher is incorrect, i.e., does not match the block size of the cipher.
+	 * @throws BadPaddingException This exception is thrown when a particular padding mechanism is expected for the input data but the data is not padded properly.
 	 */
 	public static String decrypt(byte[] encrypted, String skey, String ivx)
 			throws InvalidKeyException, IOException, IllegalBlockSizeException, BadPaddingException
@@ -220,8 +220,8 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 	}
 
 	/**This method adds any given parameter by application to hash map 
-	 * @param key
-	 * @param value
+	 * @param key of value to be added to HashMap
+	 * @param value of parameter given by
 	 */
 	public void addParameter(String key, String value)
 	{
@@ -229,8 +229,8 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 	}
 
 	/**This method returns parameter value given with key from hash map. Parameter added by application
-	 * @param String key
-	 * @return String parameter from hashMap 
+	 * @param key of value from parameters HashMap
+	 * @return parameter from hashMap 
 	 */
 	public String getParameter(String key)
 	{
@@ -239,9 +239,9 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 	
 	
 	/**This method adds encrypted parameters to hash map password and initialization vector as a key argument
-	 * @param key
-	 * @param value
-	 * @param password
+	 * @param key initialization vector
+	 * @param value byte array of data
+	 * @param password for encryption
 	 */
 	public void addEncryptedParameter(String key, byte[] value, String password)
 	{
@@ -256,8 +256,8 @@ public class SensorConfiguration implements ConfigurationInterface_v1_0
 	}
 
 	/**This method returns encrypted parameter from hash map added by application. For getting parameter password and initialization vector (key) arguments must be passed to method.
-	 * @param key
-	 * @param password
+	 * @param key initialization vector  
+	 * @param password for decryption
 	 * @return String encrypted parameter
 	 */
 	public String getEncryptedParameter(String key, String password)

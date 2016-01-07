@@ -2,7 +2,7 @@ package com.corvolution.mesana.data;
 
 import com.corvolution.mesana.rest.RestApiConnector;
 
-/**SensorData - This class represents object holding information about specific sensor.  
+/**This class represents object holding information about specific sensor.  
  * @author Suleyman Gasimov
  *
  */

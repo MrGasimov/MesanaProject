@@ -23,9 +23,7 @@ public class Measurement extends RestApiConnector
 
 	/**
 	 * This method returns information about object.
-	 *
 	 * @return String
-	 * @para none
 	 */
 	public String getMeasurementData()
 	{

@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-/**InputDialog - This class creates dialog for user input.It is used for security checking and access control.
+/**This class creates dialog for user input.It is used for security checking and access control.
  * @author Suleyman Gasimov
  */
 public class InputDialog extends Dialog

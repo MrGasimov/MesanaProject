@@ -8,8 +8,8 @@ import com.corvolution.cm2.SensorNotFoundException;
  */
 public class TimeSyncFile extends BinaryFileAdapter
 {	
-	/**Constructs object for connected sensor
-	 * @param String absolutePath
+	/**Constructs object for currently connected sensor
+	 * @param path to TimeSyncFile on a currently connected sensor.
 	 */
 	public TimeSyncFile(String path)
 	{

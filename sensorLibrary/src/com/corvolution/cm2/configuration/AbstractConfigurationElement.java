@@ -13,10 +13,10 @@ public abstract class AbstractConfigurationElement
 
 	
 	/**Constructor constructs object with given parameters.
-	 * @param configSet
-	 * @param name
-	 * @param description
-	 * @param compatibleConfigurationVersion
+	 * @param configSet byte value of configurationSet for sensor configuration
+	 * @param name of configuraitonSet
+	 * @param description of configurationSet
+	 * @param compatibleConfigurationVersion version for checking compatibility of sensor with specific configuration
 	 */
 	public AbstractConfigurationElement(byte configSet, String name, String description,
 			String compatibleConfigurationVersion)
@@ -61,7 +61,7 @@ public abstract class AbstractConfigurationElement
 	}
 
 	/**This method returns true if configuration version Compatible with sensor 
-	 * @param configurationVersion
+	 * @param configurationVersion version of configuration by implemented interfaces
 	 * @return boolean
 	 */
 	public boolean isCompatibleWithSensor(String configurationVersion)

@@ -13,11 +13,11 @@ public class StatusFile extends TextFileAdapter
 	public static final String SYSTEM_TIME = "SystemTime";
 	
 	/**Constructs this class object with a path to status file of sensor
-	 * @param sensorPath
+	 * @param path to currently connected sensor
 	 */
-	public StatusFile(String sensorPath)
+	public StatusFile(String path)
 	{
-		super(sensorPath + ":" + File.separator + Constants.CM2_FEEDBACK_FILE);
+		super(path + ":" + File.separator + Constants.CM2_FEEDBACK_FILE);
 	}
 
 }

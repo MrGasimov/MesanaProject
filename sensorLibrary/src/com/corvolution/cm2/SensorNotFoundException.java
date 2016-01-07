@@ -11,7 +11,7 @@ public class SensorNotFoundException extends Exception
 	
 		
 	/**This constructor constructs object with a given String parameter as information about exception
-	 * @param String message
+	 * @param message about exception
 	 */
 	public SensorNotFoundException(String message)
 	{
@@ -20,18 +20,18 @@ public class SensorNotFoundException extends Exception
 	}
 	
 	/**Second constructor constructs object with given Throwable parameter 
-	 * @param Throwable cause
+	 * @param cause of exception
 	 */
 	public SensorNotFoundException(Throwable cause)
 	{
 		super(cause);
 	}
-	
 	/**Third constructor constructs object with several parameters as a alternate option.
-	 * @param message
-	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
+	 * @param message - info about exception
+	 * @param cause - the cause. (A null value is permitted, and indicates that the cause is nonexistent or unknown.) 
+	 * @see Throwable 
+	 * @param enableSuppression - whether or not suppression is enabled or disabled
+	 * @param writableStackTrace - whether or not the stack trace should be writable
 	 */
 	public SensorNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)
 	{
@@ -40,7 +40,7 @@ public class SensorNotFoundException extends Exception
 	}
 	
 	/**This method retrieves message holding information about exception.
-	 * @return String message
+	 * @return message
 	 */
 	public String getMessage()
 	{

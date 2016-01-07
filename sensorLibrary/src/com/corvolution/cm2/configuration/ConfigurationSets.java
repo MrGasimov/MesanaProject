@@ -18,7 +18,7 @@ public class ConfigurationSets
 	}
 	
 	/**This method retrieves list holding configurationSets instances
-	 * @return
+	 * @return ArrayList holding configSet instances
 	 */
 	public ArrayList<ConfigurationSet> getConfigSetList(){
 		return configSetList;

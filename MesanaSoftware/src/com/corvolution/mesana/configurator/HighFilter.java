@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import com.corvolution.mesana.data.Measurement;
 
-/**HighFilter - This class is custom comparator for ordering two objects by priority.Ordering is accomplished as high,medium and low. 
+/**This class is custom comparator for ordering two objects by priority.Ordering is accomplished as high,medium and low. 
  * @author Suleyman Gasimov
  */
 public class HighFilter implements Comparator<Measurement>

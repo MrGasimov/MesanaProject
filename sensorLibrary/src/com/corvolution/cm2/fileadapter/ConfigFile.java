@@ -24,8 +24,8 @@ public class ConfigFile extends BinaryFileAdapter
 	public 	byte[] buffer = new byte[CONFIG_FILE_LENGTH];
 
 	/**Constructs object for connected sensor
-	 * @param String absolutePath
-	 * @throws SensorNotFoundException
+	 * @param absolutePath to configFile on a current sensor
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public ConfigFile(String absolutePath) throws SensorNotFoundException
 	{
@@ -34,8 +34,8 @@ public class ConfigFile extends BinaryFileAdapter
 	}
 
 	/**This method writes binary data to a sensor for a given configuration.Sensor Configuration must be passed to configure sensor.
-	 * @param sensorConfiguration
-	 * @throws SensorNotFoundException
+	 * @param sensorConfiguration object for writing binary file to sensor while configuration
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public void writeBinaryFile(SensorConfiguration sensorConfiguration) throws SensorNotFoundException
 	{

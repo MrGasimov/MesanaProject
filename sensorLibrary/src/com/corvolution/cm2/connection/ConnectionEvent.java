@@ -13,10 +13,10 @@ public class ConnectionEvent extends EventObject
 	private int nConnectedSensors;
 
 	/**Connection event object created with a source, state and number of connected sensors arguments
-	 * @param source
-	 * @param state
-	 * @param path
-	 * @param num
+	 * @param source object of fired event
+	 * @param state of current sensor
+	 * @param path to current sensor
+	 * @param num of connected sensors
 	 */
 	public ConnectionEvent(Object source, boolean state, String path, int num)
 	{

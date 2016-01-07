@@ -16,7 +16,7 @@ public class TextFileAdapter
 	private Properties prop;
 
 	/**Creates instance of this class for a given File. 
-	 * @param String path to text file
+	 * @param path to text file
 	 */
 	public TextFileAdapter(String path)
 	{
@@ -36,8 +36,8 @@ public class TextFileAdapter
 	}
 
 	/**This method returns property value from file
-	 * @param Strin property
-	 * @return String
+	 * @param  property needed from file
+	 * @return property value from file
 	 */
 	public String getProperty(String property)
 	{

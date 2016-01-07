@@ -21,14 +21,12 @@ import com.corvolution.cm2.fileadapter.StatusFile;
 import com.corvolution.cm2.fileadapter.TimeSyncFile;
 /**
 * 
-* 
-* Sensor library
 * This class represents single connected sensor
 * and provides appropriate methods for retrieving, setting and configuring sensor.
 *
 * @author  Suleyman Gasimov 
 * @version 1.0
-* @since   03.12.2015 
+* @since   07.01.2016 
 * 
 */
 public class Sensor
@@ -54,8 +52,8 @@ public class Sensor
 	/**
 	   * Only constructor for constructing sensor object when it is connected over usb port.
 	   * This constructor reads info, config, feedback and encrypted files to initialize sensor 
-	   * @param String path as path to connected sensor.
-	 * @throws SensorNotFoundException 
+	   * @param path to connected sensor.
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	   */
 	public Sensor(String path) throws SensorNotFoundException
 	{	
@@ -215,8 +213,8 @@ public class Sensor
 	}
 
 	/**This method copies measurement data from sensor to specified destination directory
-	 * @param String destination, where data would be copied
-	 * @throws SensorNotFoundException, if sensor connection failed or  sensor is disconnected.
+	 * @param dest where data to be copied
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public void readMeasurement(String dest) throws SensorNotFoundException
 	{
@@ -233,8 +231,8 @@ public class Sensor
 	}
 
 	/**This method reads encrypted data from sensor with given password
-	 * @param String password
-	 * @throws SensorNotFoundException, if sensor connection failed or  sensor is disconnected. 
+	 * @param password for reading encrypted parameters
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public void readEncryptedParameters(String password) throws SensorNotFoundException
 	{
@@ -261,7 +259,7 @@ public class Sensor
 	
 	
 	/**This method reads config binary file from the connected sensor.
-	 * @throws SensorNotFoundException, if sensor connection failed or  sensor is disconnected.
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public void readConfigFile()  throws SensorNotFoundException
 	{
@@ -274,7 +272,7 @@ public class Sensor
 	}
 
 	/**This method writes configuration file to the connected sensor.Before calling this method configuration must be set
-	 * @throws SensorNotFoundException, if sensor connection failed or  sensor is disconnected.
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public void writeConfigFile()throws SensorNotFoundException
 	{
@@ -289,7 +287,7 @@ public class Sensor
 
 	
 	/**This method writes time synchronization binary file to the connected sensor, so sensor could synchronize itself after detaching
-	 * @throws SensorNotFoundException
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public void writeTimeSyncFile() throws SensorNotFoundException
 	{
@@ -320,8 +318,8 @@ public class Sensor
 		return this.readSensorConfiguration;
 	}
 
-	/**This method sets SensorConfiguration config object  by  application
-	 * @param SensorConfiguration config
+	/**This method sets SensorConfiguration config object by  application
+	 * @param config SensorConfiguration object for writing configuration sensor by user
 	 */
 	public void setSensorConfiguration(SensorConfiguration config)
 	{
@@ -329,8 +327,8 @@ public class Sensor
 	}
 
 	/**This method writes encypted parameters to sensor by application. 
-	 *@param String password
-	 *@throws SensorNotFoundException if writing data was not successfull or sensor is disconnected
+	 *@param password for encryption
+	 *@throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public void writeEncryptedParameters(String password)throws SensorNotFoundException
 	{
@@ -405,7 +403,7 @@ public class Sensor
 	}
 	
 	/**This method writes current system time to sensor for synchronizing
-	 * @throws SensorNotFoundException
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public void synchronize() throws SensorNotFoundException
 	{

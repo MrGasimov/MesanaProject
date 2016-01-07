@@ -1,27 +1,22 @@
 package com.corvolution.mesana.rest;
+import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-
 import com.corvolution.mesana.configurator.PropertyManager;
 
 
 /**
- *RestApiConnector - This class represents manager for getting, sending data and pushing changes to server.
+ *This class represents manager for getting, sending data and pushing changes to server.
  */
 public class RestApiConnector {
 		
@@ -88,20 +83,18 @@ public class RestApiConnector {
 	/**
 	 * This method sends data to server.
 	 *
-	 * @param json , data as string to send to server
-	 * @param url, path to server that data would be sent
-	 * @throws Exception, if connection to server failed or server could not response.
+	 * @param json data as string to send to server
+	 * @param url path to server that data would be sent
+	 * @throws IOException during IO processes 
+	 * @throws ClientProtocolException Signals an error in the HTTP protocol.
+	 * 
 	 */
-	public void putMethod(String json, String url) throws Exception {		
+	public void putMethod(String json, String url) throws ClientProtocolException, IOException{		
 		CloseableHttpResponse response ;
 		HttpPut httpPut = new HttpPut(url);
 		httpPut.addHeader("Content-Type", "application/json");
-		
 		httpPut.setEntity(new StringEntity(json));
-		
 		response = httpclient.execute(httpPut);
-		
-
 		if (response.getStatusLine().getStatusCode() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatusLine().getStatusCode());
 		} else {

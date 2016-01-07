@@ -17,15 +17,15 @@ public class BinaryFileAdapter
 	String path;
 	
 	/**Creates instance of this class for a given File. 
-	 * @param String path to text file
+	 * @param path to text file
 	 */
 	public BinaryFileAdapter(String path){
 		this.path = path;
 	}
 	
 	/**This method writes byte array to the file of sensor
-	 * @param byte[] buffer
-	 * @throws SensorNotFoundException
+	 * @param buffer byte array 
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public void writeBinaryFile( byte[] buffer)throws SensorNotFoundException{
 		FileOutputStream outputStream;
@@ -45,7 +45,7 @@ public class BinaryFileAdapter
 	
 	/**This method reads binary data from a given file of sensor
 	 * @return byte[]
-	 * @throws SensorNotFoundException
+	 * @throws SensorNotFoundException if sensor connection failed or disconnected
 	 */
 	public byte[] readBinaryFile()throws SensorNotFoundException{
 		byte[] buffer = new byte[33];

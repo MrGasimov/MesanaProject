@@ -19,33 +19,16 @@ import com.google.gson.reflect.TypeToken;
 public class AddressData extends RestApiConnector
 {
 
-	/** The address list. */
 	private List<AddressData> addressList;
-	
-	/** The token. */
 	TypeToken<List<AddressData>> token = new TypeToken<List<AddressData>>()
 	{
 	};
-	
-	/** The salutation. */
 	private String salutation = "";
-	
-	/** The first name. */
 	private String firstName = "";
-	
-	/** The last name. */
 	private String lastName = "";
-	
-	/** The city. */
 	private String city = "";
-	
-	/** The street. */
 	private String street = "";
-	
-	/** The zip. */
 	private String zip = "";
-	
-	/** The country. */
 	private String country = "";
 	
 	/**
@@ -59,7 +42,7 @@ public class AddressData extends RestApiConnector
 	}
 	
 	/**
-	 * getList - Returns the list holding instances of this class.
+	 * Returns the list holding instances of this class.
 	 *
 	 * @return List - holds objects of this class
 	 * @para none
@@ -69,7 +52,7 @@ public class AddressData extends RestApiConnector
 		return addressList;
 	}
 	
-	/**getCustomerData - returns customer information as String. 
+	/**Returns customer information as String. 
 	 * @return String
 	 */
 	public String getCustomerData()
@@ -99,7 +82,7 @@ public class AddressData extends RestApiConnector
 				+ country;
 	}
 
-	/**guiAddressData - This method only returns important informations for displaying to user.
+	/**This method only returns important informations for displaying to user.
 	 * @return String
 	 */
 	public String guiAddressData()
@@ -115,7 +98,7 @@ public class AddressData extends RestApiConnector
 	}
 
 	/**
-	 * setList - This method initializes all class fields and adds instance to the list.
+	 * This method initializes all class fields and adds instance to the list.
 	 *
 	 * @param mID the new list
 	 */

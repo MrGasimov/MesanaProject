@@ -8,26 +8,14 @@ import com.corvolution.mesana.rest.RestApiConnector;
  */
 public class Task extends RestApiConnector
 {
-	
-	/** The message. */
 	private String message = "";
-	
-	/** The user. */
 	private String user = "";
-	
-	/** The created. */
 	private String created = "";
-	
-	/** The type. */
 	private String type = "";
-	
-	/** The measurement id. */
 	private String measurementID = "";
-	
-	/** The sensor id. */
 	private String sensorID = "";
 
-	/**getTaskDetails() - returns task information.
+	/**Returns task information.
 	 * @return String, information about task.
 	 */
 	public String getTaskDetails()

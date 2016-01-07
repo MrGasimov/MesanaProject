@@ -12,7 +12,7 @@ public class MainClass
 {
 
 	/**
-	 * The main method.
+	 * The main method.Execution of the application
 	 *
 	 * @param args the arguments
 	 */

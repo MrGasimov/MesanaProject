@@ -8,23 +8,13 @@ import com.corvolution.mesana.rest.RestApiConnector;
  */
 public class SensorData extends RestApiConnector
 {
-
-	/** The id. */
 	private String id = "";
-	
-	/** The state. */
 	private String state = "";
-	
-	/** The firmware. */
 	private String firmware = "";
-	
-	/** The name. */
 	private String name = "";
-	
-	/** The type. */
 	private String type = "";
 
-	/**getSensorData() - returns information  of a given sensor.
+	/**Returns information  of a given sensor.
 	 * @return String information about sensor (e.g sensor state).
 	 */
 	public String getSensorData()
@@ -33,7 +23,7 @@ public class SensorData extends RestApiConnector
 				+ name + "\r\n" + "Type: " + type;
 	}
 
-	/**getId() - returns id of given sensor.
+	/**Returns id of given sensor.
 	 * @return String, id of sensor
 	 */
 	public String getId()
@@ -41,7 +31,7 @@ public class SensorData extends RestApiConnector
 		return this.id;
 	}
 
-	/**getFirmware() - returns firmware of given sensor.
+	/**Returns firmware of given sensor.
 	 * @return String, firmware of sensor.
 	 */
 	public String getFirmware()
@@ -49,7 +39,7 @@ public class SensorData extends RestApiConnector
 		return this.firmware;
 	}
 
-	/**getState() - returns state of given sensor.
+	/**Returns state of given sensor.
 	 * @return String, state of sensor.
 	 */
 	public String getState()

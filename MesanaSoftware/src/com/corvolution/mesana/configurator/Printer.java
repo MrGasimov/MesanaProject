@@ -11,16 +11,9 @@ import java.util.List;
 public final class Printer
 {
 	
-	/** The instance. */
 	private static Printer instance = null;
-	
-	/** The print list. */
 	public List<String> printList;
-	
-	/** The hmap. */
 	public HashMap<String, String> hmap = new HashMap<String, String>();
-	
-	/** The label. */
 	String label;
 	
 	/**
@@ -30,7 +23,7 @@ public final class Printer
 	{
 	}
 	
-	/**getInstance - This method creates instance of this class and returns it. 
+	/**This method creates instance of this class and returns it. 
 	 * @return Printer - instance of this class
 	 */
 	public static Printer getInstance()
@@ -42,7 +35,7 @@ public final class Printer
 		return instance;
 	}
 	
-	/**setTemplate - This method sets template path to a class field for sending command to printer.
+	/**This method sets template path to a class field for sending command to printer.
 	 * @param labelTemplate - path to template used by printer for printing.
 	 * @return void
 	 */
@@ -51,8 +44,7 @@ public final class Printer
 		label = labelTemplate ;
 	}
 
-	// adding parameters to map e.g linkId and address
-	/**addParameter - This method adds keys and their values to HashMap for sending commands to printer.
+	/**This method adds keys and their values to HashMap for sending commands to printer.
 	 * @param key - for example link id or address
 	 * @param value - value of a key 
 	 * @return void
@@ -63,9 +55,7 @@ public final class Printer
 	}
 
 	/**
-	 * print - This method executes commands for printing. Must be called after necessary fields are initialized (template, link id or address)
-	 *
-	 * @return void
+	 * This method executes commands for printing. Must be called after necessary fields are initialized (template, link id or address)
 	 */
 	public void print()
 	{
@@ -80,8 +70,16 @@ public final class Printer
 		{
 			pr = Runtime.getRuntime().exec(command);
 			int exitCode = pr.waitFor();
+			if(exitCode==0)
+			{
+				System.out.println("The printing process is completed successfully!");
+			}
 		}
-		catch (IOException | InterruptedException e)
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InterruptedException e)
 		{
 			e.printStackTrace();
 		}

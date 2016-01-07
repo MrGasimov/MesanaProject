@@ -20,23 +20,11 @@ import org.eclipse.swt.widgets.Text;
  */
 public class InputDialog extends Dialog
 {
-	
-	/** The msg label. */
 	private Label userLabel, passwordLabel, msgLabel;
-	
-	/** The password field. */
 	private Text userField, passwordField;
-	
-	/** The password string. */
 	private String userString, passwordString;
-	
-	/** The status. */
 	private boolean status;
-	
-	/** The parent shell. */
 	private Shell parentShell;
-	
-	/** The arg. */
 	private int arg;
 
 	/**
@@ -54,7 +42,7 @@ public class InputDialog extends Dialog
 	}
 
 	/**
-	 * createDialogArea() - This method creates dialog area.
+	 * This method creates dialog area.
 	 *
 	 * @return String, user input
 	 */

@@ -24,7 +24,7 @@ public final class ConnectionManager
 	public static final int DISCONNECTION = 101;
 	public static final int SINGLE_SENSOR = 102;
 	public static final int ALL_SENSORS = 103;
-	private  List<Sensor> sensorList = new CopyOnWriteArrayList<>();
+	private  List<Sensor> sensorList ;
 	private static ConnectionManager instance = null;
 
 	/**Constructor for defending single instance.
@@ -32,6 +32,7 @@ public final class ConnectionManager
 	 */
 	private ConnectionManager()
 	{
+		sensorList = new CopyOnWriteArrayList<>();
 	}
 
 	/**This method returns single and only instance of this class. If instance is null, this method creates instance.

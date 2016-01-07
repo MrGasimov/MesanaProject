@@ -12,16 +12,12 @@ import com.google.gson.reflect.TypeToken;
  */
 public class SensorCollection extends RestApiConnector
 {
-	
-	/** The sensor list. */
 	private List<SensorData> sensorList;
-	
-	/** The token. */
 	TypeToken<List<SensorData>> token = new TypeToken<List<SensorData>>()
 	{
 	};
 
-	/**getList() - returns list holding SensorData instances.
+	/**Returns list holding SensorData instances.
 	 * @return List
 	 */
 	public List<SensorData> getList()
@@ -30,7 +26,7 @@ public class SensorCollection extends RestApiConnector
 	}
 
 	/**
-	 * setList(String sURL) - This method initializes sensorData instances and stores them in a list.
+	 * This method initializes sensorData instances and stores them in a list.
 	 *
 	 * @param sURL the new list
 	 */

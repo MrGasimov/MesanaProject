@@ -9,8 +9,7 @@ import com.corvolution.mesana.data.Measurement;
 public class MediumFilter implements Comparator<Measurement>
 {
 	
-	/** The high order. */
-	final String highOrder = "MEDIUMHIGHLOW";
+	private final String highOrder = "MEDIUMHIGHLOW";
 	
 	/**
 	 * This method compares two objects by their priority given by themselves.Ordering is done as following. MEDIUM HIGH LOW 

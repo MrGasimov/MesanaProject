@@ -8,11 +8,7 @@ import java.util.Properties;
  */
 public class PropertyManager
 {
-	
-	/** The prop. */
 	private static Properties prop;
-	
-	/** The instance. */
 	private static PropertyManager instance;
 
 	/**The constructor for creating property instance and loading properties from file.
@@ -32,7 +28,7 @@ public class PropertyManager
 	}
 
 	/**
-	 * getProperty - This method returns string value of a given property.
+	 * This method returns string value of a given property.
 	 *
 	 * @param property the property
 	 * @return String - value of property
@@ -43,7 +39,7 @@ public class PropertyManager
 	}
 	
 	/**
-	 * getInstance - This method returns instance of this class.
+	 * This method returns instance of this class.
 	 *
 	 * @return single instance of PropertyManager
 	 */

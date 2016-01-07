@@ -23,7 +23,7 @@ public class MeasurementCollection extends RestApiConnector
 	{
 	};
 
-	/**getList - returns list of holding measurement objects.
+	/**Returns list of holding measurement objects.
 	 * @return List - holds measurement objects
 	 */
 	public List<Measurement> getList()
@@ -32,7 +32,7 @@ public class MeasurementCollection extends RestApiConnector
 	}
 
 	/**
-	 * sortListbyDate - This method sorts list which holds measurement objects according to customer comparator.
+	 * This method sorts list which holds measurement objects according to customer comparator.
 	 *
 	 * @return void
 	 */
@@ -43,7 +43,7 @@ public class MeasurementCollection extends RestApiConnector
 	}
 
 	/**
-	 * highPriorityfilter - This method sorts list which holds measurement objects according to high filter comparator.
+	 * This method sorts list which holds measurement objects according to high filter comparator.
 	 *
 	 * @return void
 	 */
@@ -53,7 +53,7 @@ public class MeasurementCollection extends RestApiConnector
 	}
 	
 	/**
-	 * mediumPriorityfilter - This method sorts list which holds measurement objects according to medium filter comparator.
+	 * This method sorts list which holds measurement objects according to medium filter comparator.
 	 *
 	 * @return void
 	 */
@@ -63,7 +63,7 @@ public class MeasurementCollection extends RestApiConnector
 	}
 	
 	/**
-	 * lowPriorityfilter - This method sorts list which holds measurement objects according to low filter comparator.
+	 * This method sorts list which holds measurement objects according to low filter comparator.
 	 *
 	 * @return void
 	 */
@@ -72,7 +72,7 @@ public class MeasurementCollection extends RestApiConnector
 		Collections.sort(measList, new LowFilter());
 	}
 
-	/**getMesID(int index) - returns id of the measurement object from the list at the given index.
+	/**Returns id of the measurement object from the list at the given index.
 	 * @param index of the measurement object in the list
 	 * @return String id - id of the measurement object at given index
 	 */
@@ -83,7 +83,7 @@ public class MeasurementCollection extends RestApiConnector
 	}
 
 	/**
-	 * setList(String url) - This method initializes all measurement objects and stores them in the list.
+	 * This method initializes all measurement objects and stores them in the list.
 	 *
 	 * @param url the new list
 	 * @return void

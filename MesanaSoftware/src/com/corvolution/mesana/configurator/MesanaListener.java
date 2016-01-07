@@ -13,7 +13,6 @@ import com.corvolution.mesana.gui.MesanaReader;
 public class MesanaListener implements SensorListener
 {
 	
-	/** The gui mode. */
 	private String guiMode;
 
 	/**

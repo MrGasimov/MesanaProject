@@ -10,7 +10,7 @@ public class CustomComparator implements Comparator<Measurement>
 {
 	
 	/**
-	 * compare - This method compares objects according to date .
+	 * This method compares objects according to date.
 	 *
 	 * @param m1 the m1
 	 * @param m2 the m2

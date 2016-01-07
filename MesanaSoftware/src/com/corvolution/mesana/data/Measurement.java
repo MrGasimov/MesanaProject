@@ -13,30 +13,16 @@ import com.corvolution.mesana.rest.RestApiConnector;
  */
 public class Measurement extends RestApiConnector
 {
-
-	/** The id. */
 	private String id = "";
-	
-	/** The state. */
 	private String state = "";
-	
-	/** The state change. */
 	private String stateChange = "";
-	
-	/** The link id. */
 	private String linkId = "";
-	
-	/** The delivery date. */
 	private String deliveryDate = "";
-	
-	/** The sensor id. */
 	private String sensorId = "";
-	
-	/** The priority. */
 	private String priority = "";
 
 	/**
-	 * getMeasurementData - This method returns information about object.
+	 * This method returns information about object.
 	 *
 	 * @return String
 	 * @para none
@@ -52,7 +38,7 @@ public class Measurement extends RestApiConnector
 	}
 	
 	
-	/**getDate - returns delivery date of the sensor after configuration as Date type.
+	/**Returns delivery date of the sensor after configuration as Date type.
 	 * @return Date - date of sensor delivery.
 	 */
 	public Date getDate()
@@ -71,7 +57,7 @@ public class Measurement extends RestApiConnector
 		return date;
 	}
 
-	/**getPriority - returns priority of measurement service.This priority states how soon sensor must be configurated and sent to customer.
+	/**Returns priority of measurement service.This priority states how soon sensor must be configurated and sent to customer.
 	 * @return String
 	 */
 	public String getPriority()
@@ -81,7 +67,7 @@ public class Measurement extends RestApiConnector
 	}
 
 	/**
-	 * getId - returns id of the specific measurement service.
+	 * Returns id of the specific measurement service.
 	 *
 	 * @return String
 	 */
@@ -90,7 +76,7 @@ public class Measurement extends RestApiConnector
 		return id;
 	}
 
-	/**getLinkId - returns linkId of the measurement service.This id is a link between measurement service and sensor.
+	/**Returns linkId of the measurement service.This id is a link between measurement service and sensor.
 	 * @return String
 	 */
 	public String getLinkId()
@@ -98,7 +84,7 @@ public class Measurement extends RestApiConnector
 		return linkId;
 	}
 
-	/**getSensorId - returns id of the sensor.
+	/**Returns id of the sensor.
 	 * @return String
 	 */
 	public String getSensorId()

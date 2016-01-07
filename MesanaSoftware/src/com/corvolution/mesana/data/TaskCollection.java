@@ -14,14 +14,8 @@ import com.google.gson.reflect.TypeToken;
  */
 public class TaskCollection extends RestApiConnector
 {
-
-	/** The m task list. */
 	private List<Task> mTaskList;
-	
-	/** The s task list. */
 	private List<Task> sTaskList;
-	
-	/** The token. */
 	TypeToken<List<Task>> token = new TypeToken<List<Task>>()
 	{
 	};
@@ -38,7 +32,7 @@ public class TaskCollection extends RestApiConnector
 	}
 
 	/**
-	 * getMeasTask() - returns list holding measurement tasks.
+	 * Returns list holding measurement tasks.
 	 *
 	 * @return List<Task>
 	 */
@@ -48,7 +42,7 @@ public class TaskCollection extends RestApiConnector
 	}
 
 	/**
-	 * getSensorTask() - returns list holding sensor tasks.
+	 * Returns list holding sensor tasks.
 	 *
 	 * @return List<Task>
 	 */
@@ -58,7 +52,7 @@ public class TaskCollection extends RestApiConnector
 	}
 
 	/**
-	 * setList(String mID, String sID) - This method initializes measurement task instances, sensor task instances and stores them appropriate lists.  
+	 * This method initializes measurement task instances, sensor task instances and stores them appropriate lists.  
 	 *
 	 * @param mID the m id
 	 * @param sID the s id

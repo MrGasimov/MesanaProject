@@ -124,7 +124,7 @@ public class MesanaConfigurator
 	}
 
 	/**
-	 * connection(ConnectionEvent e) - This method updates GUI, when sensor is connected.
+	 * This method updates GUI, when sensor is connected.
 	 *
 	 * @param e the e
 	 */
@@ -178,7 +178,7 @@ public class MesanaConfigurator
 	}
 	
 	/**
-	 * disconnection(DisconnectionEvent e) - This method updates GUI, when sensor is disconnected.
+	 * This method updates GUI, when sensor is disconnected.
 	 *
 	 * @param e the e
 	 */
@@ -219,7 +219,7 @@ public class MesanaConfigurator
 		});
 	}
 
-	/**setGui() - This method sets all GUI dependent components to be ready.
+	/**This method sets all GUI dependent components to be ready.
 	 * 
 	 */
 	public void setGui()
@@ -422,7 +422,7 @@ public class MesanaConfigurator
 
 	}
 
-	/**batteryWarning() -This method opens Battery warning dialog to warn about low battery state. 
+	/**This method opens Battery warning dialog to warn about low battery state. 
 	 * @return int, specific value depended on user reply.
 	 */
 	public int batteryWarning()
@@ -652,7 +652,7 @@ public class MesanaConfigurator
 	}
 
 	/**
-	 * printLabel(String address, String linkId) - This method executes system commands for printing label.
+	 * This method executes system commands for printing label.
 	 *
 	 * @param address the address
 	 * @param linkId the link id
@@ -665,7 +665,6 @@ public class MesanaConfigurator
 
 	}
 
-	// para1 is state for measurement update , para2 which method run
 	/**
 	 * This method depending on arguments updates measurement state, sensor state, sends user entered comments and selected electrode numbers to server.
 	 *
@@ -673,7 +672,8 @@ public class MesanaConfigurator
 	 * @param para2 the para2
 	 */
 	public void restApiUpdate(String para1, String para2)
-	{
+	{	
+		// para1 is state for measurement update , para2 which method run
 		String state = null;
 		for (SensorData element : sCollect.getList())
 		{
@@ -782,7 +782,7 @@ public class MesanaConfigurator
 		}
 	}
 
-	/**configurateSensor() - when this method is called sensor configuration starts.
+	/**This method starts sensor configuration.
 	 */
 	private void configurateSensor()
 	{
@@ -842,7 +842,7 @@ public class MesanaConfigurator
 
 	}
 
-	/**setAndWriteFiles() - This method constructs sensor configuration object before sensor configuration done.
+	/**This method constructs sensor configuration object before sensor configuration done.
 	 * 
 	 */
 	private void setAndWriteFiles()
@@ -917,7 +917,7 @@ public class MesanaConfigurator
 	}
 
 	/**
-	 * setTrayIcon() - This method sets tray icon for MesanaConfigurator GUI.
+	 * This method sets tray icon for MesanaConfigurator GUI.
 	 */
 	public void setTrayIcon()
 	{
@@ -1001,7 +1001,7 @@ public class MesanaConfigurator
 	}
 
 	/**
-	 * setCustomerData() - This method retrieves customer Data from server, initializes and updates GUI.
+	 * This method retrieves customer Data from server, initializes and updates GUI.
 	 */
 	public static void setCustomerData()
 	{
@@ -1034,7 +1034,7 @@ public class MesanaConfigurator
 	}
 
 	/**
-	 * setSensorData() - This method retrieves sensor Data from server, initializes and updates GUI.
+	 * This method retrieves sensor Data from server, initializes and updates GUI.
 	 *
 	 * @throws SensorNotFoundException if sensor is disconnected.
 	 */
@@ -1061,7 +1061,7 @@ public class MesanaConfigurator
 	}
 
 	/**
-	 * setTaskData(String mID) - This method retrieves tasks from server, initializes and updates GUI .
+	 * This method retrieves tasks from server, initializes and updates GUI .
 	 *
 	 * @param mID the new task data
 	 * @throws IOException Signals that an I/O exception has occurred.
@@ -1098,7 +1098,7 @@ public class MesanaConfigurator
 		}
 	}
 
-	/**openShell() - This method opens GUI if sensor is connected. 
+	/**This method opens GUI if sensor is connected. 
 	 * 
 	 */
 	public void openShell()
@@ -1107,7 +1107,7 @@ public class MesanaConfigurator
 			shell.open();
 	}
 
-	/**resetGuiData() - This method resets MesanaConfigurator GUI.
+	/**This method resets MesanaConfigurator GUI.
 	 * 
 	 */
 	public static void resetGuiData()
@@ -1124,7 +1124,7 @@ public class MesanaConfigurator
 
 	}
 
-	/**setData() - This method sets all data to MesanaConfigurator GUI.
+	/**This method sets all data to MesanaConfigurator GUI.
 	 * 
 	 */
 	public static void setData() 
@@ -1141,7 +1141,7 @@ public class MesanaConfigurator
 
 	}
 	
-	/**checkSensorState() - This method checks sensor state.
+	/**This method checks sensor state.
 	 *
 	 * @return true, if successful
 	 */
@@ -1168,7 +1168,7 @@ public class MesanaConfigurator
 		return state;
 	}
 	
-	/**checkFirmwareVersion() - This method checks firmware version.
+	/**This method checks firmware version.
 	 */
 	public void checkFirmwareVersion()
 	{
